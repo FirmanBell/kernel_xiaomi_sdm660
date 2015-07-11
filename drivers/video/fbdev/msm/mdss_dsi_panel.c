@@ -23,6 +23,7 @@
 #ifdef CONFIG_MACH_ASUS_SDM660
 #include "mdss_panel.h"
 #endif
+#include "mdss_livedisplay.h"
 
 #define DT_CMD_HDR 6
 #define DEFAULT_MDP_TRANSFER_TIME 14000
@@ -1189,6 +1190,10 @@ static int mdss_dsi_panel_on(struct mdss_panel_data *pdata)
 
 	/* Ensure low persistence mode is set as before */
 	mdss_dsi_panel_apply_display_setting(pdata, pinfo->persist_mode);
+
+	if (pdata->event_handler)
+		pdata->event_handler(pdata, MDSS_EVENT_UPDATE_LIVEDISPLAY,
+				(void *)(unsigned long) MODE_UPDATE_ALL);
 
 #ifdef CONFIG_MACH_XIAOMI_PLATINA
 	ctrl->dsi_panel_off_mode = false;
@@ -3307,6 +3312,8 @@ static int mdss_panel_parse_dt(struct device_node *np,
 	if (rc)
 		pinfo->esc_clk_rate_hz = MDSS_DSI_MAX_ESC_CLK_RATE_HZ;
 	pr_debug("%s: esc clk %d\n", __func__, pinfo->esc_clk_rate_hz);
+
+	mdss_livedisplay_parse_dt(np, pinfo);
 
 	return 0;
 
