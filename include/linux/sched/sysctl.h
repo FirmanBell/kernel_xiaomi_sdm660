@@ -71,7 +71,6 @@ extern unsigned int sysctl_sched_downmigrate_pct;
 extern unsigned int sysctl_sched_group_upmigrate_pct;
 extern unsigned int sysctl_sched_group_downmigrate_pct;
 extern unsigned int sysctl_early_detection_duration;
-extern unsigned int sysctl_sched_boost;
 extern unsigned int sysctl_sched_small_wakee_task_load_pct;
 extern unsigned int sysctl_sched_big_waker_task_load_pct;
 extern unsigned int sysctl_sched_select_prev_cpu_us;
@@ -127,8 +126,11 @@ extern int sched_migrate_notify_proc_handler(struct ctl_table *table,
 extern int sched_hmp_proc_update_handler(struct ctl_table *table,
 		int write, void __user *buffer, size_t *lenp, loff_t *ppos);
 
+#ifdef CONFIG_SCHED_BOOST
+extern unsigned int sysctl_sched_boost;
 extern int sched_boost_handler(struct ctl_table *table, int write,
 			void __user *buffer, size_t *lenp, loff_t *ppos);
+#endif
 
 extern int sched_window_update_handler(struct ctl_table *table,
 		 int write, void __user *buffer, size_t *lenp, loff_t *ppos);
