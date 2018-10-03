@@ -4,9 +4,6 @@
 
 #include <uapi/linux/fanotify.h>
 
-/* not valid from userspace, only kernel internal */
-#define FAN_MARK_ONDIR		0x00000100
-
 #define FAN_GROUP_FLAG(group, flag) \
 	((group)->fanotify_data.flags & (flag))
 
