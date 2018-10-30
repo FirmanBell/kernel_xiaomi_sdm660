@@ -340,6 +340,9 @@ int fsnotify(struct inode *to_tell, __u32 mask, const void *data, int data_is,
 		sb = mnt->mnt.mnt_sb;
 		mnt_or_sb_mask = mnt->mnt_fsnotify_mask | sb->s_fsnotify_mask;
 	}
+	/* An event "on child" is not intended for a mount/sb mark */
+	if (mask & FS_EVENT_ON_CHILD)
+		mnt_or_sb_mask = 0;
 
 	/* An event "on child" is not intended for a mount mark */
 	if (mask & FS_EVENT_ON_CHILD)
