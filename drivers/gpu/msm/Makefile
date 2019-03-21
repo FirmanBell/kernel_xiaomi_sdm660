@@ -44,10 +44,7 @@ msm_adreno-y += \
 	adreno_cp_parser.o \
 	adreno_perfcounter.o
 
-ifdef CONFIG_DEBUG_KERNEL
-msm_adreno-y += adreno_trace.o
-endif
-
+msm_adreno-$(CONFIG_DEBUG_KERNEL) += adreno_trace.o
 msm_adreno-$(CONFIG_QCOM_KGSL_IOMMU) += adreno_iommu.o
 msm_adreno-$(CONFIG_QCOM_KGSL_CORESIGHT) += adreno_coresight.o
 msm_adreno-$(CONFIG_DEBUG_FS) += adreno_debugfs.o adreno_profile.o
