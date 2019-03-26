@@ -532,6 +532,7 @@ static struct ctl_table kern_table[] = {
 		 */
 		.extra2		= &one_thousand,
 	},
+	#if 0
 	{
 		.procname	= "sched_boost",
 		.data		= &sysctl_sched_boost,
@@ -541,6 +542,7 @@ static struct ctl_table kern_table[] = {
 		.extra1         = &zero,
 		.extra2		= &three,
 	},
+	#endif
 	{
 
 		.procname	= "sched_short_burst_ns",
