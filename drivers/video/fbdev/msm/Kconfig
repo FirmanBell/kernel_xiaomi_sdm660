@@ -138,11 +138,4 @@ config FB_MSM_MDSS_CUSTOM_FRAMERATE
 	---help---
 	Add Refresh Rate Changer Feature support with Cmdline.
 
-config KLAPSE
-    bool CONFIG_KLAPSE
-    depends on FB_MSM_MDSS
-    default n
-    help
-        A simple rgb dynamic lapsing module similar to LineageOS' livedisplay
-
 endif
