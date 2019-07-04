@@ -5413,8 +5413,8 @@ static int fg_parse_ki_coefficients(struct fg_chip *chip)
 #define DEFAULT_BATT_TEMP_WARM		70
 #define DEFAULT_BATT_TEMP_HOT		75
 #else
-#define DEFAULT_BATT_TEMP_WARM		45
-#define DEFAULT_BATT_TEMP_HOT		50
+#define DEFAULT_BATT_TEMP_WARM		70
+#define DEFAULT_BATT_TEMP_HOT		75
 #endif
 #define DEFAULT_CL_START_SOC		15
 #define DEFAULT_CL_MIN_TEMP_DECIDEGC	150
