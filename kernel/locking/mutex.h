@@ -17,8 +17,6 @@
 #define debug_mutex_unlock(lock)			((void)0)
 #define debug_mutex_init(lock, name, key)		((void)0)
 
-struct mutex_waiter;
-
 static inline void
 debug_mutex_lock_common(struct mutex *lock, struct mutex_waiter *waiter)
 {
