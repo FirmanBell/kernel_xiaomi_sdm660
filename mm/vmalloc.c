@@ -18,7 +18,6 @@
 #include <linux/interrupt.h>
 #include <linux/proc_fs.h>
 #include <linux/seq_file.h>
-#include <linux/set_memory.h>
 #include <linux/debugobjects.h>
 #include <linux/kallsyms.h>
 #include <linux/list.h>
@@ -1068,9 +1067,24 @@ static void vb_free(const void *addr, unsigned long size)
 		spin_unlock(&vb->lock);
 }
 
-static void _vm_unmap_aliases(unsigned long start, unsigned long end, int flush)
+/**
+ * vm_unmap_aliases - unmap outstanding lazy aliases in the vmap layer
+ *
+ * The vmap/vmalloc layer lazily flushes kernel virtual mappings primarily
+ * to amortize TLB flushing overheads. What this means is that any page you
+ * have now, may, in a former life, have been mapped into kernel virtual
+ * address by the vmap layer and so there might be some CPUs with TLB entries
+ * still referencing that page (additional to the regular 1:1 kernel mapping).
+ *
+ * vm_unmap_aliases flushes all such lazy mappings. After it returns, we can
+ * be sure that none of the pages we have control over will have any aliases
+ * from the vmap layer.
+ */
+void vm_unmap_aliases(void)
 {
+	unsigned long start = ULONG_MAX, end = 0;
 	int cpu;
+	int flush = 0;
 
 	if (unlikely(!vmap_initialized))
 		return;
@@ -1106,27 +1120,6 @@ static void _vm_unmap_aliases(unsigned long start, unsigned long end, int flush)
 	if (!__purge_vmap_area_lazy(start, end) && flush)
 		flush_tlb_kernel_range(start, end);
 	mutex_unlock(&vmap_purge_lock);
-}
-
-/**
- * vm_unmap_aliases - unmap outstanding lazy aliases in the vmap layer
- *
- * The vmap/vmalloc layer lazily flushes kernel virtual mappings primarily
- * to amortize TLB flushing overheads. What this means is that any page you
- * have now, may, in a former life, have been mapped into kernel virtual
- * address by the vmap layer and so there might be some CPUs with TLB entries
- * still referencing that page (additional to the regular 1:1 kernel mapping).
- *
- * vm_unmap_aliases flushes all such lazy mappings. After it returns, we can
- * be sure that none of the pages we have control over will have any aliases
- * from the vmap layer.
- */
-void vm_unmap_aliases(void)
-{
-	unsigned long start = ULONG_MAX, end = 0;
-	int flush = 0;
-
-	_vm_unmap_aliases(start, end, flush);
 }
 EXPORT_SYMBOL_GPL(vm_unmap_aliases);
 
@@ -1482,24 +1475,6 @@ struct vm_struct *find_vm_area(const void *addr)
 	return NULL;
 }
 
-static struct vm_struct *__remove_vm_area(struct vmap_area *va)
-{
-	struct vm_struct *vm = va->vm;
-
-	might_sleep();
-
-	spin_lock(&vmap_area_lock);
-	va->vm = NULL;
-	va->flags &= ~VM_VM_AREA;
-	va->flags |= VM_LAZY_FREE;
-	spin_unlock(&vmap_area_lock);
-
-	kasan_free_shadow(vm);
-	free_unmap_vmap_area(va);
-
-	return vm;
-}
-
 /**
  *	remove_vm_area  -  find and remove a continuous kernel virtual area
  *	@addr:		base address
@@ -1510,88 +1485,31 @@ static struct vm_struct *__remove_vm_area(struct vmap_area *va)
  */
 struct vm_struct *remove_vm_area(const void *addr)
 {
-	struct vm_struct *vm = NULL;
 	struct vmap_area *va;
 
+	might_sleep();
+
 	va = find_vmap_area((unsigned long)addr);
-	if (va && va->flags & VM_VM_AREA)
-		vm = __remove_vm_area(va);
+	if (va && va->flags & VM_VM_AREA) {
+		struct vm_struct *vm = va->vm;
 
-	return vm;
-}
+		spin_lock(&vmap_area_lock);
+		va->vm = NULL;
+		va->flags &= ~VM_VM_AREA;
+		va->flags |= VM_LAZY_FREE;
+		spin_unlock(&vmap_area_lock);
 
-static inline void set_area_direct_map(const struct vm_struct *area,
-				       int (*set_direct_map)(struct page *page))
-{
-	int i;
+		kasan_free_shadow(vm);
+		free_unmap_vmap_area(va);
 
-	for (i = 0; i < area->nr_pages; i++)
-		if (page_address(area->pages[i]))
-			set_direct_map(area->pages[i]);
-}
-
-/* Handle removing and resetting vm mappings related to the vm_struct. */
-static void vm_remove_mappings(struct vm_struct *area, int deallocate_pages)
-{
-	unsigned long start = ULONG_MAX, end = 0;
-	int flush_reset = area->flags & VM_FLUSH_RESET_PERMS;
-	int flush_dmap = 0;
-	int i;
-
-	/*
-	 * The below block can be removed when all architectures that have
-	 * direct map permissions also have set_direct_map_() implementations.
-	 * This is concerned with resetting the direct map any an vm alias with
-	 * execute permissions, without leaving a RW+X window.
-	 */
-	if (flush_reset && !IS_ENABLED(CONFIG_ARCH_HAS_SET_DIRECT_MAP)) {
-		set_memory_nx((unsigned long)area->addr, area->nr_pages);
-		set_memory_rw((unsigned long)area->addr, area->nr_pages);
+		return vm;
 	}
-
-	remove_vm_area(area->addr);
-
-	/* If this is not VM_FLUSH_RESET_PERMS memory, no need for the below. */
-	if (!flush_reset)
-		return;
-
-	/*
-	 * If not deallocating pages, just do the flush of the VM area and
-	 * return.
-	 */
-	if (!deallocate_pages) {
-		vm_unmap_aliases();
-		return;
-	}
-
-	/*
-	 * If execution gets here, flush the vm mapping and reset the direct
-	 * map. Find the start and end range of the direct mappings to make sure
-	 * the vm_unmap_aliases() flush includes the direct map.
-	 */
-	for (i = 0; i < area->nr_pages; i++) {
-		unsigned long addr = (unsigned long)page_address(area->pages[i]);
-		if (addr) {
-			start = min(addr, start);
-			end = max(addr + PAGE_SIZE, end);
-			flush_dmap = 1;
-		}
-	}
-
-	/*
-	 * Set direct map to something invalid so that it won't be cached if
-	 * there are any accesses after the TLB flush, then flush the TLB and
-	 * reset the direct map permissions to the default.
-	 */
-	set_area_direct_map(area, set_direct_map_invalid_noflush);
-	_vm_unmap_aliases(start, end, flush_dmap);
-	set_area_direct_map(area, set_direct_map_default_noflush);
+	return NULL;
 }
 
 static void __vunmap(const void *addr, int deallocate_pages)
 {
 	struct vm_struct *area;
-	struct vmap_area *va;
 
 	if (!addr)
 		return;
@@ -1600,19 +1518,17 @@ static void __vunmap(const void *addr, int deallocate_pages)
 			addr))
 		return;
 
-	va = find_vmap_area((unsigned long)addr);
-	if (unlikely(!va || !(va->flags & VM_VM_AREA))) {
+	area = find_vmap_area((unsigned long)addr)->vm;
+	if (unlikely(!area)) {
 		WARN(1, KERN_ERR "Trying to vfree() nonexistent vm area (%p)\n",
 				addr);
 		return;
 	}
 
-	area = va->vm;
-	debug_check_no_locks_freed(addr, get_vm_area_size(area));
-	debug_check_no_obj_freed(addr, get_vm_area_size(area));
+	debug_check_no_locks_freed(area->addr, get_vm_area_size(area));
+	debug_check_no_obj_freed(area->addr, get_vm_area_size(area));
 
-	vm_remove_mappings(area, deallocate_pages);
-
+	remove_vm_area(addr);
 	if (deallocate_pages) {
 		int i;
 
@@ -1628,6 +1544,7 @@ static void __vunmap(const void *addr, int deallocate_pages)
 	}
 
 	kfree(area);
+	return;
 }
 
 static inline void __vfree_deferred(const void *addr)
@@ -2890,4 +2807,3 @@ static int __init proc_vmalloc_init(void)
 module_init(proc_vmalloc_init);
 
 #endif
-
