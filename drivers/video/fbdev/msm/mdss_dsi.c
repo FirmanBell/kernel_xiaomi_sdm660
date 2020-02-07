@@ -4570,7 +4570,7 @@ static int mdss_dsi_parse_gpio_params(struct platform_device *ctrl_pdev,
 		pr_err("%s:%d, reset gpio not specified\n",
 						__func__, __LINE__);
 
-#ifdef CONFIG_MACH_XIAOMI
+#if defined(CONFIG_MACH_XIAOMI) || defined(CONFIG_MACH_XIAOMI_PLATINA)
 	ctrl_pdata->tp_rst_gpio = of_get_named_gpio(ctrl_pdev->dev.of_node,
 			 "qcom,platform-tp-reset-gpio", 0);
 	if (!gpio_is_valid(ctrl_pdata->tp_rst_gpio))

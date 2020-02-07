@@ -1,4 +1,5 @@
 /* Copyright (c) 2012, 2016-2017, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2019 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -111,7 +112,7 @@ int mdss_i2c_byte_read(struct i2c_client *client, uint8_t slave_addr,
 		       uint8_t reg_offset, uint8_t *read_buf);
 int mdss_i2c_byte_write(struct i2c_client *client, uint8_t slave_addr,
 			uint8_t reg_offset, uint8_t *value);
-#ifdef CONFIG_MACH_XIAOMI
+#if defined(CONFIG_MACH_XIAOMI) || defined(CONFIG_MACH_XIAOMI_PLATINA)
 bool mdss_panel_is_prim(void *fbinfo);
 bool mdss_prim_panel_is_dead(void);
 void mdss_panel_reset_skip_enable(bool enable);

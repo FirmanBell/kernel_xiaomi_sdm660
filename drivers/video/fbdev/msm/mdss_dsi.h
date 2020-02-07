@@ -593,7 +593,7 @@ struct mdss_dsi_ctrl_pdata {
 
 	bool phy_power_off;
 	
-#ifdef CONFIG_MACH_XIAOMI
+#if defined(CONFIG_MACH_XIAOMI) || defined(CONFIG_MACH_XIAOMI_PLATINA)
 	bool dsi_panel_off_mode;
 	int tp_rst_gpio;
 	u32 bklt_level;
