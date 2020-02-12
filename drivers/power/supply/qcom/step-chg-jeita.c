@@ -759,6 +759,10 @@ static int handle_jeita(struct step_chg_info *chip)
 			vote(chip->usb_icl_votable, JEITA_VOTER, false, 0);
 	}
 
+#ifdef CONFIG_MACH_MI
+	if (fv_uv > 0)
+#endif
+
 set_jeita_fv:
 	vote(chip->fv_votable, JEITA_VOTER, fv_uv ? true : false, fv_uv);
 
@@ -926,6 +930,9 @@ int qcom_step_chg_init(struct device *dev,
 #ifdef CONFIG_MACH_LONGCHEER
 	chip->jeita_fcc_config->param.rise_hys = 0;
 	chip->jeita_fcc_config->param.fall_hys = 0;
+#elif defined(CONFIG_MACH_MI)
+	chip->jeita_fcc_config->param.rise_hys = 5;
+	chip->jeita_fcc_config->param.fall_hys = 5;
 #else
 	chip->jeita_fcc_config->param.rise_hys = 10;
 	chip->jeita_fcc_config->param.fall_hys = 10;
@@ -935,6 +942,9 @@ int qcom_step_chg_init(struct device *dev,
 #ifdef CONFIG_MACH_LONGCHEER
 	chip->jeita_fv_config->param.rise_hys = 0;
 	chip->jeita_fv_config->param.fall_hys = 0;
+#elif defined(CONFIG_MACH_MI)
+	chip->jeita_fcc_config->param.rise_hys = 5;
+	chip->jeita_fcc_config->param.fall_hys = 5;
 #else
 	chip->jeita_fv_config->param.rise_hys = 10;
 	chip->jeita_fv_config->param.fall_hys = 10;
