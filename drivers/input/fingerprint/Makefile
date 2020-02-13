@@ -7,3 +7,4 @@
 obj-$(CONFIG_FINGERPRINT_GOODIX_TA)	+= goodix_ta/
 obj-$(CONFIG_FINGERPRINT_FPC1268_TEE)	+= fpc1268_tee/
 obj-$(CONFIG_FPC_FINGERPRINT)		+= fpc/
+obj-$(CONFIG_GOODIX_FINGERPRINT)	+= goodix/
