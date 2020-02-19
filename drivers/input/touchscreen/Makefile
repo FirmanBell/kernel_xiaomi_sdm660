@@ -103,3 +103,4 @@ obj-$(CONFIG_TOUCHSCREEN_ST)		+= st/
 obj-$(CONFIG_TOUCHSCREEN_FOCAL_FT8719_D2T) += focal_ft8719_d2t/
 obj-$(CONFIG_TOUCHSCREEN_NVT_D2T) 	+= nvt_touch_d2t/
 obj-$(CONFIG_TOUCHSCREEN_SYNAPTICS_TCM_D2T) += synaptics_tcm_d2t/
+obj-$(CONFIG_TOUCHSCREEN_COMMON)	+= tp_common.o
