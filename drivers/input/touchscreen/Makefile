@@ -113,6 +113,7 @@ obj-$(CONFIG_TOUCHSCREEN_ST)		+= st/
 obj-$(CONFIG_TOUCHSCREEN_SYNAPTICS_DSX) += synaptics_dsx/
 obj-$(CONFIG_TOUCHSCREEN_SYNAPTICS_TCM)	+= synaptics_tcm/
 obj-$(CONFIG_TOUCHSCREEN_FTS)	+= focaltech_touch/
+obj-$(CONFIG_TOUCHSCREEN_COMMON)	+= tp_common.o
 obj-$(CONFIG_TOUCHSCREEN_HIMAX_CHIPSET)	+= hxchipset_X01BD/
 obj-$(CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_X00TD) += synaptics_dsx_X00TD/
 obj-y += nt36xxx_ASUS/
