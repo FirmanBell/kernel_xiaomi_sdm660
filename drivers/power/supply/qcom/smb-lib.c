@@ -1133,13 +1133,6 @@ static int set_sdp_current(struct smb_charger *chg, int icl_ua)
 	u8 icl_options;
 	const struct apsd_result *apsd_result = smblib_get_apsd_result(chg);
 
-#ifdef CONFIG_FORCE_FAST_CHARGE
-	if (force_fast_charge > 0 && icl_ua == USBIN_500MA)
-	{
-		icl_ua = USBIN_900MA;
-	}
-#endif
-
 	/* power source is SDP */
 	switch (icl_ua) {
 	case USBIN_100MA:
@@ -1227,6 +1220,13 @@ int smblib_set_icl_current(struct smb_charger *chg, int icl_ua)
 
 	if (icl_ua == INT_MAX)
 		goto override_suspend_config;
+
+#ifdef CONFIG_FORCE_FAST_CHARGE
+	if (force_fast_charge > 0 &&
+			chg->real_charger_type == POWER_SUPPLY_TYPE_USB &&
+			icl_ua == USBIN_500MA)
+		icl_ua = USBIN_900MA;
+#endif
 
 	/* configure current */
 	if (chg->typec_mode == POWER_SUPPLY_TYPEC_SOURCE_DEFAULT
@@ -3764,6 +3764,16 @@ static int smblib_handle_usb_current(struct smb_charger *chg,
 	if (usb_current < USBIN_500MA
 			&& usb_current > 0)
 		usb_current = USBIN_500MA;
+#endif
+
+#ifdef CONFIG_FORCE_FAST_CHARGE
+	if (force_fast_charge > 0 &&
+			chg->real_charger_type == POWER_SUPPLY_TYPE_USB) {
+		if (usb_current > 0 && usb_current < USBIN_500MA)
+			usb_current = USBIN_500MA;
+		else if (usb_current >= USBIN_500MA)
+			usb_current = USBIN_900MA;
+	}
 #endif
 
 	if (chg->real_charger_type == POWER_SUPPLY_TYPE_USB_FLOAT) {
