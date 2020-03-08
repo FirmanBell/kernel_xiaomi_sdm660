@@ -1,4 +1,5 @@
 /* Copyright (c) 2015-2018, 2020, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2019 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -1309,7 +1310,11 @@ static void *def_msm_int_wcd_mbhc_cal(void)
 		return NULL;
 
 #define S(X, Y) ((WCD_MBHC_CAL_PLUG_TYPE_PTR(msm_int_wcd_cal)->X) = (Y))
+#ifdef CONFIG_MACH_XIAOMI_PLATINA
+	S(v_hs_max, 1700);
+#else
 	S(v_hs_max, 1500);
+#endif
 #undef S
 #define S(X, Y) ((WCD_MBHC_CAL_BTN_DET_PTR(msm_int_wcd_cal)->X) = (Y))
 	S(num_btn, WCD_MBHC_DEF_BUTTONS);
@@ -1332,6 +1337,18 @@ static void *def_msm_int_wcd_mbhc_cal(void)
 	 * 210-290 == Button 2
 	 * 360-680 == Button 3
 	 */
+#ifdef CONFIG_MACH_XIAOMI_PLATINA
+	btn_low[0] = 75;
+	btn_high[0] = 75;
+	btn_low[1] = 260;
+	btn_high[1] = 260;
+	btn_low[2] = 480;
+	btn_high[2] = 480;
+	btn_low[3] = 480;
+	btn_high[3] = 480;
+	btn_low[4] = 480;
+	btn_high[4] = 480;
+#else
 	btn_low[0] = 75;
 	btn_high[0] = 75;
 	btn_low[1] = 150;
@@ -1342,6 +1359,7 @@ static void *def_msm_int_wcd_mbhc_cal(void)
 	btn_high[3] = 450;
 	btn_low[4] = 500;
 	btn_high[4] = 500;
+#endif
 
 	return msm_int_wcd_cal;
 }

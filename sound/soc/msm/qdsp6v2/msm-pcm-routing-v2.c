@@ -1,4 +1,5 @@
 /* Copyright (c) 2012-2021, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2019 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -87,6 +88,11 @@ static int msm_route_ext_ec_ref;
 static bool is_custom_stereo_on;
 static bool is_ds2_on;
 static bool swap_ch;
+#ifdef CONFIG_MACH_XIAOMI_PLATINA
+static int voice_ext_ec_ref;
+static int voip_ext_ec_ref;
+#endif
+
 static int msm_native_mode;
 
 #ifdef CONFIG_MACH_XIAOMI_MSM8998
@@ -3079,6 +3085,25 @@ static SOC_ENUM_DOUBLE_DECL(mm1_ch7_enum,
 static SOC_ENUM_DOUBLE_DECL(mm1_ch8_enum,
 	SND_SOC_NOPM, MSM_FRONTEND_DAI_MULTIMEDIA1, 7, be_name);
 
+#ifdef CONFIG_MACH_XIAOMI_PLATINA
+static SOC_ENUM_DOUBLE_DECL(mm2_ch1_enum,
+	SND_SOC_NOPM, MSM_FRONTEND_DAI_MULTIMEDIA2, 0, be_name);
+static SOC_ENUM_DOUBLE_DECL(mm2_ch2_enum,
+	SND_SOC_NOPM, MSM_FRONTEND_DAI_MULTIMEDIA2, 1, be_name);
+static SOC_ENUM_DOUBLE_DECL(mm2_ch3_enum,
+	SND_SOC_NOPM, MSM_FRONTEND_DAI_MULTIMEDIA2, 2, be_name);
+static SOC_ENUM_DOUBLE_DECL(mm2_ch4_enum,
+	SND_SOC_NOPM, MSM_FRONTEND_DAI_MULTIMEDIA2, 3, be_name);
+static SOC_ENUM_DOUBLE_DECL(mm2_ch5_enum,
+	SND_SOC_NOPM, MSM_FRONTEND_DAI_MULTIMEDIA2, 4, be_name);
+static SOC_ENUM_DOUBLE_DECL(mm2_ch6_enum,
+	SND_SOC_NOPM, MSM_FRONTEND_DAI_MULTIMEDIA2, 5, be_name);
+static SOC_ENUM_DOUBLE_DECL(mm2_ch7_enum,
+	SND_SOC_NOPM, MSM_FRONTEND_DAI_MULTIMEDIA2, 6, be_name);
+static SOC_ENUM_DOUBLE_DECL(mm2_ch8_enum,
+	SND_SOC_NOPM, MSM_FRONTEND_DAI_MULTIMEDIA2, 7, be_name);
+#endif
+
 static int msm_pcm_get_ctl_enum_info(struct snd_ctl_elem_info *uinfo,
 		unsigned int channels,
 		unsigned int items, const char *const names[])
@@ -3489,6 +3514,18 @@ static const struct snd_kcontrol_new channel_mixer_controls[] = {
 	.private_value = (unsigned long)&(struct soc_multi_mixer_control)
 		{.shift = MSM_FRONTEND_DAI_MULTIMEDIA2, .rshift = 2,}
 	},
+#ifdef CONFIG_MACH_XIAOMI_PLATINA
+	{
+	.iface = SNDRV_CTL_ELEM_IFACE_MIXER,
+	.access = SNDRV_CTL_ELEM_ACCESS_READWRITE,
+	.name = "MultiMedia2 Output Channel4",
+	.info = msm_pcm_channel_weight_info,
+	.get = msm_pcm_channel_weight_get,
+	.put = msm_pcm_channel_weight_put,
+	.private_value = (unsigned long)&(struct soc_multi_mixer_control)
+		{.shift = MSM_FRONTEND_DAI_MULTIMEDIA2, .rshift = 3,}
+	},
+#endif
 	{
 	.iface = SNDRV_CTL_ELEM_IFACE_MIXER,
 	.access = SNDRV_CTL_ELEM_ACCESS_READWRITE,
@@ -3581,6 +3618,80 @@ static const struct snd_kcontrol_new channel_mixer_controls[] = {
 	.put = msm_pcm_channel_input_be_put,
 	.private_value = (unsigned long)&(mm1_ch8_enum)
 	},
+#ifdef CONFIG_MACH_XIAOMI_PLATINA
+	{
+	.iface = SNDRV_CTL_ELEM_IFACE_MIXER,
+	.access = SNDRV_CTL_ELEM_ACCESS_READWRITE,
+	.name = "MultiMedia2 Channel1",
+	.info = msm_pcm_channel_input_be_info,
+	.get = msm_pcm_channel_input_be_get,
+	.put = msm_pcm_channel_input_be_put,
+	.private_value = (unsigned long)&(mm2_ch1_enum)
+	},
+	{
+	.iface = SNDRV_CTL_ELEM_IFACE_MIXER,
+	.access = SNDRV_CTL_ELEM_ACCESS_READWRITE,
+	.name = "MultiMedia2 Channel2",
+	.info = msm_pcm_channel_input_be_info,
+	.get = msm_pcm_channel_input_be_get,
+	.put = msm_pcm_channel_input_be_put,
+	.private_value = (unsigned long)&(mm2_ch2_enum)
+	},
+	{
+	.iface = SNDRV_CTL_ELEM_IFACE_MIXER,
+	.access = SNDRV_CTL_ELEM_ACCESS_READWRITE,
+	.name = "MultiMedia2 Channel3",
+	.info = msm_pcm_channel_input_be_info,
+	.get = msm_pcm_channel_input_be_get,
+	.put = msm_pcm_channel_input_be_put,
+	.private_value = (unsigned long)&(mm2_ch3_enum)
+	},
+	{
+	.iface = SNDRV_CTL_ELEM_IFACE_MIXER,
+	.access = SNDRV_CTL_ELEM_ACCESS_READWRITE,
+	.name = "MultiMedia2 Channel4",
+	.info = msm_pcm_channel_input_be_info,
+	.get = msm_pcm_channel_input_be_get,
+	.put = msm_pcm_channel_input_be_put,
+	.private_value = (unsigned long)&(mm2_ch4_enum)
+	},
+	{
+	.iface = SNDRV_CTL_ELEM_IFACE_MIXER,
+	.access = SNDRV_CTL_ELEM_ACCESS_READWRITE,
+	.name = "MultiMedia2 Channel5",
+	.info = msm_pcm_channel_input_be_info,
+	.get = msm_pcm_channel_input_be_get,
+	.put = msm_pcm_channel_input_be_put,
+	.private_value = (unsigned long)&(mm2_ch5_enum)
+	},
+	{
+	.iface = SNDRV_CTL_ELEM_IFACE_MIXER,
+	.access = SNDRV_CTL_ELEM_ACCESS_READWRITE,
+	.name = "MultiMedia2 Channel6",
+	.info = msm_pcm_channel_input_be_info,
+	.get = msm_pcm_channel_input_be_get,
+	.put = msm_pcm_channel_input_be_put,
+	.private_value = (unsigned long)&(mm2_ch6_enum)
+	},
+	{
+	.iface = SNDRV_CTL_ELEM_IFACE_MIXER,
+	.access = SNDRV_CTL_ELEM_ACCESS_READWRITE,
+	.name = "MultiMedia2 Channel7",
+	.info = msm_pcm_channel_input_be_info,
+	.get = msm_pcm_channel_input_be_get,
+	.put = msm_pcm_channel_input_be_put,
+	.private_value = (unsigned long)&(mm2_ch7_enum)
+	},
+	{
+	.iface = SNDRV_CTL_ELEM_IFACE_MIXER,
+	.access = SNDRV_CTL_ELEM_ACCESS_READWRITE,
+	.name = "MultiMedia2 Channel8",
+	.info = msm_pcm_channel_input_be_info,
+	.get = msm_pcm_channel_input_be_get,
+	.put = msm_pcm_channel_input_be_put,
+	.private_value = (unsigned long)&(mm2_ch8_enum)
+	},
+#endif
 };
 
 static int msm_native_mode_get(struct snd_kcontrol *kcontrol,
@@ -4034,7 +4145,7 @@ static const struct snd_kcontrol_new ext_ec_ref_mux_ul29 =
 static int msm_routing_ext_ec_get(struct snd_kcontrol *kcontrol,
 				  struct snd_ctl_elem_value *ucontrol)
 {
-#ifdef CONFIG_MACH_XIAOMI_MSM8998
+#if defined(CONFIG_MACH_XIAOMI_MSM8998) || defined(CONFIG_MACH_XIAOMI_PLATINA)
 	struct snd_soc_dapm_widget_list *wlist =
 						dapm_kcontrol_get_wlist(kcontrol);
 	struct snd_soc_dapm_widget *widget = wlist->widgets[0];
@@ -4043,7 +4154,7 @@ static int msm_routing_ext_ec_get(struct snd_kcontrol *kcontrol,
 	pr_debug("%s: ext_ec_ref_rx  = %x\n", __func__, msm_route_ext_ec_ref);
 
 	mutex_lock(&routing_lock);
-#ifdef CONFIG_MACH_XIAOMI_MSM8998
+#if defined(CONFIG_MACH_XIAOMI_MSM8998) || defined(CONFIG_MACH_XIAOMI_PLATINA)
 	if (!strncmp(widget->name, "VOC_EXT_EC MUX", strlen("VOC_EXT_EC MUX")))
 		ucontrol->value.integer.value[0] = voice_ext_ec_ref;
 	else
@@ -4102,6 +4213,24 @@ static int msm_routing_ext_ec_put(struct snd_kcontrol *kcontrol,
 		break;
 	}
 
+#ifdef CONFIG_MACH_XIAOMI_PLATINA
+	if (!strncmp(widget->name, "VOC_EXT_EC MUX", strlen("VOC_EXT_EC MUX")))
+		voice_ext_ec_ref = msm_route_ext_ec_ref;
+	else
+		voip_ext_ec_ref = msm_route_ext_ec_ref;
+
+	pr_info("%s: state %d, voice ec ref %d, voip ec ref %d\n", __func__,
+		state, voice_ext_ec_ref, voip_ext_ec_ref);
+	if (state || (!state && voice_ext_ec_ref == 0 && voip_ext_ec_ref == 0)) {
+		pr_info("%s: update state!\n", __func__);
+		if (!voc_set_ext_ec_ref_port_id(ext_ec_ref_port_id, state)) {
+			mutex_unlock(&routing_lock);
+			snd_soc_dapm_mux_update_power(widget->dapm, kcontrol, mux, e, update);
+		} else {
+			ret = -EINVAL;
+			mutex_unlock(&routing_lock);
+		}
+#else
 	pr_debug("%s: val = %d ext_ec_ref_port_id = 0x%0x state = %d\n",
 		 __func__, msm_route_ext_ec_ref, ext_ec_ref_port_id, state);
 
@@ -4117,8 +4246,11 @@ static int msm_routing_ext_ec_put(struct snd_kcontrol *kcontrol,
 	if (!voc_set_ext_ec_ref_port_id(ext_ec_ref_port_id, state)) {
 		mutex_unlock(&routing_lock);
 		snd_soc_dapm_mux_update_power(widget->dapm, kcontrol, mux, e, update);
+#endif
 	} else {
+#ifndef CONFIG_MACH_XIAOMI_PLATINA
 		ret = -EINVAL;
+#endif
 		mutex_unlock(&routing_lock);
 	}
 
@@ -4144,7 +4276,7 @@ static const struct snd_kcontrol_new voc_ext_ec_mux =
 	SOC_DAPM_ENUM_EXT("VOC_EXT_EC MUX Mux", msm_route_ext_ec_ref_rx_enum[0],
 			  msm_routing_ext_ec_get, msm_routing_ext_ec_put);
 
-#ifdef CONFIG_MACH_XIAOMI_MSM8998
+#if defined(CONFIG_MACH_XIAOMI_MSM8998) || defined(CONFIG_MACH_XIAOMI_PLATINA)
 static const struct snd_kcontrol_new voip_ext_ec_mux =
 	SOC_DAPM_ENUM_EXT("VOIP_EXT_EC MUX Mux", msm_route_ext_ec_ref_rx_enum[0],
 			  msm_routing_ext_ec_get, msm_routing_ext_ec_put);
@@ -18264,7 +18396,7 @@ static const struct snd_soc_dapm_widget msm_qdsp6_widgets[] = {
 	SND_SOC_DAPM_MUX("VOC_EXT_EC MUX", SND_SOC_NOPM, 0, 0,
 			 &voc_ext_ec_mux),
 
-#ifdef CONFIG_MACH_XIAOMI_MSM8998
+#if defined(CONFIG_MACH_XIAOMI_MSM8998) || defined(CONFIG_MACH_XIAOMI_PLATINA)
 	SND_SOC_DAPM_MUX("VOIP_EXT_EC MUX", SND_SOC_NOPM, 0, 0,
 			 &voip_ext_ec_mux),
 #endif
@@ -20432,7 +20564,7 @@ static const struct snd_soc_dapm_route intercon[] = {
 	{"VOC_EXT_EC MUX", "QUAT_MI2S_TX" , "QUAT_MI2S_TX"},
 	{"VOC_EXT_EC MUX", "SLIM_1_TX" ,    "SLIMBUS_1_TX"},
 
-#ifdef CONFIG_MACH_XIAOMI_MSM8998
+#if defined(CONFIG_MACH_XIAOMI_MSM8998) || defined(CONFIG_MACH_XIAOMI_PLATINA)
 	{"VOIP_EXT_EC MUX", "PRI_MI2S_TX" , "PRI_MI2S_TX"},
 	{"VOIP_EXT_EC MUX", "SEC_MI2S_TX" , "SEC_MI2S_TX"},
 	{"VOIP_EXT_EC MUX", "TERT_MI2S_TX" , "TERT_MI2S_TX"},
@@ -20447,6 +20579,15 @@ static const struct snd_soc_dapm_route intercon[] = {
 	{"VoWLAN_UL", NULL, "VOC_EXT_EC MUX"},
 	{"VOICEMMODE1_UL", NULL, "VOC_EXT_EC MUX"},
 	{"VOICEMMODE2_UL", NULL, "VOC_EXT_EC MUX"},
+#ifdef CONFIG_MACH_XIAOMI_PLATINA
+	{"CS-VOICE_UL1", NULL, "VOIP_EXT_EC MUX"},
+	{"VOIP_UL", NULL, "VOIP_EXT_EC MUX"},
+	{"VoLTE_UL", NULL, "VOIP_EXT_EC MUX"},
+	{"VOICE2_UL", NULL, "VOIP_EXT_EC MUX"},
+	{"VoWLAN_UL", NULL, "VOIP_EXT_EC MUX"},
+	{"VOICEMMODE1_UL", NULL, "VOIP_EXT_EC MUX"},
+	{"VOICEMMODE2_UL", NULL, "VOIP_EXT_EC MUX"},
+#endif
 
 #ifdef CONFIG_MACH_XIAOMI_MSM8998
 	{"CS-VOICE_UL1", NULL, "VOIP_EXT_EC MUX"},
@@ -20528,6 +20669,10 @@ static const struct snd_soc_dapm_route intercon[] = {
 	{"AUDIO_REF_EC_UL19 MUX", "SEC_MI2S_TX", "SEC_MI2S_TX"},
 	{"AUDIO_REF_EC_UL19 MUX", "TERT_MI2S_TX", "TERT_MI2S_TX"},
 	{"AUDIO_REF_EC_UL19 MUX", "QUAT_MI2S_TX", "QUAT_MI2S_TX"},
+
+#ifdef CONFIG_MACH_XIAOMI_PLATINA
+	{"LSM1_UL_HL", NULL, "AUDIO_REF_EC_UL1 MUX"},
+#endif
 
 	{"AUDIO_REF_EC_UL28 MUX", "PRI_MI2S_TX", "PRI_MI2S_TX"},
 	{"AUDIO_REF_EC_UL28 MUX", "SEC_MI2S_TX", "SEC_MI2S_TX"},
