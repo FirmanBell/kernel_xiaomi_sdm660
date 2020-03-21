@@ -45,7 +45,12 @@ do {						\
 } while (0)
 # define lockdep_softirq_enter()		\
 do {						\
-	current->softirq_context++;		\
+	if (!current->hardirq_context++)	\
+		current->hardirq_threaded = 0;	\
+} while (0)
+# define trace_hardirq_threaded()		\
+do {						\
+	current->hardirq_threaded = 1;		\
 } while (0)
 # define lockdep_softirq_exit()			\
 do {						\
@@ -58,10 +63,11 @@ do {						\
 # define trace_softirq_context(p)	0
 # define trace_hardirqs_enabled(p)	0
 # define trace_softirqs_enabled(p)	0
-# define trace_hardirq_enter()		do { } while (0)
-# define trace_hardirq_exit()		do { } while (0)
-# define lockdep_softirq_enter()	do { } while (0)
-# define lockdep_softirq_exit()		do { } while (0)
+# define trace_hardirq_enter()		((void)0)
+# define trace_hardirq_threaded()	((void)0)
+# define trace_hardirq_exit()		((void)0)
+# define lockdep_softirq_enter()	((void)0)
+# define lockdep_softirq_exit()		((void)0)
 #endif
 
 #if defined(CONFIG_IRQSOFF_TRACER) || \
