@@ -808,7 +808,7 @@ static int nvt_parse_dt(struct device *dev)
 		of_property_read_bool(np, "novatek,dump-click-count");
 #endif
 
-	ts->config_array = devm_kzalloc(dev, ts->config_array_size *
+	ts->config_array = devm_kcalloc(dev, ts->config_array_size,
 					   sizeof(struct nvt_config_info),
 					   GFP_KERNEL);
 
