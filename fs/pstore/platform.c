@@ -110,21 +110,29 @@ void pstore_set_kmsg_bytes(int bytes)
 /* Tag each group of saved records with a sequence number */
 static int	oopscount;
 
-static const char *get_reason_str(enum kmsg_dump_reason reason)
+const char *pstore_type_to_name(enum pstore_type_id type)
 {
-	switch (reason) {
-	case KMSG_DUMP_PANIC:
-		return "Panic";
-	case KMSG_DUMP_OOPS:
-		return "Oops";
-	case KMSG_DUMP_EMERG:
-		return "Emergency";
-	case KMSG_DUMP_SHUTDOWN:
-		return "Shutdown";
-	default:
-		return "Unknown";
-	}
+	BUILD_BUG_ON(ARRAY_SIZE(pstore_type_names) != PSTORE_TYPE_MAX);
+
+	if (WARN_ON_ONCE(type >= PSTORE_TYPE_MAX))
+		return "unknown";
+
+	return pstore_type_names[type];
 }
+EXPORT_SYMBOL_GPL(pstore_type_to_name);
+
+enum pstore_type_id pstore_name_to_type(const char *name)
+{
+	int i;
+
+	for (i = 0; i < PSTORE_TYPE_MAX; i++) {
+		if (!strcmp(pstore_type_names[i], name))
+			return i;
+	}
+
+	return PSTORE_TYPE_MAX;
+}
+EXPORT_SYMBOL_GPL(pstore_name_to_type);
 
 static void pstore_timer_kick(void)
 {
@@ -396,7 +404,7 @@ static void pstore_dump(struct kmsg_dumper *dumper,
 	unsigned int	part = 1;
 	int		ret;
 
-	why = get_reason_str(reason);
+	why = kmsg_dump_reason_str(reason);
 
 	if (down_trylock(&psinfo->buf_lock)) {
 		/* Failed to acquire lock: give up if we cannot wait. */
