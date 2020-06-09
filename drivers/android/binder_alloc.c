@@ -218,13 +218,14 @@ static int binder_update_page_range(struct binder_alloc *alloc, int allocate,
 		mm = alloc->vma_vm_mm;
 
 	if (mm) {
-		down_read(&mm->mmap_sem);
+		mmap_write_lock(mm);
 		vma = alloc->vma;
 	}
 
 	if (!vma && need_mm) {
-		pr_debug("%d: binder_alloc_buf failed to map pages in userspace, no vma\n",
-			alloc->pid);
+		binder_alloc_debug(BINDER_DEBUG_USER_ERROR,
+				   "%d: binder_alloc_buf failed to map pages in userspace, no vma\n",
+				   alloc->pid);
 		goto err_no_vma;
 	}
 
@@ -237,7 +238,6 @@ static int binder_update_page_range(struct binder_alloc *alloc, int allocate,
 		page = &alloc->pages[index];
 
 		if (page->page_ptr) {
-
 			on_lru = list_lru_del(&binder_alloc_lru, &page->lru);
 			WARN_ON(!on_lru);
 
@@ -251,7 +251,7 @@ static int binder_update_page_range(struct binder_alloc *alloc, int allocate,
 					    __GFP_HIGHMEM |
 					    __GFP_ZERO);
 		if (!page->page_ptr) {
-			pr_debug("%d: binder_alloc_buf failed for page at %pK\n",
+			pr_err("%d: binder_alloc_buf failed for page at %pK\n",
 				alloc->pid, page_addr);
 			goto err_alloc_page_failed;
 		}
@@ -261,7 +261,7 @@ static int binder_update_page_range(struct binder_alloc *alloc, int allocate,
 		user_page_addr = (uintptr_t)page_addr;
 		ret = vm_insert_page(vma, user_page_addr, page[0].page_ptr);
 		if (ret) {
-			pr_debug("%d: binder_alloc_buf failed to map page at %lx in userspace\n",
+			pr_err("%d: binder_alloc_buf failed to map page at %lx in userspace\n",
 			       alloc->pid, user_page_addr);
 			goto err_vm_insert_page_failed;
 		}
@@ -272,7 +272,7 @@ static int binder_update_page_range(struct binder_alloc *alloc, int allocate,
 		/* vm_insert_page does not seem to increment the refcount */
 	}
 	if (mm) {
-		up_read(&mm->mmap_sem);
+		mmap_write_unlock(mm);
 		mmput_async(mm);
 	}
 	return 0;
@@ -302,12 +302,11 @@ err_page_ptr_cleared:
 	}
 err_no_vma:
 	if (mm) {
-		up_read(&mm->mmap_sem);
+		mmap_write_unlock(mm);
 		mmput_async(mm);
 	}
 	return vma ? -ENOMEM : -ESRCH;
 }
-
 
 static inline void binder_alloc_set_vma(struct binder_alloc *alloc,
 		struct vm_area_struct *vma)
@@ -999,7 +998,7 @@ enum lru_status binder_alloc_free_page(struct list_head *item,
 	mm = alloc->vma_vm_mm;
 	if (!mmget_not_zero(mm))
 		goto err_mmget;
-	if (!down_read_trylock(&mm->mmap_sem))
+	if (!mmap_read_trylock(mm))
 		goto err_down_read_mmap_sem_failed;
 	vma = binder_alloc_get_vma(alloc);
 
@@ -1009,7 +1008,7 @@ enum lru_status binder_alloc_free_page(struct list_head *item,
 	if (vma) {
 		zap_page_range(vma, page_addr, PAGE_SIZE);
 	}
-	up_read(&mm->mmap_sem);
+	mmap_read_unlock(mm);
 	mmput_async(mm);
 
 	__free_page(page->page_ptr);
