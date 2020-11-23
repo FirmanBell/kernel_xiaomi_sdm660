@@ -24,6 +24,8 @@ fw-shipped-$(CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_FORCE) += synaptics_jdi_3331_sagit
 				synaptics_jdi_3330_sagit.fw synaptics_lgd_4322_sagit.fw synaptics_jdi_3330_chiron.fw
 
 fw-shipped-$(CONFIG_TOUCHSCREEN_FT5X46) += ft8716_ebbg_incell_ebbg_chiron.fw
+fw-shipped-$(CONFIG_TOUCHSCREEN_SYNAPTICS_TCM_D2T) += synaptics_boe_4320.fw
+fw-shipped-$(CONFIG_TOUCHSCREEN_NVT_D2T) += novatek_nt36672_d2t.fw
 
 fw-shipped-all := $(fw-shipped-y) $(fw-shipped-m) $(fw-shipped-)
 
