@@ -23,8 +23,14 @@
 
 #define VENDOR_ID_NONE		0
 #define VENDOR_ID_AAC		1
+#ifdef CONFIG_MACH_XIAOMI_PLATINA
+#define VENDOR_ID_SSI		2
+#define VENDOR_ID_GOER		3
+#else
 #define VENDOR_ID_GOER		2
 #define VENDOR_ID_SSI		3
+#endif
+
 #define VENDOR_ID_UNKNOWN	4
 
 extern int spk_id_get_pin_3state(struct device_node *np);
