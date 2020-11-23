@@ -432,3 +432,4 @@ obj-y += msm_sdw/
 
 obj-$(CONFIG_SND_SOC_TFA98XX) += tfa98xx/
 obj-$(CONFIG_SND_SOC_TAS2559) += tas2559/
+obj-$(CONFIG_SND_SOC_TFA9894)	+= tfa9894/
