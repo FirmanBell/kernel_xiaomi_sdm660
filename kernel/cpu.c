@@ -1106,7 +1106,7 @@ static int cpu_down_maps_locked(unsigned int cpu, enum cpuhp_state target)
 
 static int do_cpu_down(unsigned int cpu, enum cpuhp_state target)
 {
-  	struct cpumask newmask;
+	struct cpumask newmask;
 	int err;
 
 	preempt_disable();
@@ -1115,7 +1115,8 @@ static int do_cpu_down(unsigned int cpu, enum cpuhp_state target)
 
 	/* One big, LITTLE, and prime CPU must remain online */
 	if (!cpumask_intersects(&newmask, cpu_lp_mask) ||
-	    !cpumask_intersects(&newmask, cpu_perf_mask))
+	    !cpumask_intersects(&newmask, cpu_perf_mask) ||
+	    !cpumask_intersects(&newmask, cpu_prime_mask))
 		return -EINVAL;
 
 	/*
