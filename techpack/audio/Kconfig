@@ -189,5 +189,7 @@ config TAS2557_CODEC_STEREO
 config TAS2557_MISC_STEREO
 	bool "Misc Driver support"
 endif # SND_SOC_TAS2557_STEREO
+config SOUND_CONTROL
+	bool "Sound Control for msm89xx"
 
 endmenu
