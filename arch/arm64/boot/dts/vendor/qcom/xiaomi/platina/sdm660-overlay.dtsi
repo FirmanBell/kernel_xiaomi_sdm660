@@ -556,6 +556,7 @@
 			ftrace-size = <0x80000>;
 			pmsg-size = <0x80000>;
 			status = "ok";
+			max-reason = <0x4>;
 		};
 	};
 };
