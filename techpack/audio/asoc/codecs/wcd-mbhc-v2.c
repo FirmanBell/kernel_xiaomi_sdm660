@@ -30,6 +30,10 @@
 static int hph_state;
 #endif
 
+#ifdef CONFIG_MACH_XIAOMI_CLOVER
+bool is_jack_insert = false;
+#endif
+
 void wcd_mbhc_jack_report(struct wcd_mbhc *mbhc,
 			  struct snd_soc_jack *jack, int status, int mask)
 {
@@ -42,6 +46,13 @@ void wcd_mbhc_jack_report(struct wcd_mbhc *mbhc,
 		hph_state = 0;
 #endif
 		
+#ifdef CONFIG_MACH_XIAOMI_CLOVER
+	if (!status && (jack->jack->type&WCD_MBHC_JACK_MASK)) {
+		is_jack_insert = false;
+	} else if (jack->jack->type&WCD_MBHC_JACK_MASK) {
+		is_jack_insert = true;
+	}
+#endif
 	snd_soc_jack_report(jack, status, mask);
 }
 EXPORT_SYMBOL(wcd_mbhc_jack_report);
@@ -137,11 +148,13 @@ void wcd_enable_curr_micbias(const struct wcd_mbhc *mbhc,
 
 	switch (cs_mb_en) {
 	case WCD_MBHC_EN_CS:
+#ifndef CONFIG_MACH_XIAOMI_CLOVER
 		WCD_MBHC_REG_UPDATE_BITS(WCD_MBHC_MICB_CTRL, 0);
 		WCD_MBHC_REG_UPDATE_BITS(WCD_MBHC_BTN_ISRC_CTL, 3);
 		/* Program Button threshold registers as per CS */
 		wcd_program_btn_threshold(mbhc, false);
 		break;
+#endif
 	case WCD_MBHC_EN_MB:
 		WCD_MBHC_REG_UPDATE_BITS(WCD_MBHC_BTN_ISRC_CTL, 0);
 		WCD_MBHC_REG_UPDATE_BITS(WCD_MBHC_FSM_EN, 1);
@@ -313,7 +326,18 @@ out_micb_en:
 					  &mbhc->event_state)))
 			/* enable pullup and cs, disable mb */
 			wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_PULLUP);
+#ifdef CONFIG_MACH_XIAOMI_CLOVER
+		else {
+			/* enable current source and disable mb, pullup*/
+			if (is_jack_insert)
+			   wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_MB);
+			else
+			   wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_NONE);
+		}
+#else
 		else
+#endif
+
 #ifdef CONFIG_MACH_XIAOMI_PLATINA
 			wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_MB);
 #else
@@ -323,7 +347,11 @@ out_micb_en:
 
 		/* configure cap settings properly when micbias is disabled */
 		if (mbhc->mbhc_cb->set_cap_mode)
+#ifdef CONFIG_MACH_XIAOMI_CLOVER
+			mbhc->mbhc_cb->set_cap_mode(component, micbias1, is_jack_insert);
+#else
 			mbhc->mbhc_cb->set_cap_mode(component, micbias1, false);
+#endif
 		break;
 	case WCD_EVENT_PRE_HPHL_PA_OFF:
 		mutex_lock(&mbhc->hphl_pa_lock);
@@ -334,7 +362,11 @@ out_micb_en:
 			hphlocp_off_report(mbhc, SND_JACK_OC_HPHL);
 		clear_bit(WCD_MBHC_EVENT_PA_HPHL, &mbhc->event_state);
 		/* check if micbias is enabled */
+#ifdef CONFIG_MACH_XIAOMI_CLOVER
+		if (true == is_jack_insert)
+#else
 		if (micbias2)
+#endif
 			/* Disable cs, pullup & enable micbias */
 			wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_MB);
 		else
@@ -343,6 +375,8 @@ out_micb_en:
 #endif
 #ifdef CONFIG_MACH_XIAOMI_PLATINA
 			wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_MB);
+#elif defined(CONFIG_MACH_XIAOMI_CLOVER)
+			wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_NONE);
 #else
 			/* Disable micbias, pullup & enable cs */
 			wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_CS);
@@ -359,7 +393,11 @@ out_micb_en:
 			hphrocp_off_report(mbhc, SND_JACK_OC_HPHR);
 		clear_bit(WCD_MBHC_EVENT_PA_HPHR, &mbhc->event_state);
 		/* check if micbias is enabled */
+#ifdef CONFIG_MACH_XIAOMI_CLOVER
+		if (true == is_jack_insert)
+#else
 		if (micbias2)
+#endif
 			/* Disable cs, pullup & enable micbias */
 			wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_MB);
 		else
@@ -368,6 +406,8 @@ out_micb_en:
 #endif
 #ifdef CONFIG_MACH_XIAOMI_PLATINA
 			wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_MB);
+#elif defined(CONFIG_MACH_XIAOMI_CLOVER)
+			wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_NONE);
 #else
 			/* Disable micbias, pullup & enable cs */
 			wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_CS);
@@ -597,7 +637,11 @@ void wcd_mbhc_report_plug(struct wcd_mbhc *mbhc, int insertion,
 		 __func__, insertion, mbhc->hph_status);
 	if (!insertion) {
 		/* Report removal */
+#ifdef CONFIG_MACH_XIAOMI_CLOVER
+		mbhc->hph_status &= ~(SND_JACK_HEADSET | SND_JACK_LINEOUT | SND_JACK_ANC_HEADPHONE | SND_JACK_UNSUPPORTED);
+#else
 		mbhc->hph_status &= ~jack_type;
+#endif
 		/*
 		 * cancel possibly scheduled btn work and
 		 * report release if we reported button press
@@ -1089,7 +1133,11 @@ static void wcd_mbhc_swch_irq_handler(struct wcd_mbhc *mbhc)
 					MBHC_COMMON_MICB_TAIL_CURR, false);
 
 		if (mbhc->mbhc_cb->set_cap_mode)
+#ifdef CONFIG_MACH_XIAOMI_CLOVER
+			mbhc->mbhc_cb->set_cap_mode(component, micbias1, is_jack_insert);
+#else
 			mbhc->mbhc_cb->set_cap_mode(component, micbias1, false);
+#endif
 
 		mbhc->btn_press_intr = false;
 		mbhc->is_btn_press = false;
@@ -2204,7 +2252,11 @@ int wcd_mbhc_init(struct wcd_mbhc *mbhc, struct snd_soc_component *component,
 	mbhc->is_btn_press = false;
 	mbhc->component = component;
 	mbhc->intr_ids = mbhc_cdc_intr_ids;
+#ifdef CONFIG_MACH_XIAOMI_CLOVER
+	mbhc->impedance_detect = false;
+#else
 	mbhc->impedance_detect = impedance_det_en;
+#endif
 	mbhc->hphl_swh = hph_swh;
 	mbhc->gnd_swh = gnd_swh;
 	mbhc->micbias_enable = false;
