@@ -417,7 +417,7 @@ info_retry:
 }
 
 #if TOUCHSCREEN_PLATINA
-static int nvt_get_dt_coords(struct device *dev, char *name)
+static inline int nvt_get_dt_coords(struct device *dev, char *name)
 {
 	int ret = 0;
 	u32 coords[NVT_COORDS_ARR_SIZE] = { 0 };
@@ -452,7 +452,7 @@ static int nvt_get_dt_coords(struct device *dev, char *name)
 }
 
 #ifdef CONFIG_OF
-static int nvt_parse_dt(struct device *dev)
+static inline int nvt_parse_dt(struct device *dev)
 {
 	struct device_node *mi, *np = dev->of_node;
 	struct nvt_config_info *config_info;
@@ -529,7 +529,7 @@ static int nvt_parse_dt(struct device *dev)
 	return 0;
 }
 #else
-static int nvt_parse_dt(struct device *dev)
+static inline int nvt_parse_dt(struct device *dev)
 {
 #if NVT_TOUCH_SUPPORT_HW_RST
 	ts->reset_gpio = NVT_TOUCH_RST_PIN;
@@ -559,7 +559,7 @@ static inline void nvt_parse_dt(struct device *dev)
 #endif
 
 #if TOUCHSCREEN_PLATINA
-static const char *nvt_get_config(struct nvt_ts_data *ts)
+static inline const char *nvt_get_config(struct nvt_ts_data *ts)
 {
 	int i;
 
@@ -587,7 +587,7 @@ static const char *nvt_get_config(struct nvt_ts_data *ts)
 	return ts->config_array[i].nvt_cfg_name;
 }
 
-static int nvt_get_reg(struct nvt_ts_data *ts, bool get)
+static inline int nvt_get_reg(struct nvt_ts_data *ts, bool get)
 {
 	int retval;
 
@@ -642,7 +642,7 @@ regulator_put:
 	return retval;
 }
 
-static int nvt_enable_reg(struct nvt_ts_data *ts, bool enable)
+static inline int nvt_enable_reg(struct nvt_ts_data *ts, bool enable)
 {
 	int retval;
 
@@ -857,7 +857,7 @@ XFER_ERROR:
 #define EVENT_WAKEUP_MODE_ON			5
 #define EVENT_END				13
 
-static void mi_switch_mode_work(struct work_struct *work)
+static inline void mi_switch_mode_work(struct work_struct *work)
 {
 	struct mi_mode_switch *ms = container_of(
 			work, struct mi_mode_switch, switch_mode_work
@@ -875,7 +875,7 @@ static void mi_switch_mode_work(struct work_struct *work)
 	}
 }
 
-static int mi_input_event(struct input_dev *dev, unsigned int type, unsigned int code, int value)
+static inline int mi_input_event(struct input_dev *dev, unsigned int type, unsigned int code, int value)
 {
 	struct nvt_ts_data *data = input_get_drvdata(dev);
 	struct mi_mode_switch *ms;
@@ -1058,7 +1058,7 @@ out:
 }
 
 #ifdef NVT_TOUCH_COUNT_DUMP
-static ssize_t nvt_touch_suspend_notify_show(struct device *dev, struct device_attribute *attr,
+static inline ssize_t nvt_touch_suspend_notify_show(struct device *dev, struct device_attribute *attr,
 		char *buf)
 {
 	return snprintf(buf, PAGE_SIZE, "%d\n", !bTouchIsAwake);
@@ -1067,7 +1067,7 @@ static DEVICE_ATTR(touch_suspend_notify, (S_IRUGO | S_IRGRP), nvt_touch_suspend_
 #endif
 
 #if TOUCHSCREEN_PLATINA
-static int nvt_pinctrl_init(struct nvt_ts_data *nvt_data)
+static inline int nvt_pinctrl_init(struct nvt_ts_data *nvt_data)
 {
 	int retval = 0;
 	nvt_data->ts_pinctrl = devm_pinctrl_get(&nvt_data->client->dev);
@@ -1685,7 +1685,7 @@ static struct of_device_id nvt_match_table[] = {
 #endif
 
 #ifdef CONFIG_PM
-static int nvt_pm_suspend(struct device *dev)
+static inline int nvt_pm_suspend(struct device *dev)
 {
 	if (device_may_wakeup(dev) && ts->gesture_enabled) {
 		enable_irq_wake(ts->client->irq);
@@ -1697,7 +1697,7 @@ static int nvt_pm_suspend(struct device *dev)
 
 }
 
-static int nvt_pm_resume(struct device *dev)
+static inline int nvt_pm_resume(struct device *dev)
 {
 	if (device_may_wakeup(dev) && ts->gesture_enabled) {
 		disable_irq_wake(ts->client->irq);
