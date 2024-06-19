@@ -9,9 +9,6 @@
 
 MODULE_NAME := tfa98xx_dlkm
 
-# debugging support
-TFA_DEBUG := 0
-
 ccflags-y += -I$(srctree)/$(src)/inc
 ccflags-y += -Werror
 
@@ -21,11 +18,3 @@ $(MODULE_NAME)-objs += src/tfa98xx.o
 $(MODULE_NAME)-objs += src/tfa_container.o
 $(MODULE_NAME)-objs += src/tfa_dsp.o
 $(MODULE_NAME)-objs += src/tfa_init.o
-
-# Disable enum conversion warning
-subdir-ccflags-y := $(call cc-disable-warning, enum-conversion)
-
-ifeq ($(TFA_DEBUG),1)
-ccflags-y += -DTFA_DEBUG -DDEBUG
-$(MODULE_NAME)-objs += src/tfa_debug.o
-endif
