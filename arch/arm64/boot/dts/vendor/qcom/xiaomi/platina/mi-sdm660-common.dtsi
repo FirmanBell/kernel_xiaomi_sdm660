@@ -123,6 +123,19 @@
 	qcom,en-cabc;
 	qcom,fs-current-limit = <20000>;
 	qcom,string-cfg= <3>;
+	status = "okay";
+};
+
+&pm660l_lcdb {
+	status = "okay";
+};
+
+&pm660a_oledb {
+	status = "disabled";
+};
+
+&pm660a_labibb {
+	status = "disabled";
 };
 
 &dsi_dual_nt35597_truly_video {
