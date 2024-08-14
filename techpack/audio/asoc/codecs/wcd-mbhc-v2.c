@@ -314,8 +314,12 @@ out_micb_en:
 			/* enable pullup and cs, disable mb */
 			wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_PULLUP);
 		else
+#ifdef CONFIG_MACH_XIAOMI_PLATINA
+			wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_MB);
+#else
 			/* enable current source and disable mb, pullup*/
 			wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_CS);
+#endif
 
 		/* configure cap settings properly when micbias is disabled */
 		if (mbhc->mbhc_cb->set_cap_mode)
@@ -337,8 +341,12 @@ out_micb_en:
 #ifdef CONFIG_MACH_ASUS_X00TD
 		if (!wcd_swch_level_remove(mbhc))
 #endif
+#ifdef CONFIG_MACH_XIAOMI_PLATINA
+			wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_MB);
+#else
 			/* Disable micbias, pullup & enable cs */
 			wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_CS);
+#endif
 		mutex_unlock(&mbhc->hphl_pa_lock);
 		clear_bit(WCD_MBHC_ANC0_OFF_ACK, &mbhc->hph_anc_state);
 		break;
@@ -358,8 +366,12 @@ out_micb_en:
 #ifdef CONFIG_MACH_ASUS_X00TD
 		if (!wcd_swch_level_remove(mbhc))
 #endif
+#ifdef CONFIG_MACH_XIAOMI_PLATINA
+			wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_MB);
+#else
 			/* Disable micbias, pullup & enable cs */
 			wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_CS);
+#endif
 		mutex_unlock(&mbhc->hphr_pa_lock);
 		clear_bit(WCD_MBHC_ANC1_OFF_ACK, &mbhc->hph_anc_state);
 		break;
@@ -627,7 +639,9 @@ void wcd_mbhc_report_plug(struct wcd_mbhc *mbhc, int insertion,
 		hphrocp_off_report(mbhc, SND_JACK_OC_HPHR);
 		hphlocp_off_report(mbhc, SND_JACK_OC_HPHL);
 		mbhc->current_plug = MBHC_PLUG_TYPE_NONE;
+#ifndef CONFIG_MACH_XIAOMI_PLATINA
 		mbhc->force_linein = false;
+#endif
 	} else {
 		/*
 		 * Report removal of current jack type.
@@ -717,6 +731,7 @@ void wcd_mbhc_report_plug(struct wcd_mbhc *mbhc, int insertion,
 					&mbhc->zl, &mbhc->zr);
 			WCD_MBHC_REG_UPDATE_BITS(WCD_MBHC_FSM_EN,
 						 fsm_en);
+#ifndef CONFIG_MACH_XIAOMI_PLATINA
 			if ((mbhc->zl > mbhc->mbhc_cfg->linein_th) &&
 				(mbhc->zr > mbhc->mbhc_cfg->linein_th) &&
 				(jack_type == SND_JACK_HEADPHONE)) {
@@ -735,6 +750,25 @@ void wcd_mbhc_report_plug(struct wcd_mbhc *mbhc, int insertion,
 				pr_debug("%s: Marking jack type as SND_JACK_LINEOUT\n",
 				__func__);
 			}
+#else
+			if ((jack_type == SND_JACK_UNSUPPORTED) &&
+				   mbhc->zl > 20000 &&
+				   mbhc->zr > 20000) {
+				mbhc->current_plug = MBHC_PLUG_TYPE_HEADSET;
+				mbhc->jiffies_atreport = jiffies;
+				jack_type = SND_JACK_HEADSET;
+				if (mbhc->hph_status) {
+					mbhc->hph_status &= ~(SND_JACK_LINEOUT |
+							SND_JACK_HEADPHONE |
+							SND_JACK_ANC_HEADPHONE |
+							SND_JACK_UNSUPPORTED);
+					wcd_mbhc_jack_report(mbhc,
+							&mbhc->headset_jack,
+							mbhc->hph_status,
+							WCD_MBHC_JACK_MASK);
+				}
+			}
+#endif
 		}
 
 		/* Do not calculate impedance again for lineout
@@ -850,6 +884,31 @@ void wcd_mbhc_find_plug_and_report(struct wcd_mbhc *mbhc,
 			wcd_mbhc_report_plug(mbhc, 0, SND_JACK_HEADSET);
 #ifdef CONFIG_MACH_ASUS_SDM660
 		wcd_mbhc_report_plug(mbhc, 1, SND_JACK_HEADSET);
+#elif defined(CONFIG_MACH_XIAOMI_PLATINA)
+			/*
+			 * calculate impedance detection
+			 * If Zl and Zr > 20k then it is special accessory
+			 * otherwise unsupported cable.
+			 */
+			/*Add for selfie stick not work  tangshouxing 9/6*/
+		if (mbhc->impedance_detect) {
+			mbhc->mbhc_cb->compute_impedance(mbhc,
+				&mbhc->zl, &mbhc->zr);
+			if ((mbhc->zl > 20000) && (mbhc->zr > 20000)) {
+				pr_debug("%s: special accessory \n", __func__);
+				/* Toggle switch back */
+				if (mbhc->mbhc_cfg->swap_gnd_mic &&
+					mbhc->mbhc_cfg->swap_gnd_mic(mbhc->component, true)) {
+					pr_debug("%s: US_EU gpio present,flip switch again\n"
+						, __func__);
+				}
+				/* enable CS/MICBIAS for headset button detection to work */
+				wcd_enable_mbhc_supply(mbhc, MBHC_PLUG_TYPE_HEADSET);
+				wcd_mbhc_report_plug(mbhc, 1, SND_JACK_HEADSET);
+			} else {
+				 wcd_mbhc_report_plug(mbhc, 1, SND_JACK_UNSUPPORTED);
+			}
+		}
 #else
 		wcd_mbhc_report_plug(mbhc, 1, SND_JACK_UNSUPPORTED);
 #endif
@@ -946,6 +1005,14 @@ static void wcd_mbhc_swch_irq_handler(struct wcd_mbhc *mbhc)
 	dev_dbg(component->dev, "%s: enter\n", __func__);
 	WCD_MBHC_RSC_LOCK(mbhc);
 	mbhc->in_swch_irq_handler = true;
+
+#ifdef CONFIG_MACH_XIAOMI_PLATINA
+	/*QCOM FSM can not close corretly,when make a call.
+	  Disable FSM when the mbhc irq is detected */
+	/* Disable HW FSM */
+	WCD_MBHC_REG_UPDATE_BITS(WCD_MBHC_FSM_EN, 0);
+	WCD_MBHC_REG_UPDATE_BITS(WCD_MBHC_BTN_ISRC_CTL, 0);
+#endif
 
 	/* cancel pending button press */
 	if (wcd_cancel_btn_work(mbhc))
