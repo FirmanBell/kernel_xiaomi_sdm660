@@ -1252,7 +1252,7 @@ static void *def_msm_int_wcd_mbhc_cal(void)
 		return NULL;
 
 #define S(X, Y) ((WCD_MBHC_CAL_PLUG_TYPE_PTR(msm_int_wcd_cal)->X) = (Y))
-#ifdef CONFIG_MACH_ASUS_SDM660
+#if defined(CONFIG_MACH_ASUS_SDM660) || defined(CONFIG_MACH_XIAOMI_PLATINA)
 	S(v_hs_max, 1700);
 #else
 	S(v_hs_max, 1500);
@@ -1286,6 +1286,17 @@ static void *def_msm_int_wcd_mbhc_cal(void)
 	btn_high[1] = 225;
 	btn_low[2] = 450;
 	btn_high[2] = 450;
+#elif defined(CONFIG_MACH_XIAOMI_PLATINA)
+	btn_low[0] = 75;
+	btn_high[0] = 75;
+	btn_low[1] = 260;
+	btn_high[1] = 260;
+	btn_low[2] = 480;
+	btn_high[2] = 480;
+	btn_low[3] = 480;
+	btn_high[3] = 480;
+	btn_low[4] = 480;
+	btn_high[4] = 480;
 #else
 	btn_low[1] = 150;
 	btn_high[1] = 150;
