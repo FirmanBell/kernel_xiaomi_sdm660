@@ -235,7 +235,7 @@ static struct wcd_mbhc_config mbhc_cfg = {
 	.swap_gnd_mic = NULL,
 	.hs_ext_micbias = true,
 	.key_code[0] = KEY_MEDIA,
-#ifdef CONFIG_MACH_ASUS_SDM660
+#if defined(CONFIG_MACH_ASUS_SDM660) || defined(CONFIG_MACH_XIAOMI_PLATINA)
 	.key_code[1] = KEY_VOLUMEUP,
 	.key_code[2] = KEY_VOLUMEDOWN,
 	.key_code[3] = 0,
