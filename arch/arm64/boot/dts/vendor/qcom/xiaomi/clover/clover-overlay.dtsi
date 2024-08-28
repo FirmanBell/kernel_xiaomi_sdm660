@@ -187,6 +187,16 @@
 	qcom,string-cfg = <15>;
 	qcom,en-cabc;
 	/delete-property/ qcom,auto-calibration;
+	status = "okay";
+};
+&pm660l_lcdb {
+	status = "okay";
+};
+&pm660a_oledb {
+	status = "disabled";
+};
+&pm660a_labibb {
+	status = "disable";
 };
 &pm660l_l3 {
 	regulator-min-microvolt = <3000000>;
