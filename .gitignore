@@ -126,4 +126,4 @@ android/configs/android-*.cfg
 Android.bp
 
 # KSU
-KernelSU/
+KernelSU*/
