@@ -485,6 +485,12 @@ config MACH_XIAOMI_DUMMY
 	help
 	  A stub configuration that doesn't enable support for anything.
 
+config MACH_XIAOMI_CLOVER
+	bool "Clover Platform"
+	select MACH_XIAOMI_SDM660
+	help
+	  This enables support for Xiaomi Mi Pad 4 Family
+
 config MACH_XIAOMI_PLATINA
 	bool "Xiaomi platina board"
 	select MACH_XIAOMI_SDM660
