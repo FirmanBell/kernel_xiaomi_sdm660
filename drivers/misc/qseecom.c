@@ -7790,6 +7790,7 @@ static long qseecom_ioctl(struct file *file,
 			ret = -EINVAL;
 			break;
 		}
+		mutex_unlock(&listener_access_lock);
 		atomic_inc(&data->ioctl_count);
 		ret = qseecom_receive_req(data);
 		atomic_dec(&data->ioctl_count);
