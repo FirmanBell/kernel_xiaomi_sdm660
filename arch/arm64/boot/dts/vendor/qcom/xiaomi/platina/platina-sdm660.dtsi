@@ -19,15 +19,6 @@
 #include "platina-smb1355.dtsi"
 #include "platina-xiaomi-sdm660-common.dtsi"
 
-/* sdm660.dtsi */
-
-&firmware {
-		/delete-node/ vbmeta;
-	android {
-		/delete-node/ fstab;
-	};
-};
-
 /* platina-sdm660.dtsi */
 
 &qusb_phy0 {
