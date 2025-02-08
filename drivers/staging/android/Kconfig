@@ -49,7 +49,7 @@ config ANDROID_LOW_MEMORY_KILLER_AUTODETECT_OOM_ADJ_VALUES
 
 config ANDROID_LOW_MEMORY_KILLER_CONSIDER_SWAP
 	bool "Android Low Memory Killer: consider swap free size"
-	depends on ANDROID_LOW_MEMORY_KILLER && SWAP
+	depends on (ANDROID_PR_KILL || ANDROID_LOW_MEMORY_KILLER) && SWAP
 	default n
 	---help---
 	  Use freeswap as otherfile when watermark is grater than
