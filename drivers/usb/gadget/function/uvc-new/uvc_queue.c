@@ -144,9 +144,9 @@ int uvcg_queue_init(struct uvc_video_queue *queue, struct device *dev, enum v4l2
 	queue->queue.ops = &uvc_queue_qops;
 	queue->queue.lock = lock;
 	if (cdev->gadget->sg_supported) {
-		pr_warn("%s: cdev->gadget->sg_supported == true, but force disabled\n", __func__);
-		/*queue->queue.mem_ops = &vb2_dma_sg_memops;
-		queue->use_sg = 1;*/
+		WARN(1, "uvc cdev->gadget->sg_supported\n");
+		//queue->queue.mem_ops = &vb2_dma_sg_memops;
+		//queue->use_sg = 1;
 	}
 	queue->queue.mem_ops = &vb2_vmalloc_memops;
 
