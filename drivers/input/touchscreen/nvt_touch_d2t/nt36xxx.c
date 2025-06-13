@@ -2234,7 +2234,7 @@ Description:
 return:
 	Executive outcomes. 0---succeed.
 *******************************************************/
-static int32_t nvt_ts_suspend(struct device *dev)
+static int32_t __always_inline nvt_ts_suspend(struct device *dev)
 {
 	uint8_t buf[4] = {0};
 	int ret = 0;
@@ -2317,7 +2317,7 @@ Description:
 return:
 	Executive outcomes. 0---succeed.
 *******************************************************/
-static int32_t nvt_ts_resume(struct device *dev)
+static int32_t __always_inline nvt_ts_resume(struct device *dev)
 {
 	int ret = 0;
 
@@ -2431,7 +2431,7 @@ static int drm_notifier_callback(struct notifier_block *self, unsigned long even
 }
 
 #elif defined(CONFIG_FB)
-static int fb_notifier_callback(struct notifier_block *self, unsigned long event, void *data)
+static int __always_inline fb_notifier_callback(struct notifier_block *self, unsigned long event, void *data)
 {
 	struct fb_event *evdata = data;
 	int *blank;
