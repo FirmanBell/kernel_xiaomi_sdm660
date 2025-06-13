@@ -25,7 +25,6 @@
 #include <linux/of_gpio.h>
 #include <linux/of_irq.h>
 #include <linux/regulator/consumer.h>
-#include <linux/hwinfo.h>
 
 #ifdef CONFIG_DRM
 #include <drm/drm_notifier.h>
@@ -34,24 +33,24 @@
 #endif
 
 #include "nt36xxx.h"
-#ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT
+#ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT
 #include <linux/jiffies.h>
-#endif /* ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT */
+#endif /* ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT */
 
-#ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT
+#ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT
 static struct delayed_work nvt_esd_check_work;
 static struct workqueue_struct *nvt_esd_check_wq;
 static unsigned long irq_timer = 0;
 uint8_t esd_check = false;
 uint8_t esd_retry = 0;
-#endif /* ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT */
+#endif /* ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT */
 
 #if NVT_TOUCH_EXT_PROC
 extern int32_t nvt_extra_proc_init(void);
 extern void nvt_extra_proc_deinit(void);
 #endif
 
-#ifdef CONFIG_TOUCHSCREEN_NT36XXX_MP_CTRLRAM
+#ifdef CONFIG_TOUCHSCREEN_NVT_D2T_MP_CTRLRAM
 extern int32_t nvt_mp_proc_init(void);
 extern void nvt_mp_proc_deinit(void);
 #endif
@@ -471,160 +470,6 @@ info_retry:
 }
 
 /*******************************************************
-Description:
-	Novatek touchscreen get OEM data function.
-
-return:
-	Executive outcomes. 0---success. -1---fail.
-*******************************************************/
-int32_t nvt_get_oem_data(uint8_t *data, uint32_t flash_address, int32_t size)
-{
-	uint8_t buf[64] = {0};
-	uint8_t tmp_data[512] = {0};
-	int32_t count_256 = 0;
-	uint32_t cur_flash_addr = 0;
-	uint32_t cur_sram_addr = 0;
-	uint16_t checksum_get = 0;
-	uint16_t checksum_cal = 0;
-	int32_t i = 0;
-	int32_t j = 0;
-	int32_t ret = 0;
-	int32_t retry = 0;
-
-	/* maximum 256 bytes each read */
-	if (size % 256)
-		count_256 = size / 256 + 1;
-	else
-		count_256 = size / 256;
-
-get_oem_data_retry:
-	nvt_sw_reset_idle();
-
-	nvt_stop_crc_reboot();
-
-	/* Step 1: Initial BootLoader */
-	ret = Init_BootLoader();
-	if (ret < 0)
-		goto get_oem_data_out;
-
-	/* Step 2: Resume PD */
-	ret = Resume_PD();
-	if (ret < 0)
-		goto get_oem_data_out;
-
-	/* Step 3: Unlock */
-	buf[0] = 0x00;
-	buf[1] = 0x35;
-	CTP_I2C_WRITE(ts->client, I2C_HW_Address, buf, 2);
-	msleep(10);
-
-	for (i = 0; i < count_256; i++) {
-		cur_flash_addr = flash_address + i * 256;
-		/* Step 4: Flash Read Command */
-		buf[0] = 0x00;
-		buf[1] = 0x03;
-		buf[2] = ((cur_flash_addr >> 16) & 0xFF);
-		buf[3] = ((cur_flash_addr >> 8) & 0xFF);
-		buf[4] = (cur_flash_addr & 0xFF);
-		buf[5] = 0x00;
-		buf[6] = 0xFF;
-		CTP_I2C_WRITE(ts->client, I2C_HW_Address, buf, 7);
-		msleep(10);
-		/* Check 0xAA (Read Command) */
-		buf[0] = 0x00;
-		buf[2] = 0x00;
-		CTP_I2C_READ(ts->client, I2C_HW_Address, buf, 2);
-		if (buf[1] != 0xAA) {
-			NVT_ERR("Check 0xAA error!! status=0x%02X\n", buf[1]);
-			ret = -1;
-			goto get_oem_data_out;
-		}
-		msleep(10);
-
-		/* Step 5: Read Data and Checksum */
-		for (j = 0; j < ((256 / 32) + 1); j++) {
-			cur_sram_addr
-				= ts->mmap->READ_FLASH_CHECKSUM_ADDR + j * 32;
-			buf[0] = 0xFF;
-			buf[1] = (cur_sram_addr >> 16) & 0xFF;
-			buf[2] = (cur_sram_addr  >> 8) & 0xFF;
-			CTP_I2C_WRITE(ts->client, I2C_BLDR_Address, buf, 3);
-
-			buf[0] = cur_sram_addr & 0xFF;
-			CTP_I2C_READ(ts->client, I2C_BLDR_Address, buf, 33);
-
-			memcpy(tmp_data + j * 32, buf + 1, 32);
-		}
-		/* get checksum of the 256 bytes data read */
-		checksum_get = (uint16_t)((tmp_data[1] << 8) | tmp_data[0]);
-		/* calculate checksum of of the 256 bytes data read */
-		checksum_cal = (uint16_t)((cur_flash_addr >> 16) & 0xFF) +
-		(uint16_t)((cur_flash_addr >> 8) & 0xFF) +
-		(cur_flash_addr & 0xFF) + 0x00 + 0xFF;
-
-		for (j = 0; j < 256; j++)
-			checksum_cal += tmp_data[j + 2];
-		checksum_cal = 65535 - checksum_cal + 1;
-
-		/* compare the checksum got and calculated */
-		if (checksum_get != checksum_cal) {
-			if (retry < 3) {
-				retry++;
-				goto get_oem_data_retry;
-			} else {
-				NVT_ERR("Checksum mismatch error! checksum_get=0x%04X, checksum_cal=0x%04X, i=%d\n",
-						checksum_get, checksum_cal, i);
-				ret = -2;
-				goto get_oem_data_out;
-			}
-		}
-
-		/* Step 6: Remapping (Remove 2 Bytes Checksum) */
-		if ((i + 1) * 256 > size)
-			memcpy(data + i * 256, tmp_data + 2, size - i * 256);
-		else
-			memcpy(data + i * 256, tmp_data + 2, 256);
-	}
-
-get_oem_data_out:
-	nvt_bootloader_reset();
-	nvt_check_fw_reset_state(RESET_STATE_INIT);
-
-	return ret;
-}
-
-int32_t nvt_get_lockdown_info(char *lockdata)
-{
-	uint8_t data_buf[NVT_LOCKDOWN_SIZE] = {0};
-	int ret = 0;
-
-	if (!lockdata)
-		return -ENOMEM;
-
-	if (mutex_lock_interruptible(&ts->lock))
-		return -ERESTARTSYS;
-
-#ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT
-	nvt_esd_check_enable(false);
-#endif /* ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT */
-
-	ret = nvt_get_oem_data(data_buf, 0x1E000, 8);
-
-	if (ret < 0) {
-		NVT_ERR("get OEM data failed!\n");
-		ret = -EINVAL;
-		goto end;
-	}
-
-	memcpy(lockdata, data_buf, NVT_LOCKDOWN_SIZE);
-
-end:
-	mutex_unlock(&ts->lock);
-
-	return ret;
-}
-
-/*******************************************************
   Create Device Node (Proc Entry)
 *******************************************************/
 #if NVT_TOUCH_PROC
@@ -655,14 +500,14 @@ static ssize_t nvt_flash_read(struct file *file, char __user *buff, size_t count
 		return -EFAULT;
 	}
 
-#ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT
+#ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT
 	/*
 	 * stop esd check work to avoid case that 0x77 report righ after here to enable esd check again
 	 * finally lead to trigger esd recovery bootloader reset
 	 */
 	cancel_delayed_work_sync(&nvt_esd_check_work);
 	nvt_esd_check_enable(false);
-#endif /* ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT */
+#endif /* ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT */
 
 	i2c_wr = str[0] >> 7;
 
@@ -1222,7 +1067,7 @@ static uint8_t nvt_fw_recovery(uint8_t *point_data)
 	return detected;
 }
 
-#ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT
+#ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT
 void nvt_esd_check_enable(uint8_t enable)
 {
 	/* update interrupt timer */
@@ -1254,7 +1099,7 @@ static void nvt_esd_check_func(struct work_struct *work)
 	queue_delayed_work(nvt_esd_check_wq, &nvt_esd_check_work,
 			msecs_to_jiffies(NVT_TOUCH_ESD_CHECK_PERIOD));
 }
-#endif /* ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT */
+#endif /* ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT */
 
 #if WAKEUP_GESTURE
 #define EVENT_START				0
@@ -1376,9 +1221,9 @@ static irqreturn_t nvt_ts_work_func(int irq, void *data)
 	}
 
 	if (nvt_fw_recovery(point_data)) {
-#ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT
+#ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT
 		nvt_esd_check_enable(true);
-#endif /* ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT */
+#endif /* ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT */
 		goto XFER_ERROR;
 	}
 
@@ -1399,10 +1244,10 @@ static irqreturn_t nvt_ts_work_func(int irq, void *data)
 			continue;
 
 		if (likely(((point_data[position] & 0x07) == 0x01) || ((point_data[position] & 0x07) == 0x02))) {	//finger down (enter & moving)
-#ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT
+#ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT
 			/* update interrupt timer */
 			irq_timer = jiffies;
-#endif /* ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT */
+#endif /* ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT */
 			input_x = (uint32_t) (point_data[position + 1] << 4) + (uint32_t) (point_data[position + 3] >> 4);
 			input_y = (uint32_t) (point_data[position + 2] << 4) + (uint32_t) (point_data[position + 3] & 0x0F);
 
@@ -1446,10 +1291,10 @@ static irqreturn_t nvt_ts_work_func(int irq, void *data)
 
 #if TOUCH_KEY_NUM > 0
 	if (point_data[61] == 0xF8) {
-#ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT
+#ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT
 		/* update interrupt timer */
 		irq_timer = jiffies;
-#endif /* ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT */
+#endif /* ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT */
 		for (i = 0; i < ts->max_button_num; i++) {
 			input_report_key(ts->input_dev, touch_key_array[i], ((point_data[62] >> i) & 0x01));
 		}
@@ -1599,7 +1444,6 @@ static int8_t nvt_ts_check_chip_ver_trim(void)
 			if (found_nvt_chip) {
 				NVT_LOG("This is NVT touch IC\n");
 				ts->mmap = trim_id_table[list].mmap;
-				ts->carrier_system = trim_id_table[list].hwinfo->carrier_system;
 				ret = 0;
 				goto out;
 			} else {
@@ -1829,15 +1673,6 @@ static int32_t nvt_ts_probe(struct i2c_client *client, const struct i2c_device_i
 				PM_QOS_DEFAULT_VALUE);
 	}
 
-	update_hardware_info(TYPE_TOUCH, 5);
-	ret = nvt_get_lockdown_info(ts->lockdown_info);
-	if (ret < 0)
-		NVT_ERR("can't get lockdown info\n");
-	else {
-		NVT_LOG("sucessfully retrieved lockdown info\n");
-		update_hardware_info(TYPE_TP_MAKER, ts->lockdown_info[0] - 0x30);
-	}
-
 	ts->fw_name = nvt_get_config(ts);
 
 #if WAKEUP_GESTURE
@@ -1856,7 +1691,7 @@ static int32_t nvt_ts_probe(struct i2c_client *client, const struct i2c_device_i
 	queue_delayed_work(nvt_fwu_wq, &ts->nvt_fwu_work, msecs_to_jiffies(14000));
 #endif
 
-#ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT
+#ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT
 	INIT_DELAYED_WORK(&nvt_esd_check_work, nvt_esd_check_func);
 	nvt_esd_check_wq = alloc_workqueue("nvt_esd_check_wq", WQ_MEM_RECLAIM, 1);
 	if (!nvt_esd_check_wq) {
@@ -1866,7 +1701,7 @@ static int32_t nvt_ts_probe(struct i2c_client *client, const struct i2c_device_i
 	}
 	queue_delayed_work(nvt_esd_check_wq, &nvt_esd_check_work,
 			msecs_to_jiffies(NVT_TOUCH_ESD_CHECK_PERIOD));
-#endif /* ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT */
+#endif /* ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT */
 
 	//---set device node---
 #if NVT_TOUCH_PROC
@@ -1885,7 +1720,7 @@ static int32_t nvt_ts_probe(struct i2c_client *client, const struct i2c_device_i
 	}
 #endif
 
-#ifdef CONFIG_TOUCHSCREEN_NT36XXX_MP_CTRLRAM
+#ifdef CONFIG_TOUCHSCREEN_NVT_D2T_MP_CTRLRAM
 	ret = nvt_mp_proc_init();
 	if (ret != 0) {
 		NVT_ERR("nvt mp proc init failed. ret=%d\n", ret);
@@ -1914,7 +1749,7 @@ err_register_drm_notif_failed:
 	if (drm_unregister_client(&ts->notifier))
 		NVT_ERR("Error occurred while unregistering drm_notifier.\n");
 #endif
-#ifdef CONFIG_TOUCHSCREEN_NT36XXX_MP_CTRLRAM
+#ifdef CONFIG_TOUCHSCREEN_NVT_D2T_MP_CTRLRAM
 nvt_mp_proc_deinit();
 err_mp_proc_init_failed:
 #endif
@@ -1926,7 +1761,7 @@ err_extra_proc_init_failed:
 nvt_flash_proc_deinit();
 err_flash_proc_init_failed:
 #endif
-#ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT
+#ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT
 	if (nvt_esd_check_wq) {
 		cancel_delayed_work_sync(&nvt_esd_check_work);
 		destroy_workqueue(nvt_esd_check_wq);
@@ -1987,7 +1822,7 @@ static int32_t nvt_ts_remove(struct i2c_client *client)
 
 	pm_qos_remove_request(&ts->pm_qos_req);
 
-#ifdef CONFIG_TOUCHSCREEN_NT36XXX_MP_CTRLRAM
+#ifdef CONFIG_TOUCHSCREEN_NVT_D2T_MP_CTRLRAM
 	nvt_mp_proc_deinit();
 #endif
 #if NVT_TOUCH_EXT_PROC
@@ -1997,7 +1832,7 @@ static int32_t nvt_ts_remove(struct i2c_client *client)
 	nvt_flash_proc_deinit();
 #endif
 
-#ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT
+#ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT
 	if (nvt_esd_check_wq) {
 		cancel_delayed_work_sync(&nvt_esd_check_work);
 		nvt_esd_check_enable(false);
@@ -2053,7 +1888,7 @@ static void nvt_ts_shutdown(struct i2c_client *client)
 		NVT_ERR("Error occurred while unregistering drm_notifier.\n");
 #endif
 
-#ifdef CONFIG_TOUCHSCREEN_NT36XXX_MP_CTRLRAM
+#ifdef CONFIG_TOUCHSCREEN_NVT_D2T_MP_CTRLRAM
 	nvt_mp_proc_deinit();
 #endif
 #if NVT_TOUCH_EXT_PROC
@@ -2063,14 +1898,14 @@ static void nvt_ts_shutdown(struct i2c_client *client)
 	nvt_flash_proc_deinit();
 #endif
 
-#ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT
+#ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT
 	if (nvt_esd_check_wq) {
 		cancel_delayed_work_sync(&nvt_esd_check_work);
 		nvt_esd_check_enable(false);
 		destroy_workqueue(nvt_esd_check_wq);
 		nvt_esd_check_wq = NULL;
 	}
-#endif /* ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT */
+#endif /* ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT */
 
 #if BOOT_UPDATE_FIRMWARE
 	if (nvt_fwu_wq) {
@@ -2108,11 +1943,11 @@ static int32_t nvt_ts_suspend(struct device *dev)
 	nvt_irq_enable(false);
 #endif
 
-#ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT
+#ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT
 	NVT_LOG("cancel delayed work sync\n");
 	cancel_delayed_work_sync(&nvt_esd_check_work);
 	nvt_esd_check_enable(false);
-#endif /* ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT */
+#endif /* ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT */
 
 	mutex_lock(&ts->lock);
 
@@ -2220,11 +2055,11 @@ static int32_t nvt_ts_resume(struct device *dev)
 	}
 #endif
 
-#ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT
+#ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT
 	nvt_esd_check_enable(false);
 	queue_delayed_work(nvt_esd_check_wq, &nvt_esd_check_work,
 			msecs_to_jiffies(NVT_TOUCH_ESD_CHECK_PERIOD));
-#endif /* ifdef CONFIG_TOUCHSCREEN_NT36XXX_ESD_PROTECT */
+#endif /* ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT */
 
 	bTouchIsAwake = 1;
 

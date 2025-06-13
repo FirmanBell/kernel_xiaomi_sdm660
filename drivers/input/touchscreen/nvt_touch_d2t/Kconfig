@@ -1,7 +1,7 @@
 #
 # Novatek NT36xxx touchscreen driver configuration
 #
-config TOUCHSCREEN_NT36XXX
+config TOUCHSCREEN_NVT_D2T
 	bool "Novatek NT36XXX"
 	default n
 	help
@@ -10,18 +10,18 @@ config TOUCHSCREEN_NT36XXX
 
 	  If unsure, say N.
 
-config TOUCHSCREEN_NT36XXX_MP_CTRLRAM
+config TOUCHSCREEN_NVT_D2T_MP_CTRLRAM
 	bool "Novatek NT36XXX Multipoint Control RAM"
-	depends on TOUCHSCREEN_NT36XXX
+	depends on TOUCHSCREEN_NVT_D2T
 	default n
 	help
 	  Say Y here if you need to use Multipoint Control RAM Testing
 
 	  If unsure, say N.
 
-config TOUCHSCREEN_NT36XXX_ESD_PROTECT
+config TOUCHSCREEN_NVT_D2T_ESD_PROTECT
 	bool "Novatek NT36XXX ESD Touch Protect"
-	depends on TOUCHSCREEN_NT36XXX
+	depends on TOUCHSCREEN_NVT_D2T
 	default n
 	help
 	  Say Y here if you need to use ESD Touch Protect.
