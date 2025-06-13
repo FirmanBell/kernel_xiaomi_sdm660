@@ -24,10 +24,6 @@
 #include <linux/uaccess.h>
 #include <linux/pm_qos.h>
 
-#ifdef CONFIG_HAS_EARLYSUSPEND
-#include <linux/earlysuspend.h>
-#endif
-
 #include "nt36xxx_mem_map.h"
 
 #define NVT_DEBUG 1
@@ -127,11 +123,7 @@ struct nvt_ts_data {
 
 	uint16_t addr;
 	int8_t phys[32];
-#if defined(CONFIG_DRM)
 	struct notifier_block notifier;
-#elif defined(CONFIG_HAS_EARLYSUSPEND)
-	struct early_suspend early_suspend;
-#endif
 	uint8_t fw_ver;
 	uint8_t x_num;
 	uint8_t y_num;

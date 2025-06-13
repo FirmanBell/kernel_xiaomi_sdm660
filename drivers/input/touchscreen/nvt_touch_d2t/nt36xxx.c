@@ -25,17 +25,14 @@
 #include <linux/of_gpio.h>
 #include <linux/of_irq.h>
 #include <linux/regulator/consumer.h>
-
-#ifdef CONFIG_DRM
-#include <drm/drm_notifier.h>
-#include <drm/drm_panel.h>
 #include <linux/fb.h>
-#endif
 
 #include "nt36xxx.h"
 #ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT
 #include <linux/jiffies.h>
 #endif /* ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT */
+
+extern void mdss_panel_reset_skip_enable(bool enable);
 
 #ifdef CONFIG_TOUCHSCREEN_NVT_D2T_ESD_PROTECT
 static struct delayed_work nvt_esd_check_work;
@@ -62,9 +59,7 @@ static struct workqueue_struct *nvt_fwu_wq;
 extern void Boot_Update_Firmware(struct work_struct *work);
 #endif
 
-#if defined(CONFIG_DRM)
-static int nvt_drm_notifier_callback(struct notifier_block *self, unsigned long event, void *data);
-#endif
+static int nvt_fb_notifier_callback(struct notifier_block *self, unsigned long event, void *data);
 
 #if TOUCH_KEY_NUM > 0
 const uint16_t touch_key_array[TOUCH_KEY_NUM] = {
@@ -1728,14 +1723,12 @@ static int32_t nvt_ts_probe(struct i2c_client *client, const struct i2c_device_i
 	}
 #endif
 
-#if defined(CONFIG_DRM)
-	ts->notifier.notifier_call = nvt_drm_notifier_callback;
-	ret = drm_register_client(&ts->notifier);
+	ts->notifier.notifier_call = nvt_fb_notifier_callback;
+	ret = fb_register_client(&ts->notifier);
 	if (ret) {
-		NVT_ERR("register drm_notifier failed. ret=%d\n", ret);
-		goto err_register_drm_notif_failed;
+		NVT_ERR("register fb_notifier failed. ret=%d\n", ret);
+		goto err_register_fb_notif_failed;
 	}
-#endif
 
 	bTouchIsAwake = 1;
 	NVT_LOG("end\n");
@@ -1744,11 +1737,9 @@ static int32_t nvt_ts_probe(struct i2c_client *client, const struct i2c_device_i
 
 	return 0;
 
-#if defined(CONFIG_DRM)
-err_register_drm_notif_failed:
-	if (drm_unregister_client(&ts->notifier))
-		NVT_ERR("Error occurred while unregistering drm_notifier.\n");
-#endif
+err_register_fb_notif_failed:
+	if (fb_unregister_client(&ts->notifier))
+		NVT_ERR("Error occurred while unregistering fb_notifier.\n");
 #ifdef CONFIG_TOUCHSCREEN_NVT_D2T_MP_CTRLRAM
 nvt_mp_proc_deinit();
 err_mp_proc_init_failed:
@@ -1815,10 +1806,8 @@ static int32_t nvt_ts_remove(struct i2c_client *client)
 {
 	NVT_LOG("Removing driver...\n");
 
-#if defined(CONFIG_DRM)
-	if (drm_unregister_client(&ts->notifier))
-		NVT_ERR("Error occurred while unregistering drm_notifier.\n");
-#endif
+	if (fb_unregister_client(&ts->notifier))
+		NVT_ERR("Error occurred while unregistering fb_notifier.\n");
 
 	pm_qos_remove_request(&ts->pm_qos_req);
 
@@ -1883,10 +1872,8 @@ static void nvt_ts_shutdown(struct i2c_client *client)
 
 	nvt_irq_enable(false);
 
-#if defined(CONFIG_DRM)
-	if (drm_unregister_client(&ts->notifier))
-		NVT_ERR("Error occurred while unregistering drm_notifier.\n");
-#endif
+	if (fb_unregister_client(&ts->notifier))
+		NVT_ERR("Error occurred while unregistering fb_notifier.\n");
 
 #ifdef CONFIG_TOUCHSCREEN_NVT_D2T_MP_CTRLRAM
 	nvt_mp_proc_deinit();
@@ -2070,8 +2057,7 @@ static int32_t nvt_ts_resume(struct device *dev)
 	return 0;
 }
 
-#if defined(CONFIG_DRM)
-static int nvt_drm_notifier_callback(struct notifier_block *self, unsigned long event, void *data)
+static int nvt_fb_notifier_callback(struct notifier_block *self, unsigned long event, void *data)
 {
 	struct fb_event *evdata = data;
 	int *blank;
@@ -2080,23 +2066,23 @@ static int nvt_drm_notifier_callback(struct notifier_block *self, unsigned long 
 
 	if (evdata->data && ts) {
 		blank = evdata->data;
-		if (event == DRM_EARLY_EVENT_BLANK) {
-			if (*blank == DRM_BLANK_POWERDOWN) {
+		if (event == FB_EARLY_EVENT_BLANK) {
+			if (*blank == FB_BLANK_POWERDOWN) {
 				NVT_LOG("event=%lu, *blank=%d\n", event, *blank);
 #if WAKEUP_GESTURE
 				if (ts->gesture_enabled) {
 					nvt_enable_reg(ts, true);
-					drm_panel_reset_skip_enable(true);
+					mdss_panel_reset_skip_enable(true);
 				}
 #endif
 				nvt_ts_suspend(&ts->client->dev);
 			}
-		} else if (event == DRM_EVENT_BLANK) {
-			if (*blank == DRM_BLANK_UNBLANK) {
+		} else if (event == FB_EVENT_BLANK) {
+			if (*blank == FB_BLANK_UNBLANK) {
 				NVT_LOG("event=%lu, *blank=%d\n", event, *blank);
 #if WAKEUP_GESTURE
 				if (ts->gesture_enabled) {
-					drm_panel_reset_skip_enable(false);
+					mdss_panel_reset_skip_enable(false);
 					nvt_enable_reg(ts, false);
 				}
 #endif
@@ -2107,7 +2093,6 @@ static int nvt_drm_notifier_callback(struct notifier_block *self, unsigned long 
 
 	return 0;
 }
-#endif
 
 static const struct i2c_device_id nvt_ts_id[] = {
 	{ NVT_I2C_NAME, 0 },
