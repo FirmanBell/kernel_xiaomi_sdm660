@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010 - 2017 Novatek, Inc.
- * Copyright (C) 2020 XiaoMi, Inc.
+ * Copyright (C) 2018 XiaoMi, Inc.
  *
  * $Revision: 20544 $
  * $Date: 2017-12-20 11:08:15 +0800 (週三, 20 十二月 2017) $
@@ -182,52 +182,28 @@ struct nvt_ts_trim_id_table {
 };
 
 static const struct nvt_ts_trim_id_table trim_id_table[] = {
-	{
-		.id = {0x0A, 0xFF, 0xFF, 0x72, 0x66, 0x03}, .mask = {1, 0, 0, 1, 1, 1},
-		.mmap = &NT36672A_memory_map, .carrier_system = 0
-	},
-	{
-		.id = {0x55, 0x00, 0xFF, 0x00, 0x00, 0x00}, .mask = {1, 1, 0, 1, 1, 1},
-		.mmap = &NT36772_memory_map, .carrier_system = 0
-	},
-	{
-		.id = {0x55, 0x72, 0xFF, 0x00, 0x00, 0x00}, .mask = {1, 1, 0, 1, 1, 1},
-		.mmap = &NT36772_memory_map, .carrier_system = 0
-	},
-	{
-		.id = {0xAA, 0x00, 0xFF, 0x00, 0x00, 0x00}, .mask = {1, 1, 0, 1, 1, 1},
-		.mmap = &NT36772_memory_map, .carrier_system = 0
-	},
-	{
-		.id = {0xAA, 0x72, 0xFF, 0x00, 0x00, 0x00}, .mask = {1, 1, 0, 1, 1, 1},
-		.mmap = &NT36772_memory_map, .carrier_system = 0
-	},
-	{
-		.id = {0xFF, 0xFF, 0xFF, 0x72, 0x67, 0x03}, .mask = {0, 0, 0, 1, 1, 1},
-		.mmap = &NT36772_memory_map, .carrier_system = 0
-	},
-	{
-		.id = {0xFF, 0xFF, 0xFF, 0x70, 0x66, 0x03}, .mask = {0, 0, 0, 1, 1, 1},
-		.mmap = &NT36772_memory_map, .carrier_system = 0
-	},
-	{
-		.id = {0xFF, 0xFF, 0xFF, 0x70, 0x67, 0x03}, .mask = {0, 0, 0, 1, 1, 1},
-		.mmap = &NT36772_memory_map, .carrier_system = 0
-	},
-	{
-		.id = {0xFF, 0xFF, 0xFF, 0x72, 0x66, 0x03}, .mask = {0, 0, 0, 1, 1, 1},
-		.mmap = &NT36772_memory_map, .carrier_system = 0
-	},
-	{
-		.id = {0xFF, 0xFF, 0xFF, 0x25, 0x65, 0x03}, .mask = {0, 0, 0, 1, 1, 1},
-		.mmap = &NT36525_memory_map, .carrier_system = 0
-	},
-	{
-		.id = {0xFF, 0xFF, 0xFF, 0x70, 0x68, 0x03}, .mask = {0, 0, 0, 1, 1, 1},
-		.mmap = &NT36870_memory_map, .carrier_system = 1
-	},
-	{
-		.id = {0xFF, 0xFF, 0xFF, 0x76, 0x66, 0x03}, .mask = {0, 0, 0, 1, 1, 1},
-		.mmap = &NT36676F_memory_map, .carrier_system = 0
-	}
+	{.id = {0x0A, 0xFF, 0xFF, 0x72, 0x66, 0x03}, .mask = {1, 0, 0, 1, 1, 1},
+		.mmap = &NT36672A_memory_map, .carrier_system = 0},
+	{.id = {0x55, 0x00, 0xFF, 0x00, 0x00, 0x00}, .mask = {1, 1, 0, 1, 1, 1},
+		.mmap = &NT36772_memory_map, .carrier_system = 0},
+	{.id = {0x55, 0x72, 0xFF, 0x00, 0x00, 0x00}, .mask = {1, 1, 0, 1, 1, 1},
+		.mmap = &NT36772_memory_map, .carrier_system = 0},
+	{.id = {0xAA, 0x00, 0xFF, 0x00, 0x00, 0x00}, .mask = {1, 1, 0, 1, 1, 1},
+		.mmap = &NT36772_memory_map, .carrier_system = 0},
+	{.id = {0xAA, 0x72, 0xFF, 0x00, 0x00, 0x00}, .mask = {1, 1, 0, 1, 1, 1},
+		.mmap = &NT36772_memory_map, .carrier_system = 0},
+	{.id = {0xFF, 0xFF, 0xFF, 0x72, 0x67, 0x03}, .mask = {0, 0, 0, 1, 1, 1},
+		.mmap = &NT36772_memory_map, .carrier_system = 0},
+	{.id = {0xFF, 0xFF, 0xFF, 0x70, 0x66, 0x03}, .mask = {0, 0, 0, 1, 1, 1},
+		.mmap = &NT36772_memory_map, .carrier_system = 0},
+	{.id = {0xFF, 0xFF, 0xFF, 0x70, 0x67, 0x03}, .mask = {0, 0, 0, 1, 1, 1},
+		.mmap = &NT36772_memory_map, .carrier_system = 0},
+	{.id = {0xFF, 0xFF, 0xFF, 0x72, 0x66, 0x03}, .mask = {0, 0, 0, 1, 1, 1},
+		.mmap = &NT36772_memory_map, .carrier_system = 0},
+	{.id = {0xFF, 0xFF, 0xFF, 0x25, 0x65, 0x03}, .mask = {0, 0, 0, 1, 1, 1},
+		.mmap = &NT36525_memory_map, .carrier_system = 0},
+	{.id = {0xFF, 0xFF, 0xFF, 0x70, 0x68, 0x03}, .mask = {0, 0, 0, 1, 1, 1},
+		.mmap = &NT36870_memory_map, .carrier_system = 1},
+	{.id = {0xFF, 0xFF, 0xFF, 0x76, 0x66, 0x03}, .mask = {0, 0, 0, 1, 1, 1},
+		.mmap = &NT36676F_memory_map, .carrier_system = 0}
 };
