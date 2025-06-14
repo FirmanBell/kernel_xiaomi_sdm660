@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010 - 2017 Novatek, Inc.
- * Copyright (C) 2018 XiaoMi, Inc.
+ * Copyright (C) 2020 XiaoMi, Inc.
  *
  * $Revision: 21600 $
  * $Date: 2018-01-12 15:21:45 +0800 (週五, 12 一月 2018) $
@@ -16,8 +16,8 @@
  * more details.
  *
  */
-#ifndef 	_LINUX_NVT_TOUCH_H
-#define		_LINUX_NVT_TOUCH_H
+#ifndef _LINUX_NVT_TOUCH_H
+#define	_LINUX_NVT_TOUCH_H
 
 #include <linux/i2c.h>
 #include <linux/input.h>
@@ -31,8 +31,8 @@
 #define PINCTRL_STATE_ACTIVE		"pmx_ts_active"
 #define PINCTRL_STATE_SUSPEND		"pmx_ts_suspend"
 #define PINCTRL_STATE_RELEASE		"pmx_ts_release"
-
-#define NVT_DEBUG 1
+#define NVT_COORDS_ARR_SIZE 2
+#define NVT_DEBUG 0
 
 /*---GPIO number---*/
 #define NVTTOUCH_INT_PIN 943
@@ -53,7 +53,7 @@
 #if NVT_DEBUG
 #define NVT_LOG(fmt, args...)    pr_err("[%s] %s %d: " fmt, NVT_I2C_NAME, __func__, __LINE__, ##args)
 #else
-#define NVT_LOG(fmt, args...)    pr_info("[%s] %s %d: " fmt, NVT_I2C_NAME, __func__, __LINE__, ##args)
+#define NVT_LOG(fmt, args...)    pr_debug("[%s] %s %d: " fmt, NVT_I2C_NAME, __func__, __LINE__, ##args)
 #endif
 #define NVT_ERR(fmt, args...)    pr_err("[%s] %s %d: " fmt, NVT_I2C_NAME, __func__, __LINE__, ##args)
 
@@ -80,13 +80,18 @@ extern const uint16_t touch_key_array[TOUCH_KEY_NUM];
 #if WAKEUP_GESTURE
 extern const uint16_t gesture_key_array[];
 #endif
-#define BOOT_UPDATE_FIRMWARE 1
-#define BOOT_UPDATE_FIRMWARE_NAME "novatek_nt36672_e10.fw"
+#define BOOT_UPDATE_FIRMWARE_INWORK 0
+#define BOOT_UPDATE_FIRMWARE_NAME "novatek_nt36672_d2t.fw"
 
 /*---ESD Protect.---*/
 #define NVT_TOUCH_ESD_PROTECT 0
 #define NVT_TOUCH_ESD_CHECK_PERIOD 1500	/* ms */
 #define NVT_LOCKDOWN_SIZE	8
+
+#define NVT_TOUCH_COUNT_DUMP
+#ifdef NVT_TOUCH_COUNT_DUMP
+#define TOUCH_COUNT_FILE_MAXSIZE 50
+#endif
 
 struct nvt_config_info {
 	u8 tp_vendor;
@@ -94,12 +99,14 @@ struct nvt_config_info {
 	u8 tp_hw_version;
 	const char *nvt_cfg_name;
 	const char *nvt_limit_name;
+#ifdef NVT_TOUCH_COUNT_DUMP
+	const char *clicknum_file_name;
+#endif
 };
 
 struct nvt_ts_data {
 	struct i2c_client *client;
 	struct input_dev *input_dev;
-	struct work_struct nvt_work;
 	struct delayed_work nvt_fwu_work;
 	struct regulator *vddio_reg;
 	struct regulator *lab_reg;
@@ -120,7 +127,7 @@ struct nvt_ts_data {
 	u8 lockdown_info[NVT_LOCKDOWN_SIZE];
 	uint16_t addr;
 	int8_t phys[32];
-#if defined(CONFIG_DRM)
+#if defined(CONFIG_DRM) || defined(CONFIG_FB)
 	struct notifier_block notifier;
 #elif defined(CONFIG_HAS_EARLYSUSPEND)
 	struct early_suspend early_suspend;
@@ -150,13 +157,22 @@ struct nvt_ts_data {
 	int stylus_enabled;
 	int cover_enabled;
 	int grip_enabled;
+	int dbclick_count;
 	size_t config_array_size;
 	int current_index;
 	bool dev_pm_suspend;
-	struct work_struct suspend_work;
+	struct completion dev_pm_suspend_completion;
 	struct work_struct resume_work;
 	struct workqueue_struct *event_wq;
-	struct completion dev_pm_suspend_completion;
+#ifdef NVT_TOUCH_COUNT_DUMP
+	struct class *nvt_tp_class;
+	struct device *nvt_touch_dev;
+	bool dump_click_count;
+	char *current_clicknum_file;
+#endif
+	bool tddi_tp_hw_reset;
+	bool gesture_enabled_when_resume;
+	bool gesture_disabled_when_resume;
 };
 
 struct nvt_mode_switch {
@@ -166,7 +182,7 @@ struct nvt_mode_switch {
 };
 
 #if NVT_TOUCH_PROC
-struct nvt_flash_data{
+struct nvt_flash_data {
 	rwlock_t lock;
 	struct i2c_client *client;
 };
@@ -181,11 +197,11 @@ typedef enum {
 } RST_COMPLETE_STATE;
 
 typedef enum {
-    EVENT_MAP_HOST_CMD                      = 0x50,
-    EVENT_MAP_HANDSHAKING_or_SUB_CMD_BYTE   = 0x51,
-    EVENT_MAP_RESET_COMPLETE                = 0x60,
-    EVENT_MAP_FWINFO                        = 0x78,
-    EVENT_MAP_PROJECTID                     = 0x9A,
+	EVENT_MAP_HOST_CMD                      = 0x50,
+	EVENT_MAP_HANDSHAKING_or_SUB_CMD_BYTE   = 0x51,
+	EVENT_MAP_RESET_COMPLETE                = 0x60,
+	EVENT_MAP_FWINFO                        = 0x78,
+	EVENT_MAP_PROJECTID                     = 0x9A,
 } I2C_EVENT_MAP;
 
 /*---extern structures---*/
