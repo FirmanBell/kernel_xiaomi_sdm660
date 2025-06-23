@@ -43,6 +43,12 @@
 #define TOUCHSCREEN_WAYNE 0
 #endif
 
+#ifdef CONFIG_TOUCHSCREEN_NVT_D2T
+#define TOUCHSCREEN_PLATINA 1
+#else
+#define TOUCHSCREEN_PLATINA 0
+#endif
+
 #ifdef CONFIG_TOUCHSCREEN_NVT_F7A
 #define TOUCHSCREEN_LAVENDER 1
 #else
@@ -55,6 +61,12 @@
 #else
 #define NVT_TOUCH_RST_PIN 980
 #define NVT_TOUCH_INT_PIN 943
+#endif
+
+#if TOUCHSCREEN_PLATINA
+#define PINCTRL_STATE_ACTIVE		"pmx_ts_active"
+#define PINCTRL_STATE_SUSPEND		"pmx_ts_suspend"
+#define PINCTRL_STATE_RELEASE		"pmx_ts_release"
 #endif
 
 #define INT_TRIGGER_TYPE IRQ_TYPE_EDGE_RISING
@@ -72,6 +84,8 @@
 #define TOUCH_DEFAULT_MAX_HEIGHT 2280
 #elif TOUCHSCREEN_LAVENDER
 #define TOUCH_DEFAULT_MAX_HEIGHT 2340
+#elif TOUCHSCREEN_PLATINA
+#define TOUCH_DEFAULT_MAX_HEIGHT 2246
 #else
 #define TOUCH_DEFAULT_MAX_HEIGHT 1920
 #endif
@@ -100,6 +114,8 @@ extern const uint16_t gesture_key_array[];
 #elif TOUCHSCREEN_LAVENDER
 #define BOOT_UPDATE_FIRMWARE_NAME_TIANMA "novatek/tianma_nt36672a_miui_f7a.bin"
 #define BOOT_UPDATE_FIRMWARE_NAME_SHENCHAO "novatek/shenchao_nt36672a_miui_f7a.bin"
+#elif TOUCHSCREEN_PLATINA
+#define BOOT_UPDATE_FIRMWARE_NAME "novatek_nt36672_d2t.fw"
 #else
 #define BOOT_UPDATE_FIRMWARE_NAME "novatek_ts_fw.bin"
 #endif
@@ -107,6 +123,24 @@ extern const uint16_t gesture_key_array[];
 
 #define TOUCH_STATE_WORKING 0x00
 #define POINT_DATA_LEN 65
+
+#if TOUCHSCREEN_PLATINA
+#define NVT_LOCKDOWN_SIZE	8
+#define NVT_TOUCH_COUNT_DUMP
+#ifdef NVT_TOUCH_COUNT_DUMP
+#define TOUCH_COUNT_FILE_MAXSIZE 50
+#endif
+struct nvt_config_info {
+	u8 tp_vendor;
+	u8 tp_color;
+	u8 tp_hw_version;
+	const char *nvt_cfg_name;
+	const char *nvt_limit_name;
+#ifdef NVT_TOUCH_COUNT_DUMP
+	const char *clicknum_file_name;
+#endif
+};
+#endif
 
 struct nvt_ts_data {
 #if TOUCHSCREEN_LAVENDER
@@ -143,7 +177,46 @@ struct nvt_ts_data {
 	uint8_t xbuf[1025];
 	struct mutex xbuf_lock;
 	bool irq_enabled;
+#if TOUCHSCREEN_PLATINA
+	struct nvt_config_info *config_array;
+	struct pinctrl *ts_pinctrl;
+	struct pinctrl_state *pinctrl_state_active;
+	struct pinctrl_state *pinctrl_state_suspend;
+	struct regulator *vddio_reg;
+	struct regulator *lab_reg;
+	struct regulator *ibb_reg;
+	const char *vddio_reg_name;
+	const char *lab_reg_name;
+	const char *ibb_reg_name;
+	const char *fw_name;
+	u8 lockdown_info[NVT_LOCKDOWN_SIZE];
+	size_t config_array_size;
+#if WAKEUP_GESTURE
+	int gesture_enabled;
+#endif
+	int current_index;
+	bool tddi_tp_hw_reset;
+	bool gesture_enabled_when_resume;
+	bool gesture_disabled_when_resume;
+	int32_t reset_tddi;
+#endif
+#ifdef NVT_TOUCH_COUNT_DUMP
+	struct class *nvt_tp_class;
+	struct device *nvt_touch_dev;
+	bool dump_click_count;
+	char *current_clicknum_file;
+#endif
 };
+
+#if TOUCHSCREEN_PLATINA
+#if WAKEUP_GESTURE
+struct mi_mode_switch {
+	struct nvt_ts_data *nvt_data;
+	unsigned char mode;
+	struct work_struct switch_mode_work;
+};
+#endif
+#endif
 
 typedef enum {
 	RESET_STATE_INIT = 0xA0,// IC reset

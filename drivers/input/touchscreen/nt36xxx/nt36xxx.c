@@ -19,6 +19,15 @@
 #include <linux/fb.h>
 #include "nt36xxx.h"
 
+#if TOUCHSCREEN_PLATINA
+#define BOOT_UPDATE_FIRMWARE_NAME "novatek_nt36672_d2t.fw"
+#endif
+
+#if TOUCHSCREEN_PLATINA
+extern void mdss_panel_reset_skip_enable(bool enable);
+extern bool mdss_panel_is_prim(void *fbinfo);
+#endif
+
 #if TOUCHSCREEN_LAVENDER
 extern char g_lcd_id[128];
 static struct work_struct g_resume_work;
@@ -112,7 +121,11 @@ inline int nvt_gesture_switch(struct input_dev *dev, unsigned int type,
 static inline ssize_t double_tap_show(struct kobject *kobj,
 				      struct kobj_attribute *attr, char *buf)
 {
+#if TOUCHSCREEN_PLATINA
+	return sprintf(buf, "%d\n", ts->gesture_enabled);
+#else
 	return sprintf(buf, "%d\n", enable_gesture_mode);
+#endif
 }
 
 static inline ssize_t double_tap_store(struct kobject *kobj,
@@ -125,7 +138,11 @@ static inline ssize_t double_tap_store(struct kobject *kobj,
 	if (rc)
 		return -EINVAL;
 
+#if TOUCHSCREEN_PLATINA
+	ts->gesture_enabled = !!val;
+#else
 	enable_gesture_mode = !!val;
+#endif
 	return count;
 }
 
@@ -396,6 +413,94 @@ info_retry:
 	return ret;
 }
 
+#if TOUCHSCREEN_PLATINA
+#ifdef CONFIG_OF
+static int nvt_parse_dt(struct device *dev)
+{
+	struct device_node *mi, *np = dev->of_node;
+	struct nvt_config_info *config_info;
+	int retval;
+	u32 temp_val;
+
+	ts->reset_gpio = of_get_named_gpio_flags(np, "novatek,reset-gpio", 0, &ts->reset_flags);
+	ts->tddi_tp_hw_reset = of_property_read_bool(np, "novatek,tddi-tp-hw-reset");
+	ts->reset_tddi = of_get_named_gpio_flags(np, "novatek,reset-tddi", 0, NULL);
+	ts->irq_gpio = of_get_named_gpio_flags(np, "novatek,irq-gpio", 0, &ts->irq_flags);
+
+	retval = of_property_read_string(np, "novatek,vddio-reg-name", &ts->vddio_reg_name);
+	if (retval < 0) {
+		return retval;
+	}
+
+	retval = of_property_read_string(np, "novatek,lab-reg-name", &ts->lab_reg_name);
+	if (retval < 0) {
+		return retval;
+	}
+
+	retval = of_property_read_string(np, "novatek,ibb-reg-name", &ts->ibb_reg_name);
+	if (retval < 0) {
+		return retval;
+	}
+
+#ifdef NVT_TOUCH_COUNT_DUMP
+	ts->dump_click_count =
+		of_property_read_bool(np, "novatek,dump-click-count");
+#endif
+	retval = of_property_read_u32(np, "novatek,config-array-size",
+				 (u32 *) &ts->config_array_size);
+	if (retval) {
+		return retval;
+	}
+
+	ts->config_array = devm_kzalloc(dev, ts->config_array_size *
+					   sizeof(struct nvt_config_info),
+					   GFP_KERNEL);
+
+	if (!ts->config_array) {
+		return -ENOMEM;
+	}
+	config_info = ts->config_array;
+	for_each_child_of_node(np, mi) {
+		retval = of_property_read_u32(mi,
+				"novatek,tp-vendor", &temp_val);
+		retval = of_property_read_u32(mi,
+				"novatek,hw-version", &temp_val);
+		retval = of_property_read_string(mi, "novatek,fw-name",
+						 &config_info->nvt_cfg_name);
+		retval = of_property_read_string(mi, "novatek,limit-name",
+						 &config_info->nvt_limit_name);
+
+#ifdef NVT_TOUCH_COUNT_DUMP
+		if (ts->dump_click_count) {
+			retval = of_property_read_string(mi, "novatek,clicknum-file-name",
+							&config_info->clicknum_file_name);
+
+			if (retval && (retval != -EINVAL)) {
+				dev_err(dev,
+					"Unable to read click count file name\n");
+			} else
+				dev_err(dev, "%s\n",
+					config_info->clicknum_file_name);
+		}
+
+#endif
+		config_info++;
+	}
+
+	return 0;
+}
+#else
+static int nvt_parse_dt(struct device *dev)
+{
+#if NVT_TOUCH_SUPPORT_HW_RST
+	ts->reset_gpio = NVT_TOUCH_RST_PIN;
+#endif
+	ts->irq_gpio = NVT_TOUCH_INT_PIN;
+
+	return 0;
+}
+#endif
+#else
 static inline void nvt_parse_dt(struct device *dev)
 {
 #ifdef CONFIG_OF
@@ -412,17 +517,155 @@ static inline void nvt_parse_dt(struct device *dev)
 	ts->irq_gpio = NVT_TOUCH_INT_PIN;
 #endif
 }
+#endif
+
+#if TOUCHSCREEN_PLATINA
+static const char *nvt_get_config(struct nvt_ts_data *ts)
+{
+	int i;
+
+	for (i = 0; i < ts->config_array_size; i++) {
+		if (ts->lockdown_info[0] ==
+		     ts->config_array[i].tp_vendor)
+			break;
+	}
+
+	if (i >= ts->config_array_size) {
+		return BOOT_UPDATE_FIRMWARE_NAME;
+	}
+
+	ts->current_index = i;
+#ifdef NVT_TOUCH_COUNT_DUMP
+	if (ts->dump_click_count) {
+		ts->current_clicknum_file =
+			kzalloc(TOUCH_COUNT_FILE_MAXSIZE, GFP_KERNEL);
+		strlcpy(ts->current_clicknum_file,
+			ts->config_array[i].clicknum_file_name,
+			TOUCH_COUNT_FILE_MAXSIZE);
+	}
+
+#endif
+	return ts->config_array[i].nvt_cfg_name;
+}
+
+static int nvt_get_reg(struct nvt_ts_data *ts, bool get)
+{
+	int retval;
+
+	if (!get) {
+		retval = 0;
+		goto regulator_put;
+	}
+
+	if ((ts->vddio_reg_name != NULL) && (*ts->vddio_reg_name != 0)) {
+		ts->vddio_reg = regulator_get(&ts->client->dev,
+				ts->vddio_reg_name);
+		if (IS_ERR(ts->vddio_reg)) {
+			retval = PTR_ERR(ts->vddio_reg);
+			goto regulator_put;
+		}
+	}
+
+	if ((ts->lab_reg_name != NULL) && (*ts->lab_reg_name != 0)) {
+		ts->lab_reg = regulator_get(&ts->client->dev,
+				ts->lab_reg_name);
+		if (IS_ERR(ts->lab_reg)) {
+			retval = PTR_ERR(ts->lab_reg);
+			goto regulator_put;
+		}
+	}
+
+	if ((ts->ibb_reg_name != NULL) && (*ts->ibb_reg_name != 0)) {
+		ts->ibb_reg = regulator_get(&ts->client->dev,
+				ts->ibb_reg_name);
+		if (IS_ERR(ts->ibb_reg)) {
+			retval = PTR_ERR(ts->ibb_reg);
+			goto regulator_put;
+		}
+	}
+
+	return 0;
+
+regulator_put:
+	if (ts->vddio_reg) {
+		regulator_put(ts->vddio_reg);
+		ts->vddio_reg = NULL;
+	}
+	if (ts->lab_reg) {
+		regulator_put(ts->lab_reg);
+		ts->lab_reg = NULL;
+	}
+	if (ts->ibb_reg) {
+		regulator_put(ts->ibb_reg);
+		ts->ibb_reg = NULL;
+	}
+
+	return retval;
+}
+
+static int nvt_enable_reg(struct nvt_ts_data *ts, bool enable)
+{
+	int retval;
+
+	if (!enable) {
+		retval = 0;
+		goto disable_ibb_reg;
+	}
+
+	if (ts->vddio_reg) {
+		retval = regulator_enable(ts->vddio_reg);
+		if (retval < 0) {
+			goto exit;
+		}
+	}
+
+	if (ts->lab_reg && ts->lab_reg) {
+		retval = regulator_enable(ts->lab_reg);
+		if (retval < 0) {
+			goto disable_vddio_reg;
+		}
+	}
+
+	if (ts->ibb_reg) {
+		retval = regulator_enable(ts->ibb_reg);
+		if (retval < 0) {
+			goto disable_lab_reg;
+		}
+	}
+
+	return 0;
+
+disable_ibb_reg:
+	if (ts->ibb_reg)
+		regulator_disable(ts->ibb_reg);
+
+disable_lab_reg:
+	if (ts->lab_reg)
+		regulator_disable(ts->lab_reg);
+
+disable_vddio_reg:
+	if (ts->vddio_reg)
+		regulator_disable(ts->vddio_reg);
+
+exit:
+	return retval;
+}
+#endif
 
 static inline int nvt_gpio_config(struct nvt_ts_data *ts)
 {
 	int32_t ret = 0;
 
-#if NVT_TOUCH_SUPPORT_HW_RST || TOUCHSCREEN_WHYRED || TOUCHSCREEN_WAYNE
+#if NVT_TOUCH_SUPPORT_HW_RST || TOUCHSCREEN_WHYRED || TOUCHSCREEN_WAYNE || TOUCHSCREEN_PLATINA
 	if (gpio_is_valid(ts->reset_gpio)) {
-#if TOUCHSCREEN_WHYRED || TOUCHSCREEN_WAYNE
+#if TOUCHSCREEN_WHYRED || TOUCHSCREEN_WAYNE || TOUCHSCREEN_PLATINA
 		ret = gpio_request(ts->reset_gpio, "NVT-reset");
 		if (ret)
+#if TOUCHSCREEN_PLATINA
+			goto err_request_reset_gpio;
+#else
 			goto err_request_irq_gpio;
+#endif
 #else
 		ret = gpio_request_one(ts->reset_gpio, GPIOF_OUT_INIT_HIGH, "NVT-tp-rst");
 		if (ret)
@@ -439,6 +682,9 @@ static inline int nvt_gpio_config(struct nvt_ts_data *ts)
 
 	return ret;
 
+#if TOUCHSCREEN_PLATINA
+err_request_reset_gpio:
+#endif
 err_request_irq_gpio:
 #if NVT_TOUCH_SUPPORT_HW_RST
 	gpio_free(ts->reset_gpio);
@@ -451,7 +697,7 @@ static inline void nvt_gpio_deconfig(struct nvt_ts_data *ts)
 {
 	if (gpio_is_valid(ts->irq_gpio))
 		gpio_free(ts->irq_gpio);
-#if NVT_TOUCH_SUPPORT_HW_RST || TOUCHSCREEN_WHYRED || TOUCHSCREEN_WAYNE
+#if NVT_TOUCH_SUPPORT_HW_RST || TOUCHSCREEN_WHYRED || TOUCHSCREEN_WAYNE || TOUCHSCREEN_PLATINA
 	if (gpio_is_valid(ts->reset_gpio))
 		gpio_free(ts->reset_gpio);
 #endif
@@ -557,6 +803,59 @@ XFER_ERROR:
 	mutex_unlock(&ts->lock);
 	return;
 }
+
+#if TOUCHSCREEN_PLATINA
+#if WAKEUP_GESTURE
+#define EVENT_START				0
+#define EVENT_WAKEUP_MODE_OFF			4
+#define EVENT_WAKEUP_MODE_ON			5
+#define EVENT_END				13
+
+static void mi_switch_mode_work(struct work_struct *work)
+{
+	struct mi_mode_switch *ms = container_of(
+			work, struct mi_mode_switch, switch_mode_work
+	);
+	struct nvt_ts_data *data = ms->nvt_data;
+	unsigned char value = ms->mode;
+
+	if (value >= EVENT_WAKEUP_MODE_OFF &&
+		value <= EVENT_WAKEUP_MODE_ON)
+		data->gesture_enabled = value - EVENT_WAKEUP_MODE_OFF;
+
+	if (ms != NULL) {
+		kfree(ms);
+		ms = NULL;
+	}
+}
+
+static int mi_input_event(struct input_dev *dev, unsigned int type, unsigned int code, int value)
+{
+	struct nvt_ts_data *data = input_get_drvdata(dev);
+	struct mi_mode_switch *ms;
+
+	if (type == EV_SYN && code == SYN_CONFIG) {
+
+		if (value >= EVENT_START && value <= EVENT_END) {
+			ms = kmalloc(sizeof(struct mi_mode_switch), GFP_ATOMIC);
+
+			if (ms != NULL) {
+				ms->nvt_data = data;
+				ms->mode = (unsigned char)value;
+				INIT_WORK(&ms->switch_mode_work, mi_switch_mode_work);
+				schedule_work(&ms->switch_mode_work);
+			} else {
+				return -ENOMEM;
+			}
+		} else {
+			return -EINVAL;
+		}
+	}
+
+	return 0;
+}
+#endif
+#endif
 
 static inline irqreturn_t nvt_ts_work_func(int irq, void *data)
 {
@@ -712,6 +1011,53 @@ out:
 	return ret;
 }
 
+#ifdef NVT_TOUCH_COUNT_DUMP
+static ssize_t nvt_touch_suspend_notify_show(struct device *dev, struct device_attribute *attr,
+		char *buf)
+{
+	return snprintf(buf, PAGE_SIZE, "%d\n", !bTouchIsAwake);
+}
+static DEVICE_ATTR(touch_suspend_notify, (S_IRUGO | S_IRGRP), nvt_touch_suspend_notify_show, NULL);
+#endif
+
+#if TOUCHSCREEN_PLATINA
+static int nvt_pinctrl_init(struct nvt_ts_data *nvt_data)
+{
+	int retval = 0;
+	nvt_data->ts_pinctrl = devm_pinctrl_get(&nvt_data->client->dev);
+
+	if (IS_ERR_OR_NULL(nvt_data->ts_pinctrl)) {
+		retval = PTR_ERR(nvt_data->ts_pinctrl);
+		goto err_pinctrl_get;
+	}
+
+	nvt_data->pinctrl_state_active = pinctrl_lookup_state(
+			nvt_data->ts_pinctrl, PINCTRL_STATE_ACTIVE
+		);
+
+	if (IS_ERR_OR_NULL(nvt_data->pinctrl_state_active)) {
+		retval = PTR_ERR(nvt_data->pinctrl_state_active);
+		goto err_pinctrl_lookup;
+	}
+
+	nvt_data->pinctrl_state_suspend = pinctrl_lookup_state(
+			nvt_data->ts_pinctrl, PINCTRL_STATE_SUSPEND
+		);
+
+	if (IS_ERR_OR_NULL(nvt_data->pinctrl_state_suspend)) {
+		retval = PTR_ERR(nvt_data->pinctrl_state_suspend);
+		goto err_pinctrl_lookup;
+	}
+
+	return 0;
+err_pinctrl_lookup:
+	devm_pinctrl_put(nvt_data->ts_pinctrl);
+err_pinctrl_get:
+	nvt_data->ts_pinctrl = NULL;
+	return retval;
+}
+#endif
+
 static inline int32_t nvt_ts_probe(struct i2c_client *client,
 			    const struct i2c_device_id *id)
 {
@@ -728,6 +1074,13 @@ static inline int32_t nvt_ts_probe(struct i2c_client *client,
 	i2c_set_clientdata(client, ts);
 
 	nvt_parse_dt(&client->dev);
+
+#if TOUCHSCREEN_PLATINA
+	ret = nvt_pinctrl_init(ts);
+	if (!ret && ts->ts_pinctrl) {
+		ret = pinctrl_select_state(ts->ts_pinctrl, ts->pinctrl_state_active);
+	}
+#endif
 
 	ret = nvt_gpio_config(ts);
 	if (ret)
@@ -813,10 +1166,20 @@ static inline int32_t nvt_ts_probe(struct i2c_client *client,
 	ts->input_dev->name = NVT_TS_NAME;
 	ts->input_dev->phys = ts->phys;
 	ts->input_dev->id.bustype = BUS_I2C;
+#if TOUCHSCREEN_PLATINA
+#if WAKEUP_GESTURE
+	ts->input_dev->event = mi_input_event;
+	input_set_drvdata(ts->input_dev, ts);
+#endif
+#endif
 
 	ret = input_register_device(ts->input_dev);
 	if (ret)
 		goto err_input_register_device_failed;
+
+#if TOUCHSCREEN_PLATINA
+	nvt_get_reg(ts, true);
+#endif
 
 	//---set int-pin & request irq---
 	client->irq = gpio_to_irq(ts->irq_gpio);
@@ -830,6 +1193,10 @@ static inline int32_t nvt_ts_probe(struct i2c_client *client,
 		else
 			nvt_irq_enable(false);
 	}
+
+#if TOUCHSCREEN_PLATINA
+	ts->fw_name = nvt_get_config(ts);
+#endif
 
 #if WAKEUP_GESTURE
 	device_init_wakeup(&ts->input_dev->dev, 1);
@@ -857,6 +1224,24 @@ static inline int32_t nvt_ts_probe(struct i2c_client *client,
 	if (ret)
 		goto err_register_fb_notif_failed;
 
+#ifdef NVT_TOUCH_COUNT_DUMP
+	if (ts->nvt_tp_class == NULL)
+		ts->nvt_tp_class = class_create(THIS_MODULE, "touch");
+
+	ts->nvt_touch_dev = device_create(ts->nvt_tp_class, NULL, 0x62, ts, "touch_suspend_notify");
+
+	if (IS_ERR(ts->nvt_touch_dev)) {
+		goto err_register_tp_class;
+	}
+
+	dev_set_drvdata(ts->nvt_touch_dev, ts);
+	ret = sysfs_create_file(&ts->nvt_touch_dev->kobj, &dev_attr_touch_suspend_notify.attr);
+
+	if (ret) {
+		goto err_register_tp_class;
+	}
+#endif
+
 #if TOUCHSCREEN_LAVENDER
 	INIT_WORK(&g_resume_work, do_nvt_ts_resume_work);
 #endif
@@ -868,6 +1253,12 @@ static inline int32_t nvt_ts_probe(struct i2c_client *client,
 
 	fb_unregister_client(&ts->fb_notif);
 
+#ifdef NVT_TOUCH_COUNT_DUMP
+err_register_tp_class:
+	device_destroy(ts->nvt_tp_class, 0x62);
+	class_destroy(ts->nvt_tp_class);
+	ts->nvt_tp_class = NULL;
+#endif
 err_register_fb_notif_failed:
 err_create_nvt_ts_workqueue_failed:
 	if (ts->coord_workqueue)
@@ -919,6 +1310,19 @@ static inline int32_t nvt_ts_remove(struct i2c_client *client)
 
 	fb_unregister_client(&ts->fb_notif);
 
+#ifdef NVT_TOUCH_COUNT_DUMP
+	if (ts->dump_click_count && !ts->current_clicknum_file) {
+		kfree(ts->current_clicknum_file);
+		ts->current_clicknum_file = NULL;
+	}
+
+	sysfs_remove_file(&ts->nvt_touch_dev->kobj,
+			  &dev_attr_touch_suspend_notify.attr);
+	device_destroy(ts->nvt_tp_class, 0x62);
+	class_destroy(ts->nvt_tp_class);
+	ts->nvt_tp_class = NULL;
+#endif
+
 #if BOOT_UPDATE_FIRMWARE
 	if (nvt_fwu_wq) {
 		cancel_delayed_work_sync(&ts->nvt_fwu_work);
@@ -931,6 +1335,9 @@ static inline int32_t nvt_ts_remove(struct i2c_client *client)
 	device_init_wakeup(&ts->input_dev->dev, 0);
 #endif
 
+#if TOUCHSCREEN_PLATINA
+	nvt_get_reg(ts, false);
+#endif
 	nvt_irq_enable(false);
 	free_irq(client->irq, ts);
 
@@ -1010,6 +1417,13 @@ static int32_t __always_inline nvt_ts_suspend(struct device *dev)
 	buf[0] = EVENT_MAP_HOST_CMD;
 	buf[1] = 0x11;
 	CTP_I2C_WRITE(ts->client, I2C_FW_Address, buf, 2);
+
+#if TOUCHSCREEN_PLATINA
+	if (ts->ts_pinctrl) {
+		ret = pinctrl_select_state(ts->ts_pinctrl,
+			ts->pinctrl_state_suspend);
+	}
+#endif
 #endif // WAKEUP_GESTURE
 
 	mutex_unlock(&ts->lock);
@@ -1034,6 +1448,11 @@ static int32_t __always_inline nvt_ts_suspend(struct device *dev)
 
 static int32_t __always_inline nvt_ts_resume(struct device *dev)
 {
+
+#if TOUCHSCREEN_PLATINA
+	int ret = 0;
+#endif
+
 	if (bTouchIsAwake)
 		return 0;
 
@@ -1043,10 +1462,23 @@ static int32_t __always_inline nvt_ts_resume(struct device *dev)
 	gpio_set_value(ts->reset_gpio, 1);
 #endif
 
+#if TOUCHSCREEN_PLATINA
+	nvt_bootloader_reset();
+#endif
 	if (nvt_check_fw_reset_state(RESET_STATE_REK)) {
 		nvt_bootloader_reset();
 		nvt_check_fw_reset_state(RESET_STATE_REK);
 	}
+
+#if TOUCHSCREEN_PLATINA
+	if ((ts->gesture_enabled && ts->gesture_disabled_when_resume) || !ts->gesture_enabled_when_resume) {
+		enable_irq(ts->client->irq);
+
+		if (ts->ts_pinctrl) {
+			ret = pinctrl_select_state(ts->ts_pinctrl, ts->pinctrl_state_active);
+		}
+	}
+#endif
 
 #if XIAOMI_PANEL
 #if WAKEUP_GESTURE
@@ -1062,6 +1494,13 @@ static int32_t __always_inline nvt_ts_resume(struct device *dev)
 #endif
 #if !WAKEUP_GESTURE
 	nvt_irq_enable(true);
+
+#if TOUCHSCREEN_PLATINA
+	if (ts->ts_pinctrl) {
+		ret = pinctrl_select_state(ts->ts_pinctrl,
+			ts->pinctrl_state_active);
+	}
+#endif
 #endif
 
 	bTouchIsAwake = 1;
@@ -1100,6 +1539,55 @@ static int __always_inline nvt_fb_notifier_callback(struct notifier_block *self,
 	struct nvt_ts_data *ts = container_of(self, struct nvt_ts_data, fb_notif);
 	struct fb_event *evdata = data;
 
+#if TOUCHSCREEN_PLATINA
+	if (evdata && evdata->data && mdss_panel_is_prim(evdata->info)) {
+		blank = evdata->data;
+		if (event == FB_EARLY_EVENT_BLANK) {
+			if (*blank == FB_BLANK_POWERDOWN) {
+				if (ts->gesture_enabled) {
+					nvt_enable_reg(ts, true);
+					ts->gesture_enabled_when_resume = true;
+					ts->gesture_disabled_when_resume = false;
+					mdss_panel_reset_skip_enable(true);
+				}
+				nvt_ts_suspend(&ts->client->dev);
+				if (ts->tddi_tp_hw_reset && !ts->gesture_enabled) {
+					gpio_direction_output(ts->reset_gpio, 0);
+				}
+#ifdef NVT_TOUCH_COUNT_DUMP
+				sysfs_notify(&ts->nvt_touch_dev->kobj, NULL,
+						 "touch_suspend_notify");
+#endif
+			} else if (*blank == FB_BLANK_UNBLANK) {
+				if ((ts->gesture_enabled || !ts->gesture_disabled_when_resume) && ts->gesture_enabled_when_resume) {
+					if (ts->tddi_tp_hw_reset)
+						gpio_direction_output(ts->reset_gpio, 0);
+					gpio_direction_output(ts->reset_tddi, 0);
+					msleep(15);
+					gpio_direction_output(ts->reset_tddi, 1);
+					if (ts->tddi_tp_hw_reset)
+						gpio_direction_output(ts->reset_gpio, 1);
+					msleep(20);
+				}
+			}
+		} else if (event == FB_EVENT_BLANK) {
+			if (*blank == FB_BLANK_UNBLANK) {
+				if ((ts->gesture_enabled || !ts->gesture_disabled_when_resume) && ts->gesture_enabled_when_resume) {
+					mdss_panel_reset_skip_enable(false);
+					nvt_enable_reg(ts, false);
+				}
+				if (ts->tddi_tp_hw_reset && !ts->gesture_enabled) {
+					gpio_direction_output(ts->reset_gpio, 1);
+				}
+				nvt_ts_resume(&ts->client->dev);
+#ifdef NVT_TOUCH_COUNT_DUMP
+				sysfs_notify(&ts->nvt_touch_dev->kobj, NULL,
+						 "touch_suspend_notify");
+#endif
+			}
+		}
+	}
+#else
 	if (evdata && evdata->data && event == FB_EARLY_EVENT_BLANK) {
 		blank = evdata->data;
 		if (*blank == FB_BLANK_POWERDOWN)
@@ -1121,6 +1609,7 @@ static int __always_inline nvt_fb_notifier_callback(struct notifier_block *self,
 #endif
 	}
 
+#endif
 	return 0;
 }
 

@@ -742,6 +742,11 @@ void Boot_Update_Firmware(struct work_struct *work)
 	} else if (strstr(g_lcd_id, "shenchao nt36672a") != NULL) {
 		sprintf(firmware_name, BOOT_UPDATE_FIRMWARE_NAME_SHENCHAO);
 	}
+#elif TOUCHSCREEN_PLATINA
+	if (ts->fw_name)
+		sprintf(firmware_name, ts->fw_name);
+	else
+		sprintf(firmware_name, BOOT_UPDATE_FIRMWARE_NAME);
 #else
 	sprintf(firmware_name, BOOT_UPDATE_FIRMWARE_NAME);
 #endif
