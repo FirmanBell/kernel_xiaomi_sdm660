@@ -712,16 +712,18 @@ void Boot_Update_Firmware(struct work_struct *work)
 	int32_t ret = 0;
 
 	char firmware_name[256] = "";
-	sprintf(firmware_name, BOOT_UPDATE_FIRMWARE_NAME);
+
+	if (ts->fw_name)
+		sprintf(firmware_name, ts->fw_name);
+	else
+		sprintf(firmware_name, BOOT_UPDATE_FIRMWARE_NAME);
 
 	ret = update_firmware_request(firmware_name);
 	if (ret)
 		return;
 
 	mutex_lock(&ts->lock);
-
 	nvt_sw_reset_idle();
-
 	ret = Check_CheckSum();
 
 	if ((ret < 0) || ((ret == 0) && (Check_FW_Ver() == 0)) || (nvt_check_flash_end_flag())) {

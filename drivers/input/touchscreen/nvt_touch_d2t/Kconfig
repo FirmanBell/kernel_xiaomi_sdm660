@@ -2,7 +2,7 @@
 # Novatek NT36xxx touchscreen driver configuration
 #
 
-config TOUCHSCREEN_NT36XXX
+config TOUCHSCREEN_NVT_D2T
 	bool "Novatek NT36XXX support"
 	help
 	  Say Y here if you have a Novatek NT36xxx touchscreen connected
