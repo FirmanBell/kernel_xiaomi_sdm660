@@ -731,6 +731,7 @@ inline void nvt_ts_wakeup_gesture_report(uint8_t gesture_id, uint8_t *data)
 		case GESTURE_DOUBLE_CLICK:
 			NVT_LOG("Gesture : Double Click.\n");
 			keycode = gesture_key_array[3];
+			ts->dbclick_count++;
 			break;
 		case GESTURE_WORD_Z:
 			NVT_LOG("Gesture : Word-Z.\n");
@@ -1616,6 +1617,7 @@ static inline int32_t nvt_ts_probe(struct i2c_client *client, const struct i2c_d
 	int32_t retry = 0;
 #endif
 
+	char *tp_maker = NULL;
 	NVT_LOG("start\n");
 
 	ts = kzalloc(sizeof(struct nvt_ts_data), GFP_KERNEL);
@@ -1776,6 +1778,16 @@ static inline int32_t nvt_ts_probe(struct i2c_client *client, const struct i2c_d
 	}
 
 	ts->fw_name = nvt_get_config(ts);
+	tp_maker = kzalloc(20, GFP_KERNEL);
+
+	if (tp_maker == NULL)
+		NVT_ERR("fail to alloc vendor name memory\n");
+	else {
+		kfree(tp_maker);
+		tp_maker = NULL;
+	}
+
+	ts->dbclick_count = 0;
 
 #if WAKEUP_GESTURE
 	device_init_wakeup(&ts->input_dev->dev, 1);
