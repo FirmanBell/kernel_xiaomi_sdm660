@@ -782,6 +782,44 @@ inline void nvt_ts_wakeup_gesture_report(uint8_t gesture_id, uint8_t *data)
 }
 #endif
 
+static inline int nvt_get_dt_coords(struct device *dev, char *name)
+{
+	int ret = 0;
+	u32 coords[NVT_COORDS_ARR_SIZE] = { 0 };
+	struct property *prop;
+	struct device_node *np = dev->of_node;
+	int coords_size;
+
+	prop = of_find_property(np, name, NULL);
+	if (!prop)
+		return -EINVAL;
+	if (!prop->value)
+		return -ENODATA;
+
+	coords_size = prop->length / sizeof(u32);
+	if (coords_size != NVT_COORDS_ARR_SIZE) {
+		NVT_ERR("invalid:%s, size:%d\n", name, coords_size);
+		return -EINVAL;
+	}
+
+	ret = of_property_read_u32_array(np, name, coords, coords_size);
+	if (ret && (ret != -EINVAL)) {
+		NVT_ERR("Unable to read %s\n", name);
+		return -ENODATA;
+	}
+
+	if (!strcmp(name, "novatek,display-coords")) {
+		ts->abs_x_max = coords[0];
+		ts->abs_y_max = coords[1];
+	} else {
+		NVT_ERR("unsupported property %s\n", name);
+		return -EINVAL;
+	}
+
+	NVT_LOG("display x %d y %d\n", ts->abs_x_max, ts->abs_y_max);
+	return 0;
+}
+
 /*******************************************************
 Description:
 	Novatek touchscreen parse device tree function.
@@ -796,6 +834,10 @@ static inline int nvt_parse_dt(struct device *dev)
 	struct nvt_config_info *config_info;
 	int retval;
 	u32 temp_val;
+
+	retval = nvt_get_dt_coords(dev, "novatek,display-coords");
+	if (retval < 0)
+		NVT_ERR("Unable to get display-coords\n");
 
 #if NVT_TOUCH_SUPPORT_HW_RST
 	ts->reset_gpio = of_get_named_gpio_flags(np, "novatek,reset-gpio", 0, &ts->reset_flags);

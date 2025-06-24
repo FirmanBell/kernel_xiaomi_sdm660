@@ -36,6 +36,7 @@
 #define PINCTRL_STATE_ACTIVE		"pmx_ts_active"
 #define PINCTRL_STATE_SUSPEND		"pmx_ts_suspend"
 #define PINCTRL_STATE_RELEASE		"pmx_ts_release"
+#define NVT_COORDS_ARR_SIZE 2
 
 //---INT trigger mode---
 //#define IRQ_TYPE_EDGE_RISING 1
