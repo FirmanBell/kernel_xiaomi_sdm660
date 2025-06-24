@@ -199,6 +199,7 @@ struct nvt_ts_data {
 	bool gesture_enabled_when_resume;
 	bool gesture_disabled_when_resume;
 	int32_t reset_tddi;
+	int dbclick_count;
 #endif
 #ifdef NVT_TOUCH_COUNT_DUMP
 	struct class *nvt_tp_class;

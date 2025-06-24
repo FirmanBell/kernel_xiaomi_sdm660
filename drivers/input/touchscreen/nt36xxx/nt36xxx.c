@@ -175,6 +175,9 @@ inline void nvt_ts_wakeup_gesture_report(uint8_t gesture_id, uint8_t *data)
 		break;
 	case GESTURE_DOUBLE_CLICK:
 		keycode = gesture_key_array[3];
+#if TOUCHSCREEN_PLATINA
+		ts->dbclick_count++;
+#endif
 		break;
 	case GESTURE_WORD_Z:
 		keycode = gesture_key_array[4];
@@ -1066,6 +1069,9 @@ static inline int32_t nvt_ts_probe(struct i2c_client *client,
 	int32_t retry = 0;
 #endif
 
+#if TOUCHSCREEN_PLATINA
+	char *tp_maker = NULL;
+#endif
 	ts = kmalloc(sizeof(struct nvt_ts_data), GFP_KERNEL);
 	if (ts == NULL)
 		return -ENOMEM;
@@ -1196,6 +1202,14 @@ static inline int32_t nvt_ts_probe(struct i2c_client *client,
 
 #if TOUCHSCREEN_PLATINA
 	ts->fw_name = nvt_get_config(ts);
+	tp_maker = kzalloc(20, GFP_KERNEL);
+
+	if (tp_maker != NULL) {
+		kfree(tp_maker);
+		tp_maker = NULL;
+	}
+
+	ts->dbclick_count = 0;
 #endif
 
 #if WAKEUP_GESTURE
