@@ -159,7 +159,7 @@ void nvt_ts_wakeup_gesture_report(uint8_t gesture_id, uint8_t *data)
 }
 #endif
 
-static void nvt_irq_enable(bool enable)
+static void __always_inline nvt_irq_enable(bool enable)
 {
 	struct irq_desc *desc;
 
@@ -1254,7 +1254,7 @@ static void nvt_ts_shutdown(struct i2c_client *client)
 #endif
 }
 
-static int32_t nvt_ts_suspend(struct device *dev)
+static int32_t __always_inline nvt_ts_suspend(struct device *dev)
 {
 	uint8_t buf[4] = { 0 };
 	uint32_t i = 0;
@@ -1304,7 +1304,7 @@ static int32_t nvt_ts_suspend(struct device *dev)
 	return 0;
 }
 
-static int32_t nvt_ts_resume(struct device *dev)
+static int32_t __always_inline nvt_ts_resume(struct device *dev)
 {
 
 	int ret = 0;
@@ -1348,7 +1348,7 @@ static int32_t nvt_ts_resume(struct device *dev)
 	return 0;
 }
 
-static int nvt_fb_notifier_callback(struct notifier_block *self,
+static int __always_inline nvt_fb_notifier_callback(struct notifier_block *self,
 						    unsigned long event, void *data)
 {
 	int *blank;
