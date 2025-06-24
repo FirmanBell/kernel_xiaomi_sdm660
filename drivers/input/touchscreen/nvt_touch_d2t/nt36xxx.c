@@ -68,13 +68,13 @@ const uint16_t gesture_key_array[] = {
 };
 
 #ifdef CONFIG_TOUCHSCREEN_COMMON
-static ssize_t double_tap_show(struct kobject *kobj,
+static inline ssize_t double_tap_show(struct kobject *kobj,
 				      struct kobj_attribute *attr, char *buf)
 {
 	return sprintf(buf, "%d\n", ts->gesture_enabled);
 }
 
-static ssize_t double_tap_store(struct kobject *kobj,
+static inline ssize_t double_tap_store(struct kobject *kobj,
 				       struct kobj_attribute *attr, const char *buf,
 				       size_t count)
 {
@@ -94,7 +94,7 @@ static struct tp_common_ops double_tap_ops = {
 };
 #endif
 
-void nvt_ts_wakeup_gesture_report(uint8_t gesture_id, uint8_t *data)
+inline void nvt_ts_wakeup_gesture_report(uint8_t gesture_id, uint8_t *data)
 {
 	uint32_t keycode = 0;
 	uint8_t func_type = data[2];
@@ -178,7 +178,7 @@ static void __always_inline nvt_irq_enable(bool enable)
 	desc = irq_to_desc(ts->client->irq);
 }
 
-int32_t CTP_I2C_READ(struct i2c_client *client, uint16_t address, uint8_t *buf,
+inline int32_t CTP_I2C_READ(struct i2c_client *client, uint16_t address, uint8_t *buf,
 			    uint16_t len)
 {
 	struct i2c_msg msgs[2];
@@ -204,7 +204,7 @@ int32_t CTP_I2C_READ(struct i2c_client *client, uint16_t address, uint8_t *buf,
 	return ret;
 }
 
-int32_t CTP_I2C_WRITE(struct i2c_client *client, uint16_t address, uint8_t *buf,
+inline int32_t CTP_I2C_WRITE(struct i2c_client *client, uint16_t address, uint8_t *buf,
 			     uint16_t len)
 {
 	struct i2c_msg msg;
@@ -225,7 +225,7 @@ int32_t CTP_I2C_WRITE(struct i2c_client *client, uint16_t address, uint8_t *buf,
 	return ret;
 }
 
-int32_t nvt_set_page(uint16_t i2c_addr, uint32_t addr)
+inline int32_t nvt_set_page(uint16_t i2c_addr, uint32_t addr)
 {
 	uint8_t buf[4] = { 0 };
 
@@ -236,7 +236,7 @@ int32_t nvt_set_page(uint16_t i2c_addr, uint32_t addr)
 	return CTP_I2C_WRITE(ts->client, i2c_addr, buf, 3);
 }
 
-void nvt_sw_reset_idle(void)
+inline void nvt_sw_reset_idle(void)
 {
 	uint8_t buf[4] = { 0 };
 
@@ -247,7 +247,7 @@ void nvt_sw_reset_idle(void)
 	msleep(15);
 }
 
-void nvt_bootloader_reset(void)
+inline void nvt_bootloader_reset(void)
 {
 	uint8_t buf[8] = { 0 };
 
@@ -258,7 +258,7 @@ void nvt_bootloader_reset(void)
 	msleep(35);
 }
 
-int32_t nvt_clear_fw_status(void)
+inline int32_t nvt_clear_fw_status(void)
 {
 	uint8_t buf[8] = { 0 };
 
@@ -276,7 +276,7 @@ int32_t nvt_clear_fw_status(void)
 	return 0;
 }
 
-int32_t nvt_check_fw_status(void)
+inline int32_t nvt_check_fw_status(void)
 {
 	uint8_t buf[8] = { 0 };
 
@@ -290,7 +290,7 @@ int32_t nvt_check_fw_status(void)
 	return 0;
 }
 
-int32_t nvt_check_fw_reset_state(RST_COMPLETE_STATE check_reset_state)
+inline int32_t nvt_check_fw_reset_state(RST_COMPLETE_STATE check_reset_state)
 {
 	uint8_t buf[8] = { 0 };
 	int32_t ret = 0;
@@ -302,7 +302,7 @@ int32_t nvt_check_fw_reset_state(RST_COMPLETE_STATE check_reset_state)
 	return ret;
 }
 
-int32_t nvt_read_pid(void)
+inline int32_t nvt_read_pid(void)
 {
 	uint8_t buf[3] = { 0 };
 	int32_t ret = 0;
@@ -320,7 +320,7 @@ int32_t nvt_read_pid(void)
 	return ret;
 }
 
-int32_t nvt_get_fw_info(void)
+inline int32_t nvt_get_fw_info(void)
 {
 	uint8_t buf[64] = { 0 };
 	uint32_t retry_count = 0;
@@ -356,7 +356,7 @@ info_retry:
 	return ret;
 }
 
-static int nvt_get_dt_coords(struct device *dev, char *name)
+static inline int nvt_get_dt_coords(struct device *dev, char *name)
 {
 	int ret = 0;
 	u32 coords[NVT_COORDS_ARR_SIZE] = { 0 };
@@ -391,7 +391,7 @@ static int nvt_get_dt_coords(struct device *dev, char *name)
 }
 
 #ifdef CONFIG_OF
-static int nvt_parse_dt(struct device *dev)
+static inline int nvt_parse_dt(struct device *dev)
 {
 	struct device_node *mi, *np = dev->of_node;
 	struct nvt_config_info *config_info;
@@ -468,7 +468,7 @@ static int nvt_parse_dt(struct device *dev)
 	return 0;
 }
 #else
-static int nvt_parse_dt(struct device *dev)
+static inline int nvt_parse_dt(struct device *dev)
 {
 #if NVT_TOUCH_SUPPORT_HW_RST
 	ts->reset_gpio = NVT_TOUCH_RST_PIN;
@@ -479,7 +479,7 @@ static int nvt_parse_dt(struct device *dev)
 }
 #endif
 
-static const char *nvt_get_config(struct nvt_ts_data *ts)
+static inline const char *nvt_get_config(struct nvt_ts_data *ts)
 {
 	int i;
 
@@ -507,7 +507,7 @@ static const char *nvt_get_config(struct nvt_ts_data *ts)
 	return ts->config_array[i].nvt_cfg_name;
 }
 
-static int nvt_get_reg(struct nvt_ts_data *ts, bool get)
+static inline int nvt_get_reg(struct nvt_ts_data *ts, bool get)
 {
 	int retval;
 
@@ -562,7 +562,7 @@ regulator_put:
 	return retval;
 }
 
-static int nvt_enable_reg(struct nvt_ts_data *ts, bool enable)
+static inline int nvt_enable_reg(struct nvt_ts_data *ts, bool enable)
 {
 	int retval;
 
@@ -610,7 +610,7 @@ exit:
 	return retval;
 }
 
-static int nvt_gpio_config(struct nvt_ts_data *ts)
+static inline int nvt_gpio_config(struct nvt_ts_data *ts)
 {
 	int32_t ret = 0;
 
@@ -637,7 +637,7 @@ err_request_reset_gpio:
 	return ret;
 }
 
-static void nvt_gpio_deconfig(struct nvt_ts_data *ts)
+static inline void nvt_gpio_deconfig(struct nvt_ts_data *ts)
 {
 	if (gpio_is_valid(ts->irq_gpio))
 		gpio_free(ts->irq_gpio);
@@ -645,7 +645,7 @@ static void nvt_gpio_deconfig(struct nvt_ts_data *ts)
 		gpio_free(ts->reset_gpio);
 }
 
-static uint8_t nvt_fw_recovery(uint8_t *point_data)
+static inline uint8_t nvt_fw_recovery(uint8_t *point_data)
 {
 	uint8_t i = 0;
 	uint8_t detected = true;
@@ -660,7 +660,7 @@ static uint8_t nvt_fw_recovery(uint8_t *point_data)
 	return detected;
 }
 
-static void nvt_ts_worker(struct work_struct *work)
+static inline void nvt_ts_worker(struct work_struct *work)
 {
 	struct nvt_ts_data *ts = container_of(work, struct nvt_ts_data, irq_work);
 
@@ -755,7 +755,7 @@ XFER_ERROR:
 #define EVENT_WAKEUP_MODE_ON			5
 #define EVENT_END				13
 
-static void mi_switch_mode_work(struct work_struct *work)
+static inline void mi_switch_mode_work(struct work_struct *work)
 {
 	struct mi_mode_switch *ms = container_of(
 			work, struct mi_mode_switch, switch_mode_work
@@ -773,7 +773,7 @@ static void mi_switch_mode_work(struct work_struct *work)
 	}
 }
 
-static int mi_input_event(struct input_dev *dev, unsigned int type, unsigned int code, int value)
+static inline int mi_input_event(struct input_dev *dev, unsigned int type, unsigned int code, int value)
 {
 	struct nvt_ts_data *data = input_get_drvdata(dev);
 	struct mi_mode_switch *ms;
@@ -800,7 +800,7 @@ static int mi_input_event(struct input_dev *dev, unsigned int type, unsigned int
 }
 #endif
 
-static irqreturn_t nvt_ts_work_func(int irq, void *data)
+static inline irqreturn_t nvt_ts_work_func(int irq, void *data)
 {
 	struct nvt_ts_data *ts = data;
 
@@ -809,7 +809,7 @@ static irqreturn_t nvt_ts_work_func(int irq, void *data)
 	return IRQ_HANDLED;
 }
 
-void nvt_stop_crc_reboot(void)
+inline void nvt_stop_crc_reboot(void)
 {
 	uint8_t buf[8] = { 0 };
 	int32_t retry = 0;
@@ -851,7 +851,7 @@ void nvt_stop_crc_reboot(void)
 	return;
 }
 
-static int8_t nvt_ts_check_chip_ver_trim(void)
+static inline int8_t nvt_ts_check_chip_ver_trim(void)
 {
 	uint8_t buf[8] = { 0 };
 	int32_t retry = 0;
@@ -920,7 +920,7 @@ out:
 }
 
 #ifdef NVT_TOUCH_COUNT_DUMP
-static ssize_t nvt_touch_suspend_notify_show(struct device *dev, struct device_attribute *attr,
+static inline ssize_t nvt_touch_suspend_notify_show(struct device *dev, struct device_attribute *attr,
 		char *buf)
 {
 	return snprintf(buf, PAGE_SIZE, "%d\n", !bTouchIsAwake);
@@ -928,7 +928,7 @@ static ssize_t nvt_touch_suspend_notify_show(struct device *dev, struct device_a
 static DEVICE_ATTR(touch_suspend_notify, (S_IRUGO | S_IRGRP), nvt_touch_suspend_notify_show, NULL);
 #endif
 
-static int nvt_pinctrl_init(struct nvt_ts_data *nvt_data)
+static inline int nvt_pinctrl_init(struct nvt_ts_data *nvt_data)
 {
 	int retval = 0;
 	nvt_data->ts_pinctrl = devm_pinctrl_get(&nvt_data->client->dev);
@@ -964,7 +964,7 @@ err_pinctrl_get:
 	return retval;
 }
 
-static int32_t nvt_ts_probe(struct i2c_client *client,
+static inline int32_t nvt_ts_probe(struct i2c_client *client,
 			    const struct i2c_device_id *id)
 {
 	int32_t ret = 0;
@@ -1179,7 +1179,7 @@ err_gpio_config_failed:
 	return ret;
 }
 
-static int32_t nvt_ts_remove(struct i2c_client *client)
+static inline int32_t nvt_ts_remove(struct i2c_client *client)
 {
 	if (ts->coord_workqueue)
 		destroy_workqueue(ts->coord_workqueue);
@@ -1235,7 +1235,7 @@ static int32_t nvt_ts_remove(struct i2c_client *client)
 	return 0;
 }
 
-static void nvt_ts_shutdown(struct i2c_client *client)
+static inline void nvt_ts_shutdown(struct i2c_client *client)
 {
 	nvt_irq_enable(false);
 
@@ -1418,7 +1418,7 @@ static struct of_device_id nvt_match_table[] = {
 #endif
 
 #ifdef CONFIG_PM
-static int nvt_pm_suspend(struct device *dev)
+static inline int nvt_pm_suspend(struct device *dev)
 {
 	if (device_may_wakeup(dev) && ts->gesture_enabled) {
 		enable_irq_wake(ts->client->irq);
@@ -1430,7 +1430,7 @@ static int nvt_pm_suspend(struct device *dev)
 
 }
 
-static int nvt_pm_resume(struct device *dev)
+static inline int nvt_pm_resume(struct device *dev)
 {
 	if (device_may_wakeup(dev) && ts->gesture_enabled) {
 		disable_irq_wake(ts->client->irq);
@@ -1464,7 +1464,7 @@ static struct i2c_driver nvt_i2c_driver = {
 	},
 };
 
-static int32_t __init nvt_driver_init(void)
+static inline int32_t __init nvt_driver_init(void)
 {
 	int32_t ret = 0;
 
@@ -1477,7 +1477,7 @@ static int32_t __init nvt_driver_init(void)
 }
 module_init(nvt_driver_init);
 
-static void __exit nvt_driver_exit(void)
+static inline void __exit nvt_driver_exit(void)
 {
 	i2c_del_driver(&nvt_i2c_driver);
 }
