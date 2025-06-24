@@ -171,6 +171,8 @@ struct nvt_ts_data {
 	char *current_clicknum_file;
 #endif
 	struct pm_qos_request pm_qos_req;
+	bool dev_pm_suspend;
+	struct completion dev_pm_suspend_completion;
 };
 
 #if WAKEUP_GESTURE

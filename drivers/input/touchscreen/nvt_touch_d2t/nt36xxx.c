@@ -1333,6 +1333,13 @@ static inline void nvt_ts_worker(struct work_struct *work)
 
 	mutex_lock(&ts->lock);
 
+	if (ts->dev_pm_suspend) {
+		ret = wait_for_completion_timeout(&ts->dev_pm_suspend_completion, msecs_to_jiffies(500));
+		if (!ret) {
+			goto XFER_ERROR;
+		}
+	}
+
 	ret = CTP_I2C_READ(ts->client, I2C_FW_Address, point_data, POINT_DATA_LEN + 1);
 	if (unlikely(ret < 0)) {
 		NVT_ERR("CTP_I2C_READ failed.(%d)\n", ret);
@@ -1834,6 +1841,8 @@ static inline int32_t nvt_ts_probe(struct i2c_client *client, const struct i2c_d
 #if WAKEUP_GESTURE
 	device_init_wakeup(&ts->input_dev->dev, 1);
 #endif
+	ts->dev_pm_suspend = false;
+	init_completion(&ts->dev_pm_suspend_completion);
 
 #if BOOT_UPDATE_FIRMWARE
 	nvt_fwu_wq = alloc_workqueue("nvt_fwu_wq", WQ_UNBOUND | WQ_MEM_RECLAIM, 1);
@@ -2362,6 +2371,35 @@ static struct of_device_id nvt_match_table[] = {
 };
 #endif
 
+#ifdef CONFIG_PM
+static int nvt_pm_suspend(struct device *dev)
+{
+	if (device_may_wakeup(dev) && ts->gesture_enabled) {
+		enable_irq_wake(ts->client->irq);
+	}
+	ts->dev_pm_suspend = true;
+	reinit_completion(&ts->dev_pm_suspend_completion);
+
+	return 0;
+
+}
+
+static int nvt_pm_resume(struct device *dev)
+{
+	if (device_may_wakeup(dev) && ts->gesture_enabled) {
+		disable_irq_wake(ts->client->irq);
+	}
+	ts->dev_pm_suspend = false;
+	complete(&ts->dev_pm_suspend_completion);
+
+	return 0;
+}
+static const struct dev_pm_ops nvt_dev_pm_ops = {
+	.suspend = nvt_pm_suspend,
+	.resume = nvt_pm_resume,
+};
+#endif
+
 static struct i2c_driver nvt_i2c_driver = {
 	.probe		= nvt_ts_probe,
 	.remove		= nvt_ts_remove,
@@ -2369,6 +2407,9 @@ static struct i2c_driver nvt_i2c_driver = {
 	.id_table	= nvt_ts_id,
 	.driver = {
 		.name	= NVT_I2C_NAME,
+#ifdef CONFIG_PM
+		.pm = &nvt_dev_pm_ops,
+#endif
 #ifdef CONFIG_OF
 		.of_match_table = nvt_match_table,
 #endif
