@@ -45,7 +45,7 @@
 #if WAKEUP_GESTURE
 extern const uint16_t gesture_key_array[];
 #endif
-#define BOOT_UPDATE_FIRMWARE 0
+#define BOOT_UPDATE_FIRMWARE 1
 #define BOOT_UPDATE_FIRMWARE_NAME "novatek_nt36672_d2t.fw"
 
 #define TOUCH_STATE_WORKING 0x00
