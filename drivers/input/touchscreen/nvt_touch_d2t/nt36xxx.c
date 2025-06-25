@@ -781,7 +781,7 @@ static inline int mi_input_event(struct input_dev *dev, unsigned int type, unsig
 	if (type == EV_SYN && code == SYN_CONFIG) {
 
 		if (value >= EVENT_START && value <= EVENT_END) {
-			ms = kmalloc(sizeof(struct mi_mode_switch), GFP_ATOMIC);
+			ms = kzalloc(sizeof(struct mi_mode_switch), GFP_ATOMIC);
 
 			if (ms != NULL) {
 				ms->nvt_data = data;
@@ -973,7 +973,7 @@ static inline int32_t nvt_ts_probe(struct i2c_client *client,
 #endif
 
 	char *tp_maker = NULL;
-	ts = kmalloc(sizeof(struct nvt_ts_data), GFP_KERNEL);
+	ts = kzalloc(sizeof(struct nvt_ts_data), GFP_KERNEL);
 	if (ts == NULL)
 		return -ENOMEM;
 
