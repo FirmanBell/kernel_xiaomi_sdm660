@@ -417,6 +417,40 @@ info_retry:
 }
 
 #if TOUCHSCREEN_PLATINA
+static int nvt_get_dt_coords(struct device *dev, char *name)
+{
+	int ret = 0;
+	u32 coords[NVT_COORDS_ARR_SIZE] = { 0 };
+	struct property *prop;
+	struct device_node *np = dev->of_node;
+	int coords_size;
+
+	prop = of_find_property(np, name, NULL);
+	if (!prop)
+		return -EINVAL;
+	if (!prop->value)
+		return -ENODATA;
+
+	coords_size = prop->length / sizeof(u32);
+	if (coords_size != NVT_COORDS_ARR_SIZE) {
+		return -EINVAL;
+	}
+
+	ret = of_property_read_u32_array(np, name, coords, coords_size);
+	if (ret && (ret != -EINVAL)) {
+		return -ENODATA;
+	}
+
+	if (!strcmp(name, "novatek,display-coords")) {
+		ts->abs_x_max = coords[0];
+		ts->abs_y_max = coords[1];
+	} else {
+		return -EINVAL;
+	}
+
+	return 0;
+}
+
 #ifdef CONFIG_OF
 static int nvt_parse_dt(struct device *dev)
 {
@@ -424,6 +458,8 @@ static int nvt_parse_dt(struct device *dev)
 	struct nvt_config_info *config_info;
 	int retval;
 	u32 temp_val;
+
+	retval = nvt_get_dt_coords(dev, "novatek,display-coords");
 
 	ts->reset_gpio = of_get_named_gpio_flags(np, "novatek,reset-gpio", 0, &ts->reset_flags);
 	ts->tddi_tp_hw_reset = of_property_read_bool(np, "novatek,tddi-tp-hw-reset");
