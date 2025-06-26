@@ -208,6 +208,8 @@ struct nvt_ts_data {
 	bool dump_click_count;
 	char *current_clicknum_file;
 #endif
+	bool dev_pm_suspend;
+	struct completion dev_pm_suspend_completion;
 };
 
 #if TOUCHSCREEN_PLATINA
