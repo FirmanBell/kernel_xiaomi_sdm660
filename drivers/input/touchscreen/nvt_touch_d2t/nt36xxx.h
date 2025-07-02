@@ -18,6 +18,8 @@
 #include <linux/regulator/consumer.h>
 #include <uapi/linux/sched/types.h>
 
+#define NVT_DEBUG 0
+
 #define NVT_TOUCH_RST_PIN 980
 #define NVT_TOUCH_INT_PIN 943
 
@@ -32,12 +34,21 @@
 #define I2C_BLDR_Address 0x01
 #define I2C_FW_Address 0x01
 #define I2C_HW_Address 0x62
+
+#if NVT_DEBUG
+#define NVT_LOG(fmt, args...)    pr_err("[%s] %s %d: " fmt, NVT_I2C_NAME, __func__, __LINE__, ##args)
+#else
+#define NVT_LOG(fmt, args...)    pr_info("[%s] %s %d: " fmt, NVT_I2C_NAME, __func__, __LINE__, ##args)
+#endif
+#define NVT_ERR(fmt, args...)    pr_err("[%s] %s %d: " fmt, NVT_I2C_NAME, __func__, __LINE__, ##args)
+
 #define NVT_TS_NAME "NVTCapacitiveTouchScreen"
 
 #define TOUCH_DEFAULT_MAX_WIDTH 1080
 #define TOUCH_DEFAULT_MAX_HEIGHT 2246
 #define TOUCH_MAX_FINGER_NUM 10
 #define TOUCH_FORCE_NUM 1000
+#define TOUCH_KEY_NUM 0
 
 #define NVT_TOUCH_SUPPORT_HW_RST 0
 
@@ -82,6 +93,7 @@ struct nvt_ts_data {
 	uint16_t abs_x_max;
 	uint16_t abs_y_max;
 	uint8_t max_touch_num;
+	uint8_t max_button_num;
 	uint32_t int_trigger_type;
 	int32_t irq_gpio;
 	uint32_t irq_flags;
