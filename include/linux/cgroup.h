@@ -548,6 +548,27 @@ static inline bool cgroup_is_descendant(struct cgroup *cgrp,
 }
 
 /**
+ * cgroup_ancestor - find ancestor of cgroup
+ * @cgrp: cgroup to find ancestor of
+ * @ancestor_level: level of ancestor to find starting from root
+ *
+ * Find ancestor of cgroup at specified level starting from root if it exists
+ * and return pointer to it. Return NULL if @cgrp doesn't have ancestor at
+ * @ancestor_level.
+ *
+ * This function is safe to call as long as @cgrp is accessible.
+ */
+static inline struct cgroup *cgroup_ancestor(struct cgroup *cgrp,
+					     int ancestor_level)
+{
+	if (cgrp->level < ancestor_level)
+		return NULL;
+	while (cgrp && cgrp->level > ancestor_level)
+		cgrp = cgroup_parent(cgrp);
+	return cgrp;
+}
+
+/**
  * task_under_cgroup_hierarchy - test task's membership of cgroup ancestry
  * @task: the task to be tested
  * @ancestor: possible ancestor of @task's cgroup
@@ -573,7 +594,7 @@ static inline bool cgroup_is_populated(struct cgroup *cgrp)
 /* returns ino associated with a cgroup */
 static inline ino_t cgroup_ino(struct cgroup *cgrp)
 {
-	return cgrp->kn->ino;
+	return cgrp->kn->id.ino;
 }
 
 /* cft/css accessors for cftype->write() operation */
@@ -640,6 +661,13 @@ static inline void cgroup_kthread_ready(void)
 	current->no_cgroup_migration = 0;
 }
 
+static inline union kernfs_node_id *cgroup_get_kernfs_id(struct cgroup *cgrp)
+{
+	return &cgrp->kn->id;
+}
+
+void cgroup_path_from_kernfs_id(const union kernfs_node_id *id,
+					char *buf, size_t buflen);
 #else /* !CONFIG_CGROUPS */
 
 struct cgroup_subsys_state;
@@ -660,6 +688,10 @@ static inline void cgroup_free(struct task_struct *p) {}
 
 static inline int cgroup_init_early(void) { return 0; }
 static inline int cgroup_init(void) { return 0; }
+static inline union kernfs_node_id *cgroup_get_kernfs_id(struct cgroup *cgrp)
+{
+	return NULL;
+}
 
 static inline bool task_under_cgroup_hierarchy(struct task_struct *task,
 					       struct cgroup *ancestor)
@@ -670,6 +702,8 @@ static inline bool task_under_cgroup_hierarchy(struct task_struct *task,
 static inline void cgroup_init_kthreadd(void) {}
 static inline void cgroup_kthread_ready(void) {}
 
+static inline void cgroup_path_from_kernfs_id(const union kernfs_node_id *id,
+	char *buf, size_t buflen) {}
 #endif /* !CONFIG_CGROUPS */
 
 /*

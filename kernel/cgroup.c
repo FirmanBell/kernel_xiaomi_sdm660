@@ -2026,7 +2026,8 @@ static int cgroup_setup_root(struct cgroup_root *root, u16 ss_mask)
 		goto cancel_ref;
 
 	root->kf_root = kernfs_create_root(&cgroup_kf_syscall_ops,
-					   KERNFS_ROOT_CREATE_DEACTIVATED,
+					   KERNFS_ROOT_CREATE_DEACTIVATED |
+					   KERNFS_ROOT_SUPPORT_EXPORTOP,
 					   root_cgrp);
 	if (IS_ERR(root->kf_root)) {
 		ret = PTR_ERR(root->kf_root);
@@ -5809,6 +5810,18 @@ static int __init cgroup_wq_init(void)
 }
 core_initcall(cgroup_wq_init);
 
+void cgroup_path_from_kernfs_id(const union kernfs_node_id *id,
+					char *buf, size_t buflen)
+{
+	struct kernfs_node *kn;
+
+	kn = kernfs_get_node_by_id(cgrp_dfl_root.kf_root, id);
+	if (!kn)
+		return;
+	kernfs_path(kn, buf, buflen);
+	kernfs_put(kn);
+}
+
 /*
  * proc_cgroup_show()
  *  - Print task's cgroup paths into seq_file, one line for each hierarchy
@@ -6570,6 +6583,16 @@ int cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
 
 	mutex_lock(&cgroup_mutex);
 	ret = __cgroup_bpf_detach(cgrp, prog, type, flags);
+	mutex_unlock(&cgroup_mutex);
+	return ret;
+}
+int cgroup_bpf_query(struct cgroup *cgrp, const union bpf_attr *attr,
+		     union bpf_attr __user *uattr)
+{
+	int ret;
+
+	mutex_lock(&cgroup_mutex);
+	ret = __cgroup_bpf_query(cgrp, attr, uattr);
 	mutex_unlock(&cgroup_mutex);
 	return ret;
 }
