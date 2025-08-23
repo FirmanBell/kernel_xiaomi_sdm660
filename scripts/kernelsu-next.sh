@@ -68,7 +68,7 @@ parse_parameters $@
 #
 # Check action and call appropriate function
 #
-if [ $action = "stable" ] || [ $action = "devel" ]; then
+if [[ $action = "stable" ]] || [[ $action = "devel" ]]; then
 do_$action
 else
 do_older
