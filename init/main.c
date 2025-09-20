@@ -141,7 +141,7 @@ static char *execute_command;
 static char *ramdisk_execute_command;
 
 // Hardcode ZRAM size to 4GB
-u64 zram_size = 4ULL * 1024 * 1024 * 1024;
+u64 zram_size = 3ULL * 1024 * 1024 * 1024;
 
 /*
  * Used to generate warnings if static_key manipulation functions are used
