@@ -15,8 +15,6 @@
 
 #include "kgsl_device.h"
 #include "kgsl_pwrscale.h"
-#include "kgsl_trace.h"
-#include "kgsl_trace_power.h"
 
 #define KGSL_PWRFLAGS_POWER_ON 0
 #define KGSL_PWRFLAGS_CLK_ON   1
@@ -402,8 +400,7 @@ static int kgsl_pwrctrl_cx_ipeak_init(struct kgsl_device *device)
 	for_each_child_of_node(node, child) {
 		if (i >= ARRAY_SIZE(pwr->gpu_ipeak_client)) {
 			dev_err(device->dev,
-				"dt: too many CX ipeak clients defined\n",
-					i);
+				"dt: too many CX ipeak clients defined\n");
 			ret = -EINVAL;
 			of_node_put(child);
 			goto error;
@@ -557,7 +554,9 @@ unsigned int kgsl_pwrctrl_adjust_pwrlevel(struct kgsl_device *device,
 				unsigned int new_level)
 {
 	struct kgsl_pwrctrl *pwr = &device->pwrctrl;
+#ifdef CONFIG_DEBUG_KERNEL
 	unsigned int old_level = pwr->active_pwrlevel;
+#endif
 
 	/* If a pwr constraint is expired, remove it */
 	if ((pwr->constraint.type != KGSL_CONSTRAINT_NONE) &&
@@ -1003,9 +1002,17 @@ static ssize_t gpuclk_show(struct device *dev,
 				    char *buf)
 {
 	struct kgsl_device *device = dev_get_drvdata(dev);
+	unsigned long freq;
+	struct kgsl_pwrctrl *pwr;
+	
+	pwr = &device->pwrctrl;
+	
+	if (device->state == KGSL_STATE_SLUMBER)
+		freq = pwr->pwrlevels[pwr->num_pwrlevels - 1].gpu_freq;
+	else
+		freq = kgsl_pwrctrl_active_freq(pwr);
 
-	return scnprintf(buf, PAGE_SIZE, "%ld\n",
-		kgsl_pwrctrl_active_freq(&device->pwrctrl));
+	return scnprintf(buf, PAGE_SIZE, "%ld\n", freq);
 }
 
 static ssize_t __timer_store(struct device *dev, struct device_attribute *attr,
@@ -1015,6 +1022,8 @@ static ssize_t __timer_store(struct device *dev, struct device_attribute *attr,
 	unsigned int val = 0;
 	struct kgsl_device *device = dev_get_drvdata(dev);
 	int ret;
+
+	return count;
 
 	ret = kgsl_sysfs_store(buf, &val);
 	if (ret)
@@ -1380,9 +1389,17 @@ static ssize_t clock_mhz_show(struct device *dev,
 				struct device_attribute *attr, char *buf)
 {
 	struct kgsl_device *device = dev_get_drvdata(dev);
+	unsigned long freq;
+	struct kgsl_pwrctrl *pwr;
+	
+	pwr = &device->pwrctrl;
+	
+	if (device->state == KGSL_STATE_SLUMBER)
+		freq = pwr->pwrlevels[pwr->num_pwrlevels - 1].gpu_freq;
+	else
+		freq = kgsl_pwrctrl_active_freq(pwr);
 
-	return scnprintf(buf, PAGE_SIZE, "%ld\n",
-			kgsl_pwrctrl_active_freq(&device->pwrctrl) / 1000000);
+	return scnprintf(buf, PAGE_SIZE, "%ld\n", freq / 1000000);
 }
 
 static ssize_t freq_table_mhz_show(struct device *dev,
@@ -2594,7 +2611,6 @@ static int _wake(struct kgsl_device *device)
 {
 	struct kgsl_pwrctrl *pwr = &device->pwrctrl;
 	int status = 0;
-	unsigned int state = device->state;
 
 	switch (device->state) {
 	case KGSL_STATE_SUSPEND:
@@ -2621,9 +2637,6 @@ static int _wake(struct kgsl_device *device)
 		/* Turn on the core clocks */
 		kgsl_pwrctrl_clk(device, KGSL_PWRFLAGS_ON, KGSL_STATE_ACTIVE);
 
-		if (state == KGSL_STATE_SLUMBER || state == KGSL_STATE_SUSPEND)
-			trace_gpu_frequency(
-			pwr->pwrlevels[pwr->active_pwrlevel].gpu_freq/1000, 0);
 		/*
 		 * No need to turn on/off irq here as it no longer affects
 		 * power collapse
@@ -2783,7 +2796,6 @@ _slumber(struct kgsl_device *device)
 		kgsl_pwrctrl_clk_set_options(device, false);
 		kgsl_pwrctrl_disable(device);
 		kgsl_pwrscale_sleep(device);
-		trace_gpu_frequency(0, 0);
 		kgsl_pwrctrl_set_state(device, KGSL_STATE_SLUMBER);
 		pm_qos_update_request(&device->pwrctrl.pm_qos_req_dma,
 						PM_QOS_DEFAULT_VALUE);
@@ -2795,7 +2807,6 @@ _slumber(struct kgsl_device *device)
 		break;
 	case KGSL_STATE_AWARE:
 		kgsl_pwrctrl_disable(device);
-		trace_gpu_frequency(0, 0);
 		kgsl_pwrctrl_set_state(device, KGSL_STATE_SLUMBER);
 		break;
 	case KGSL_STATE_RESET:

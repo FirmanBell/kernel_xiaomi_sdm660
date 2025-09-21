@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
  * Copyright (c) 2011-2021, The Linux Foundation. All rights reserved.
- * Copyright (c) 2022-2023, Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2022-2024, Qualcomm Innovation Center, Inc. All rights reserved.
  */
 
 #include <linux/compat.h>
@@ -1211,8 +1211,10 @@ static int _init_global_pt(struct kgsl_mmu *mmu, struct kgsl_pagetable *pt)
 		goto done;
 	}
 
-	if (kgsl_mmu_is_perprocess(mmu) && MMU_FEATURE(mmu,
-				KGSL_MMU_SMMU_APERTURE)) {
+	if (kgsl_mmu_is_perprocess(mmu) &&
+		MMU_FEATURE(mmu, KGSL_MMU_SMMU_APERTURE) &&
+		!of_machine_is_compatible("qcom,sdm636") &&
+		!of_machine_is_compatible("qcom,sdm660")) {
 		struct scm_desc desc = {0};
 
 		desc.args[0] = 0xFFFF0000 | ((CP_APERTURE_REG & 0xff) << 8) |
