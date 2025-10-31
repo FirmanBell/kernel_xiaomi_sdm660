@@ -5238,7 +5238,7 @@ static void update_charge_current(struct work_struct *work)
 		pr_debug("err_bat_temp_state8=%d,bat_temp_state=%d,last_bat_temp_state=%d\n",err_bat_temp_state,bat_temp_state,last_bat_temp_state);
 	}
 
-	queue_delayed_work(system_power_efficient_wq, &smbchg_dev->update_current_work,msecs_to_jiffies(1000));
+	schedule_delayed_work(&smbchg_dev->update_current_work,msecs_to_jiffies(1000));
 }
 #endif
 
@@ -5411,7 +5411,7 @@ void smblib_usb_plugin_locked(struct smb_charger *chg)
 
 #ifdef CONFIG_MACH_XIAOMI_CLOVER
 		/* Schedule work to avoid BC 1.2 detection issue. */
-		queue_delayed_work(system_power_efficient_wq, &chg->typec_disable_cmd_work, msecs_to_jiffies(1500));
+		schedule_delayed_work(&chg->typec_disable_cmd_work, msecs_to_jiffies(1500));
 #endif
 
 		/* Schedule work to enable parallel charger */
@@ -6643,7 +6643,7 @@ static void smblib_handle_typec_insertion(struct smb_charger *chg)
 		typec_sink_removal(chg);
 	}
 #ifdef CONFIG_MACH_XIAOMI_CLOVER
-	queue_delayed_work(system_power_efficient_wq, &smbchg_dev->update_current_work,msecs_to_jiffies(1000));
+	schedule_delayed_work(&smbchg_dev->update_current_work,msecs_to_jiffies(1000));
 #endif
 }
 
