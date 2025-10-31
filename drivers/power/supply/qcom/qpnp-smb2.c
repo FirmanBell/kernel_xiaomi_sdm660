@@ -55,33 +55,21 @@ static struct smb_params v1_params = {
 		.name	= "fast charge current",
 		.reg	= FAST_CHARGE_CURRENT_CFG_REG,
 		.min_u	= 0,
-#ifdef CONFIG_MACH_XIAOMI_PLATINA
-		.max_u	= 3400000,
-#else
 		.max_u	= 4500000,
-#endif
 		.step_u	= 25000,
 	},
 	.fv			= {
 		.name	= "float voltage",
 		.reg	= FLOAT_VOLTAGE_CFG_REG,
 		.min_u	= 3487500,
-#ifdef CONFIG_MACH_XIAOMI_PLATINA
-		.max_u	= 4400000,
-#else
 		.max_u	= 4920000,
-#endif
 		.step_u	= 7500,
 	},
 	.usb_icl		= {
 		.name	= "usb input current limit",
 		.reg	= USBIN_CURRENT_LIMIT_CFG_REG,
 		.min_u	= 0,
-#ifdef CONFIG_MACH_XIAOMI_PLATINA
-		.max_u	= 3000000,
-#else
 		.max_u	= 4800000,
-#endif
 		.step_u	= 25000,
 	},
 	.icl_stat		= {
@@ -95,11 +83,7 @@ static struct smb_params v1_params = {
 		.name	= "usb otg current limit",
 		.reg	= OTG_CURRENT_LIMIT_CFG_REG,
 		.min_u	= 250000,
-#ifdef CONFIG_MACH_XIAOMI_PLATINA
-		.max_u	= 1250000,
-#else
 		.max_u	= 2000000,
-#endif
 		.step_u	= 250000,
 	},
 	.dc_icl			= {
@@ -217,11 +201,7 @@ struct smb2 {
 
 static int __debug_mask;
 
-#ifdef CONFIG_MACH_XIAOMI_PLATINA
-static int __weak_chg_icl_ua = 700000;
-#else
 static int __weak_chg_icl_ua = 900000;
-#endif
 static ssize_t weak_chg_icl_ua_show(struct device *dev, struct device_attribute
 				     *attr, char *buf)
 {
@@ -293,15 +273,7 @@ static struct attribute *smb2_attrs[] = {
 ATTRIBUTE_GROUPS(smb2);
 
 
-#ifdef CONFIG_MACH_XIAOMI_PLATINA
-#define MICRO_1P5A		1250000
-#define MAX_DCP_ICL_UA  1800000
-#define MAX_DCP_ICL_UA_2A  2000000
-#define DEFAULT_JEITA_FCC		1600000
-#define DEFAULT_CRITICAL_JEITA_FCC		525000
-#else
 #define MICRO_1P5A		1500000
-#endif
 #define MICRO_P1A		100000
 #define OTG_DEFAULT_DEGLITCH_TIME_MS	50
 #define MIN_WD_BARK_TIME		16
@@ -328,19 +300,6 @@ static int smb2_parse_dt(struct smb2 *chip)
 
 	chg->sw_jeita_enabled = of_property_read_bool(node,
 				"qcom,sw-jeita-enable");
-
-#ifdef CONFIG_MACH_XIAOMI_PLATINA
-	chg->boost_charge_support = of_property_read_bool(node,
-				"qcom,boost-charge-support");
-	chg->use_usbmid = of_property_read_bool(node,
-				"qcom,use-usbmid");
-	/*
-	 * set this parameter for device configure 5v/2a adapter
-	 * not 5V/1.8A
-	 */
-	chg->support_5v_2a = of_property_read_bool(node,
-				"qcom,supprot-5v-2a");
-#endif
 
 	rc = of_property_read_u32(node, "qcom,wd-bark-time-secs",
 					&chip->dt.wd_bark_time);
@@ -401,105 +360,6 @@ static int smb2_parse_dt(struct smb2 *chip)
 	if (rc < 0)
 		chip->dt.wipower_max_uw = -EINVAL;
 
-#ifdef CONFIG_MACH_XIAOMI_PLATINA
-#if 0
-	rc = of_property_read_u32(node,
-				"qcom,critical-low-fcc-ua", &chg->critical_low_fcc_ua);
-	if (rc < 0)
-		chg->critical_low_fcc_ua = DEFAULT_CRITICAL_JEITA_FCC;
-
-	rc = of_property_read_u32(node,
-				"qcom,normal-cool-fcc-ua", &chg->normal_cool_fcc_ua);
-	if (rc < 0)
-		chg->normal_cool_fcc_ua = DEFAULT_JEITA_FCC;
-
-	rc = of_property_read_u32(node,
-				"qcom,cool-fcc-ua", &chg->cool_fcc_ua);
-	if (rc < 0)
-		chg->cool_fcc_ua = DEFAULT_JEITA_FCC;
-
-	rc = of_property_read_u32(node,
-				"qcom,warm-fcc-ua", &chg->warm_fcc_ua);
-	if (rc < 0)
-		chg->warm_fcc_ua = DEFAULT_JEITA_FCC;
-#endif
-#ifdef CONFIG_FB
-	if (of_find_property(node, "qcom,thermal-mitigation-dcp", &byte_len)) {
-		chg->thermal_mitigation_dcp = devm_kzalloc(chg->dev, byte_len,
-			GFP_KERNEL);
-
-		if (chg->thermal_mitigation_dcp == NULL)
-			return -ENOMEM;
-
-		chg->thermal_levels = byte_len / sizeof(u32);
-		rc = of_property_read_u32_array(node,
-				"qcom,thermal-mitigation-dcp",
-				chg->thermal_mitigation_dcp,
-				chg->thermal_levels);
-		if (rc < 0) {
-			dev_err(chg->dev,
-				"Couldn't read threm limits rc = %d\n", rc);
-			return rc;
-		}
-	}
-	if (of_find_property(node, "qcom,thermal-mitigation-qc3", &byte_len)) {
-		chg->thermal_mitigation_qc3 = devm_kzalloc(chg->dev, byte_len,
-			GFP_KERNEL);
-
-		if (chg->thermal_mitigation_qc3 == NULL)
-			return -ENOMEM;
-
-		chg->thermal_levels = byte_len / sizeof(u32);
-		rc = of_property_read_u32_array(node,
-				"qcom,thermal-mitigation-qc3",
-				chg->thermal_mitigation_qc3,
-				chg->thermal_levels);
-		if (rc < 0) {
-			dev_err(chg->dev,
-				"Couldn't read threm limits rc = %d\n", rc);
-			return rc;
-		}
-	}
-	if (of_find_property(node, "qcom,thermal-mitigation-qc2", &byte_len)) {
-		chg->thermal_mitigation_qc2 = devm_kzalloc(chg->dev, byte_len,
-			GFP_KERNEL);
-
-		if (chg->thermal_mitigation_qc2 == NULL)
-			return -ENOMEM;
-
-		chg->thermal_levels = byte_len / sizeof(u32);
-		rc = of_property_read_u32_array(node,
-				"qcom,thermal-mitigation-qc2",
-				chg->thermal_mitigation_qc2,
-				chg->thermal_levels);
-		if (rc < 0) {
-			dev_err(chg->dev,
-				"Couldn't read threm limits rc = %d\n", rc);
-			return rc;
-		}
-	}
-	if (of_find_property(node, "qcom,thermal-mitigation-pd-base", &byte_len)) {
-		chg->thermal_mitigation_pd_base = devm_kzalloc(chg->dev, byte_len,
-			GFP_KERNEL);
-
-		if (chg->thermal_mitigation_pd_base == NULL)
-			return -ENOMEM;
-
-		chg->thermal_levels = byte_len / sizeof(u32);
-		rc = of_property_read_u32_array(node,
-				"qcom,thermal-mitigation-pd-base",
-				chg->thermal_mitigation_pd_base,
-				chg->thermal_levels);
-		if (rc < 0) {
-			dev_err(chg->dev,
-				"Couldn't read threm limits rc = %d\n", rc);
-			return rc;
-		}
-	}
-#endif
-#endif
-
-#if !defined(CONFIG_MACH_XIAOMI_PLATINA) || (defined(CONFIG_MACH_XIAOMI_PLATINA) && !defined(CONFIG_FB))
 	if (of_find_property(node, "qcom,thermal-mitigation", &byte_len)) {
 		chg->thermal_mitigation = devm_kzalloc(chg->dev, byte_len,
 			GFP_KERNEL);
@@ -518,7 +378,6 @@ static int smb2_parse_dt(struct smb2 *chip)
 			return rc;
 		}
 	}
-#endif
 
 	of_property_read_u32(node, "qcom,float-option", &chip->dt.float_option);
 	if (chip->dt.float_option < 0 || chip->dt.float_option > 4) {
@@ -543,17 +402,7 @@ static int smb2_parse_dt(struct smb2 *chip)
 	chg->use_extcon = of_property_read_bool(node,
 						"qcom,use-extcon");
 
-#ifdef CONFIG_MACH_XIAOMI_PLATINA
-	chg->need_soft_charge_done = of_property_read_bool(node,
-				"qcom,need-soft-done");
-
-	if (chg->support_5v_2a)
-		chg->dcp_icl_ua = MAX_DCP_ICL_UA_2A;
-	else
-		chg->dcp_icl_ua = MAX_DCP_ICL_UA;
-#else
 	chg->dcp_icl_ua = chip->dt.usb_icl_ua;
-#endif
 
 	chg->suspend_input_on_debug_batt = of_property_read_bool(node,
 					"qcom,suspend-input-on-debug-batt");
@@ -565,32 +414,6 @@ static int smb2_parse_dt(struct smb2 *chip)
 
 	chg->disable_stat_sw_override = of_property_read_bool(node,
 					"qcom,disable-stat-sw-override");
-
-#ifdef CONFIG_MACH_XIAOMI_PLATINA
-	if (chg->boost_charge_support) {
-		chg->boost_en_gpio = of_get_named_gpio(node, "qcom,boost-en", 0);
-		if (gpio_is_valid(chg->boost_en_gpio)) {
-			rc = gpio_request(chg->boost_en_gpio, "boost-en");
-			if (rc)
-				pr_err("failed to request boost_en_gpio rc = %d\n", rc);
-			/* set boost_en_gpio to default output high */
-			rc = gpio_direction_output(chg->boost_en_gpio, 1);
-			if (rc)
-				pr_err("unable to set output high rc = %d\n", rc);
-		}
-
-		chg->sw_usb_en_gpio = of_get_named_gpio(node, "qcom,sw-usb-en", 0);
-		if (gpio_is_valid(chg->sw_usb_en_gpio)) {
-			rc = gpio_request(chg->sw_usb_en_gpio, "sw-usb-en");
-			if (rc)
-				pr_err("failed to request sw_usb_en_gpio rc = %d\n", rc);
-			/* set sw_usb_en_gpio to default output low */
-			rc = gpio_direction_output(chg->sw_usb_en_gpio, 0);
-			if (rc)
-				pr_err("unable to set output low rc = %d\n", rc);
-		}
-	}
-#endif
 
 	chg->fcc_stepper_enable = of_property_read_bool(node,
 					"qcom,fcc-stepping-enable");
@@ -631,14 +454,11 @@ static enum power_supply_property smb2_usb_props[] = {
 	POWER_SUPPLY_PROP_PD_VOLTAGE_MAX,
 	POWER_SUPPLY_PROP_PD_VOLTAGE_MIN,
 	POWER_SUPPLY_PROP_SDP_CURRENT_MAX,
-#if defined(CONFIG_MACH_LONGCHEER) || defined(CONFIG_MACH_XIAOMI_PLATINA)
+#ifdef CONFIG_MACH_LONGCHEER
 	POWER_SUPPLY_PROP_RERUN_APSD,
 #endif
 	POWER_SUPPLY_PROP_CONNECTOR_TYPE,
 	POWER_SUPPLY_PROP_MOISTURE_DETECTED,
-#ifdef CONFIG_MACH_XIAOMI_PLATINA
-	POWER_SUPPLY_PROP_TYPE_RECHECK,
-#endif
 };
 
 static int smb2_usb_get_prop(struct power_supply *psy,
@@ -657,12 +477,6 @@ static int smb2_usb_get_prop(struct power_supply *psy,
 			rc = smblib_get_prop_usb_present(chg, val);
 		break;
 	case POWER_SUPPLY_PROP_ONLINE:
-#ifdef CONFIG_MACH_XIAOMI_PLATINA
-		if (chg->report_usb_absent) {
-			val->intval = 0;
-			break;
-		}
-#endif
 		rc = smblib_get_prop_usb_online(chg, val);
 		if (!val->intval)
 			break;
@@ -773,14 +587,9 @@ static int smb2_usb_get_prop(struct power_supply *psy,
 		val->intval = get_client_vote(chg->disable_power_role_switch,
 					      MOISTURE_VOTER);
 		break;
-#if defined(CONFIG_MACH_LONGCHEER) || defined(CONFIG_MACH_XIAOMI_PLATINA)
+#ifdef CONFIG_MACH_LONGCHEER
 	case POWER_SUPPLY_PROP_RERUN_APSD:
 		val->intval = chg->float_rerun_apsd;
-		break;
-#endif
-#ifdef CONFIG_MACH_XIAOMI_PLATINA
-	case POWER_SUPPLY_PROP_TYPE_RECHECK:
-		rc = smblib_get_prop_type_recheck(chg, val);
 		break;
 #endif
 	default:
@@ -856,14 +665,9 @@ static int smb2_usb_set_prop(struct power_supply *psy,
 	case POWER_SUPPLY_PROP_SDP_CURRENT_MAX:
 		rc = smblib_set_prop_sdp_current_max(chg, val);
 		break;
-#if defined(CONFIG_MACH_LONGCHEER) || defined(CONFIG_MACH_XIAOMI_PLATINA)
+#ifdef CONFIG_MACH_LONGCHEER
 	case POWER_SUPPLY_PROP_RERUN_APSD:
 		rc = smblib_set_prop_rerun_apsd(chg, val);
-		break;
-#endif
-#ifdef CONFIG_MACH_XIAOMI_PLATINA
-	case POWER_SUPPLY_PROP_TYPE_RECHECK:
-		rc = smblib_set_prop_type_recheck(chg, val);
 		break;
 #endif
 	default:
@@ -939,12 +743,6 @@ static int smb2_usb_port_get_prop(struct power_supply *psy,
 		val->intval = POWER_SUPPLY_TYPE_USB;
 		break;
 	case POWER_SUPPLY_PROP_ONLINE:
-#ifdef CONFIG_MACH_XIAOMI_PLATINA
-		if (chg->report_usb_absent) {
-			val->intval = 0;
-			break;
-		}
-#endif
 		rc = smblib_get_prop_usb_online(chg, val);
 		if (!val->intval)
 			break;
@@ -1312,8 +1110,6 @@ static enum power_supply_property smb2_batt_props[] = {
 	POWER_SUPPLY_PROP_CHARGE_COUNTER,
 #ifdef CONFIG_MACH_LONGCHEER
 	POWER_SUPPLY_PROP_CHARGING_ENABLED,
-#elif defined(CONFIG_MACH_XIAOMI_PLATINA)
-	POWER_SUPPLY_PROP_CHARGER_TYPE,
 #endif
 	POWER_SUPPLY_PROP_CHARGE_FULL,
 	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
@@ -1408,7 +1204,7 @@ static int smb2_batt_get_prop(struct power_supply *psy,
 		break;
 #endif
 	case POWER_SUPPLY_PROP_TECHNOLOGY:
-#if defined(CONFIG_MACH_LONGCHEER) || defined(CONFIG_MACH_XIAOMI_PLATINA)
+#ifdef CONFIG_MACH_LONGCHEER
 		val->intval = POWER_SUPPLY_TECHNOLOGY_LIPO;
 #else
 		val->intval = POWER_SUPPLY_TECHNOLOGY_LION;
@@ -1445,9 +1241,7 @@ static int smb2_batt_get_prop(struct power_supply *psy,
 	case POWER_SUPPLY_PROP_CHARGE_COUNTER:
 	case POWER_SUPPLY_PROP_CHARGE_FULL:
 #ifndef CONFIG_MACH_LONGCHEER
-#ifndef CONFIG_MACH_XIAOMI_PLATINA
 	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
-#endif
 #endif
 	case POWER_SUPPLY_PROP_CYCLE_COUNT:
 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
@@ -1463,14 +1257,6 @@ static int smb2_batt_get_prop(struct power_supply *psy,
 	case POWER_SUPPLY_PROP_FCC_STEPPER_ENABLE:
 		val->intval = chg->fcc_stepper_enable;
 		break;
-#ifdef CONFIG_MACH_XIAOMI_PLATINA
-	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
-		rc = smblib_get_prop_batt_charge_full(chg, val);
-		break;
-	case POWER_SUPPLY_PROP_CHARGER_TYPE:
-		val->intval = chg->real_charger_type;
-		break;
-#endif
 	default:
 		pr_err("batt power supply prop %d not supported\n", psp);
 		return -EINVAL;
@@ -2001,7 +1787,7 @@ static int smb2_init_hw(struct smb2 *chip)
 	vote(chg->pd_disallowed_votable_indirect, PD_NOT_SUPPORTED_VOTER,
 			chip->dt.no_pd, 0);
 
-#if defined(CONFIG_MACH_LONGCHEER) || defined(CONFIG_MACH_XIAOMI_PLATINA)
+#ifdef CONFIG_MACH_LONGCHEER
 	/* Operate the QC2.0 in 5V/9V mode i.e. Disable 12V */
 	rc = smblib_masked_write(chg, HVDCP_PULSE_COUNT_MAX_REG,
 						PULSE_COUNT_QC2P0_12V | PULSE_COUNT_QC2P0_9V,
@@ -2171,16 +1957,6 @@ static int smb2_init_hw(struct smb2 *chip)
 		return rc;
 	}
 
-#ifdef CONFIG_MACH_XIAOMI_PLATINA
-	/* set usbin collapse timer */
-	rc = smblib_masked_write(chg, USBIN_LOAD_CFG_REG,
-				USBIN_COLLAPSE_SEL_MASK,
-				0x1);
-	if (rc < 0) {
-		dev_err(chg->dev, "set usbin collapse timer fault rc=%d\n",
-			rc);
-	}
-#endif
 	/* configure float charger options */
 	switch (chip->dt.float_option) {
 	case 1:
@@ -2608,9 +2384,6 @@ static struct smb_irq_info smb2_irqs[] = {
 		.name		= "switcher-power-ok",
 		.handler	= smblib_handle_switcher_power_ok,
 		.wake		= true,
-#ifdef CONFIG_MACH_XIAOMI_PLATINA
-		.wake		= true,
-#endif
 		.storm_data	= {true, 1000, 8},
 	},
 };
@@ -2988,11 +2761,6 @@ static int smb2_probe(struct platform_device *pdev)
 	/* set driver data before resources request it */
 	platform_set_drvdata(pdev, chip);
 
-#ifdef CONFIG_MACH_XIAOMI_PLATINA
-	/* wakeup init should be done at the beginning of smb2_probe */
-	device_init_wakeup(chg->dev, true);
-#endif
-
 	rc = smb2_init_vbus_regulator(chip);
 	if (rc < 0) {
 		pr_err("Couldn't initialize vbus regulator rc=%d\n",
@@ -3124,9 +2892,7 @@ static int smb2_probe(struct platform_device *pdev)
 	}
 	batt_charge_type = val.intval;
 
-#ifndef CONFIG_MACH_XIAOMI_PLATINA
 	device_init_wakeup(chg->dev, true);
-#endif
 
 #ifdef CONFIG_MACH_LONGCHEER
 	lct_therm_lvl_reserved.intval = 0;
@@ -3141,9 +2907,6 @@ static int smb2_probe(struct platform_device *pdev)
 	pr_info("QPNP SMB2 probed successfully usb:present=%d type=%d batt:present = %d health = %d charge = %d\n",
 		usb_present, chg->real_charger_type,
 		batt_present, batt_health, batt_charge_type);
-#ifdef CONFIG_MACH_XIAOMI_PLATINA
-	schedule_delayed_work(&chg->reg_work, 60 * HZ);
-#endif
 	return rc;
 
 cleanup:
