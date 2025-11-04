@@ -464,4 +464,34 @@ endchoice
 
 endif
 
+config MACH_XIAOMI
+	bool "Xiaomi device"
+	help
+	  Support for Xiaomi products
+
+if MACH_XIAOMI
+
+config MACH_XIAOMI_SDM660
+	bool
+	select ARCH_QCOM
+	select ARCH_SDM660
+
+choice
+	prompt "XIAOMI device"
+	default MACH_XIAOMI_DUMMY
+
+config MACH_XIAOMI_DUMMY
+	bool "Dummy device"
+	help
+	  A stub configuration that doesn't enable support for anything.
+
+config MACH_XIAOMI_PLATINA
+	bool "Xiaomi platina board"
+	select MACH_XIAOMI_SDM660
+	help
+	  Support for Xiaomi Mi 8 Lite
+endchoice
+
+endif
+
 endmenu
