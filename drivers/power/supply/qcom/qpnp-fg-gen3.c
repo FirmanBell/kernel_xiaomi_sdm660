@@ -5687,9 +5687,8 @@ static void fg_gen3_shutdown(struct platform_device *pdev)
 	struct fg_gen3_chip *chip = dev_get_drvdata(&pdev->dev);
 	struct fg_dev *fg = &chip->fg;
 	int rc, bsoc;
-
-#ifdef CONFIG_MACH_ASUS_SDM660
 	u8 mask;
+#ifdef CONFIG_MACH_ASUS_SDM660
 	u8 status;
 	rc = fg_read(fg, BATT_INFO_BATT_MISS_CFG(fg), &status, 1);
 	printk("fg_gen3_shutdown status0=%d\n",status);

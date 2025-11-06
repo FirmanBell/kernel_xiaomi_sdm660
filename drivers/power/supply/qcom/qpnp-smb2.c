@@ -209,6 +209,10 @@ static int __debug_mask;
 #endif
 #endif /* CONFIG_MACH_ASUS_SDM660 */
 
+#ifdef CONFIG_MACH_XIAOMI_PLATINA
+static int __debug_mask;
+#endif
+
 static int __weak_chg_icl_ua = 500000;
 static ssize_t weak_chg_icl_ua_show(struct device *dev, struct device_attribute
 				     *attr, char *buf)
@@ -2535,7 +2539,9 @@ static int smb2_probe(struct platform_device *pdev)
 	chg = &chip->chg;
 	chg->dev = &pdev->dev;
 	chg->param = v1_params;
+#if defined(CONFIG_MACH_ASUS_SDM660) || defined(CONFIG_MACH_XIAOMI_PLATINA)
 	chg->debug_mask = &__debug_mask;
+#endif
 	chg->try_sink_enabled = &__try_sink_enabled;
 	chg->weak_chg_icl_ua = &__weak_chg_icl_ua;
 	chg->mode = PARALLEL_MASTER;
