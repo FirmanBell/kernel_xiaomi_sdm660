@@ -26,17 +26,21 @@
 #include "wcd-mbhc-adc.h"
 #include <asoc/wcd-mbhc-v2-api.h>
 
+#ifdef CONFIG_MACH_ASUS_SDM660
 static int hph_state;
+#endif
 
 void wcd_mbhc_jack_report(struct wcd_mbhc *mbhc,
 			  struct snd_soc_jack *jack, int status, int mask)
 {
+#ifdef CONFIG_MACH_ASUS_SDM660
 	pr_info("%s:%x,%x", __func__, status, mask);
 	if ((status == 0x9 && mask == 0x3cf) ||
 	    (status == 0xb && mask == 0x3cf))
 		hph_state = 1;
 	else
 		hph_state = 0;
+#endif
 		
 	snd_soc_jack_report(jack, status, mask);
 }
@@ -796,7 +800,11 @@ void wcd_mbhc_elec_hs_report_unplug(struct wcd_mbhc *mbhc)
 	 */
 	wcd_mbhc_hs_elec_irq(mbhc, WCD_MBHC_ELEC_HS_REM,
 			     false);
+#ifdef CONFIG_MACH_ASUS_SDM660
 	wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_MB);
+#else
+	wcd_enable_curr_micbias(mbhc, WCD_MBHC_EN_NONE);
+#endif
 	/* Disable HW FSM */
 	WCD_MBHC_REG_UPDATE_BITS(WCD_MBHC_FSM_EN, 0);
 	WCD_MBHC_REG_UPDATE_BITS(WCD_MBHC_ELECT_SCHMT_ISRC, 3);
@@ -840,7 +848,11 @@ void wcd_mbhc_find_plug_and_report(struct wcd_mbhc *mbhc,
 			wcd_mbhc_report_plug(mbhc, 0, SND_JACK_HEADPHONE);
 		if (mbhc->current_plug == MBHC_PLUG_TYPE_HEADSET)
 			wcd_mbhc_report_plug(mbhc, 0, SND_JACK_HEADSET);
+#ifdef CONFIG_MACH_ASUS_SDM660
 		wcd_mbhc_report_plug(mbhc, 1, SND_JACK_HEADSET);
+#else
+		wcd_mbhc_report_plug(mbhc, 1, SND_JACK_UNSUPPORTED);
+#endif
 	} else if (plug_type == MBHC_PLUG_TYPE_HEADSET) {
 		if (mbhc->mbhc_cfg->enable_anc_mic_detect &&
 		    mbhc->mbhc_fn->wcd_mbhc_detect_anc_plug_type)
@@ -919,8 +931,10 @@ static bool wcd_mbhc_moisture_detect(struct wcd_mbhc *mbhc, bool detection_type)
 	return ret;
 }
 
+#ifdef CONFIG_MACH_ASUS_SDM660
 int hph_ext_en_gpio = -1;
 int hph_ext_sw_gpio = -1;
+#endif
 
 static void wcd_mbhc_swch_irq_handler(struct wcd_mbhc *mbhc)
 {
@@ -1153,8 +1167,13 @@ static void wcd_btn_lpress_fn(struct work_struct *work)
 
 	WCD_MBHC_REG_READ(WCD_MBHC_BTN_RESULT, btn_result);
 	if (mbhc->current_plug == MBHC_PLUG_TYPE_HEADSET) {
+#ifdef CONFIG_MACH_ASUS_SDM660
 		pr_debug("%s: Reporting long button press event, btn_result: %d %x\n",
 			 __func__, btn_result, mbhc->buttons_pressed);
+#else
+		pr_debug("%s: Reporting long button press event, btn_result: %d\n",
+			 __func__, btn_result);
+#endif
 		wcd_mbhc_jack_report(mbhc, &mbhc->button_jack,
 				mbhc->buttons_pressed, mbhc->buttons_pressed);
 	}
@@ -2003,6 +2022,7 @@ void wcd_mbhc_stop(struct wcd_mbhc *mbhc)
 }
 EXPORT_SYMBOL(wcd_mbhc_stop);
 
+#ifdef CONFIG_MACH_ASUS_SDM660
 static ssize_t show_hp_state(struct device *dev,
 			     struct device_attribute *attr,
 			     char *buf)
@@ -2013,6 +2033,7 @@ static ssize_t show_hp_state(struct device *dev,
 	return ret;
 }
 static DEVICE_ATTR(hp_state, 0444, show_hp_state, NULL);
+#endif
 
 /*
  * wcd_mbhc_init : initialize MBHC internal structures.
@@ -2027,7 +2048,9 @@ int wcd_mbhc_init(struct wcd_mbhc *mbhc, struct snd_soc_component *component,
 {
 	int ret = 0;
 	int hph_swh = 0;
+#ifdef CONFIG_MACH_ASUS_SDM660
 	int ret_hp = 0;
+#endif
 	int gnd_swh = 0;
 	u32 hph_moist_config[3];
 	struct snd_soc_card *card = component->card;
@@ -2270,7 +2293,9 @@ int wcd_mbhc_init(struct wcd_mbhc *mbhc, struct snd_soc_component *component,
 	}
 
 	mbhc->deinit_in_progress = false;
+#ifdef CONFIG_MACH_ASUS_SDM660
 	ret_hp = sysfs_create_file(&card->dev->kobj, &dev_attr_hp_state.attr);
+#endif
 	pr_debug("%s: leave ret %d\n", __func__, ret);
 	return ret;
 

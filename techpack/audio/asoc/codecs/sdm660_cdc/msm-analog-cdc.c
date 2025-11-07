@@ -349,6 +349,7 @@ void msm_anlg_cdc_spk_ext_pa_cb(
 }
 EXPORT_SYMBOL(msm_anlg_cdc_spk_ext_pa_cb);
 
+#ifdef CONFIG_MACH_ASUS_SDM660
 void msm_anlg_cdc_hph_ext_sw_cb(
 		int (*codec_hph_ext_sw)(struct snd_soc_component *component,
 			int enable), struct snd_soc_component *component)
@@ -365,6 +366,7 @@ void msm_anlg_cdc_hph_ext_sw_cb(
 	dev_dbg(component->dev, "%s: Enter\n", __func__);
 	sdm660_cdc->codec_hph_ext_sw_cb = codec_hph_ext_sw;
 }
+#endif
 
 static void msm_anlg_cdc_compute_impedance(struct snd_soc_component *component,
 						s16 l, s16 r,
@@ -2112,9 +2114,11 @@ static const char * const wsa_spk_text[] = {
 	"ZERO", "WSA"
 };
 
+#ifdef CONFIG_MACH_ASUS_SDM660
 static const char * const ext_hph_text[] = {
 	"Off", "On"
 };
+#endif
 
 static const struct soc_enum adc2_enum =
 	SOC_ENUM_SINGLE(SND_SOC_NOPM, 0,
@@ -2128,15 +2132,19 @@ static const struct soc_enum wsa_spk_enum =
 	SOC_ENUM_SINGLE(SND_SOC_NOPM, 0,
 		ARRAY_SIZE(wsa_spk_text), wsa_spk_text);
 
+#ifdef CONFIG_MACH_ASUS_SDM660
 static const struct soc_enum ext_hph_enum =
 	SOC_ENUM_SINGLE(SND_SOC_NOPM, 0,
 		ARRAY_SIZE(ext_hph_text), ext_hph_text);
+#endif
 
 static const struct snd_kcontrol_new ext_spk_mux =
 	SOC_DAPM_ENUM("Ext Spk Switch Mux", ext_spk_enum);
 
+#ifdef CONFIG_MACH_ASUS_SDM660
 static const struct snd_kcontrol_new ext_hph_mux =
 	SOC_DAPM_ENUM("Ext Hph Switch Mux", ext_hph_enum);
+#endif
 
 static const struct snd_kcontrol_new tx_adc2_mux =
 	SOC_DAPM_ENUM("ADC2 MUX Mux", adc2_enum);
@@ -3142,11 +3150,13 @@ static const struct snd_soc_dapm_route audio_map[] = {
 
 	/* Headset (RX MIX1 and RX MIX2) */
 	{"HEADPHONE", NULL, "HPHL PA"},
+#ifdef CONFIG_MACH_ASUS_SDM660
 	{"HEADPHONE", NULL, "HPHR PA"},
 	
 	{"Ext Hph", NULL, "Ext Hph Switch"},
 	{"Ext Hph Switch", "On", "HPHL PA"},
 	{"Ext Hph Switch", "On", "HPHR PA"},
+#endif
 
 	{"Ext Spk", NULL, "Ext Spk Switch"},
 	{"Ext Spk Switch", "On", "HPHL PA"},
@@ -3409,6 +3419,7 @@ static int msm_anlg_cdc_codec_enable_spk_ext_pa(struct snd_soc_dapm_widget *w,
 	return 0;
 }
 
+#ifdef CONFIG_MACH_ASUS_SDM660
 static int msm_anlg_cdc_codec_enable_hph_ext_sw(struct snd_soc_dapm_widget *w,
 						struct snd_kcontrol *kcontrol,
 						int event)
@@ -3435,6 +3446,7 @@ static int msm_anlg_cdc_codec_enable_hph_ext_sw(struct snd_soc_dapm_widget *w,
 	}
 	return 0;
 }
+#endif
 
 static int msm_anlg_cdc_codec_enable_ear_pa(struct snd_soc_dapm_widget *w,
 					    struct snd_kcontrol *kcontrol,
@@ -3544,7 +3556,9 @@ static const struct snd_soc_dapm_widget msm_anlg_cdc_dapm_widgets[] = {
 	SND_SOC_DAPM_MUX("RDAC2 MUX", SND_SOC_NOPM, 0, 0, &rdac2_mux),
 	SND_SOC_DAPM_MUX("WSA Spk Switch", SND_SOC_NOPM, 0, 0, wsa_spk_mux),
 	SND_SOC_DAPM_MUX("Ext Spk Switch", SND_SOC_NOPM, 0, 0, &ext_spk_mux),
+#ifdef CONFIG_MACH_ASUS_SDM660
 	SND_SOC_DAPM_MUX("Ext Hph Switch", SND_SOC_NOPM, 0, 0, &ext_hph_mux),
+#endif
 	SND_SOC_DAPM_MUX("LINE_OUT", SND_SOC_NOPM, 0, 0, lo_mux),
 	SND_SOC_DAPM_MUX("ADC2 MUX", SND_SOC_NOPM, 0, 0, &tx_adc2_mux),
 
@@ -3569,7 +3583,9 @@ static const struct snd_soc_dapm_widget msm_anlg_cdc_dapm_widgets[] = {
 		SND_SOC_DAPM_POST_PMD),
 
 	SND_SOC_DAPM_SPK("Ext Spk", msm_anlg_cdc_codec_enable_spk_ext_pa),
+#ifdef CONFIG_MACH_ASUS_SDM660
 	SND_SOC_DAPM_HP("Ext Hph", msm_anlg_cdc_codec_enable_hph_ext_sw),
+#endif
 
 	SND_SOC_DAPM_SWITCH("ADC1_INP1", SND_SOC_NOPM, 0, 0,
 			    &adc1_switch),

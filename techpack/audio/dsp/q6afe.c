@@ -24,8 +24,10 @@
 #include "adsp_err.h"
 #include "q6afecal-hwdep.h"
 
+#ifdef CONFIG_MACH_ASUS_SDM660
 #define AFE_PARAM_ID_TFADSP_RX_CFG	(0x1000B921)
 #define AFE_MODULE_ID_TFADSP_RX	(0x1000B911)
+#endif
 
 #define WAKELOCK_TIMEOUT	5000
 #define AFE_CLK_TOKEN	1024
@@ -2503,9 +2505,11 @@ static int afe_spk_prot_prepare(int src_port, int dst_port, int param_id,
 	case AFE_PARAM_ID_SP_V4_EX_VI_FTM_CFG:
 		param_info.module_id = AFE_MODULE_SPEAKER_PROTECTION_V4_VI;
 		break;
+#ifdef CONFIG_MACH_ASUS_SDM660
 	case AFE_PARAM_ID_TFADSP_RX_CFG:
 		param_info.module_id = AFE_MODULE_ID_TFADSP_RX;
 		break;
+#endif
 	default:
 		pr_err("%s: default case 0x%x\n", __func__, param_id);
 		goto fail_cmd;
