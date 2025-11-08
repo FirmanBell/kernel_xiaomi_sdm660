@@ -103,6 +103,10 @@ VDSO_CFLAGS += -D__uint128_t='void*'
 VDSO_CFLAGS += $(call cc32-disable-warning,shift-count-overflow)
 VDSO_CFLAGS += -Wno-int-to-pointer-cast
 
+ifeq ($(shell test $(CONFIG_CLANG_VERSION) -ge 210000; echo $$?),0)
+VDSO_CFLAGS += -Wno-default-const-init-field-unsafe
+endif
+
 VDSO_AFLAGS := $(VDSO_CAFLAGS)
 VDSO_AFLAGS += -D__ASSEMBLY__
 
