@@ -554,6 +554,7 @@
 			record-size = <0x100000>;
 			console-size = <0x100000>;
 			ftrace-size = <0x80000>;
-			pmsg-size = <0x80000>;		};
+			pmsg-size = <0x80000>;
+		};
 	};
 };
