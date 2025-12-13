@@ -33,6 +33,7 @@ static bool use_cycle_counter;
 DEFINE_MUTEX(cluster_lock);
 static atomic64_t walt_irq_work_lastq_ws;
 static u64 walt_load_reported_window;
+
 static struct irq_work walt_cpufreq_irq_work;
 static struct irq_work walt_migration_irq_work;
 
@@ -314,6 +315,10 @@ update_window_start(struct rq *rq, u64 wallclock, int event)
 	return old_window_start;
 }
 
+/*
+ * Assumes rq_lock is held and wallclock was recorded in the same critical
+ * section as this function's invocation.
+ */
 static inline u64 read_cycle_counter(int cpu, u64 wallclock)
 {
 	struct rq *rq = cpu_rq(cpu);
@@ -1723,7 +1728,6 @@ static void update_cpu_busy_time(struct task_struct *p, struct rq *rq,
 	}
 
 done:
-
 	if (!is_idle_task(p) && !exiting_task(p))
 		update_top_tasks(p, rq, old_curr_window,
 					new_window, full_window);
@@ -3357,7 +3361,6 @@ void walt_irq_work(struct irq_work *irq_work)
 	int level = 0;
 	unsigned long flags;
 
-
 	/* Am I the window rollover work or the migration work? */
 	if (irq_work == &walt_migration_irq_work)
 		is_migration = true;
@@ -3385,7 +3388,6 @@ void walt_irq_work(struct irq_work *irq_work)
 				account_load_subtractions(rq);
 				aggr_grp_load += rq->grp_time.prev_runnable_sum;
 			}
-
 			if (is_migration && rq->notif_pending &&
 			    cpumask_test_cpu(cpu, &asym_cap_sibling_cpus)) {
 				is_asym_migration = true;
@@ -3427,6 +3429,7 @@ void walt_irq_work(struct irq_work *irq_work)
 		num_cpus = cpumask_weight(&cluster_online_cpus);
 		for_each_cpu(cpu, &cluster_online_cpus) {
 			int flag = SCHED_CPUFREQ_WALT;
+
 			rq = cpu_rq(cpu);
 
 			if (is_migration) {
@@ -3558,7 +3561,7 @@ fill_util:
 }
 
 int walt_proc_group_thresholds_handler(struct ctl_table *table, int write,
-				       void *buffer, size_t *lenp,
+				       void __user *buffer, size_t *lenp,
 				       loff_t *ppos)
 {
 	int ret;
@@ -3608,7 +3611,6 @@ static void walt_init_once(void)
 {
 	init_irq_work(&walt_migration_irq_work, walt_irq_work);
 	init_irq_work(&walt_cpufreq_irq_work, walt_irq_work);
-
 	walt_rotate_work_init();
 	walt_init_window_dep();
 }
@@ -3651,7 +3653,6 @@ void walt_sched_init_rq(struct rq *rq)
 	rq->curr_top = 0;
 	rq->last_cc_update = 0;
 	rq->cycles = 0;
-
 	for (j = 0; j < NUM_TRACKED_WINDOWS; j++) {
 		memset(&rq->load_subs[j], 0,
 				sizeof(struct load_subtractions));
@@ -3666,7 +3667,7 @@ void walt_sched_init_rq(struct rq *rq)
 }
 
 int walt_proc_user_hint_handler(struct ctl_table *table,
-				int write, void *buffer, size_t *lenp,
+				int write, void __user *buffer, size_t *lenp,
 				loff_t *ppos)
 {
 	int ret;
@@ -3703,7 +3704,7 @@ static inline void sched_window_nr_ticks_change(void)
 }
 
 int sched_ravg_window_handler(struct ctl_table *table,
-				int write, void *buffer, size_t *lenp,
+				int write, void __user *buffer, size_t *lenp,
 				loff_t *ppos)
 {
 	int ret = -EPERM;
@@ -3787,7 +3788,7 @@ static void sched_update_updown_migrate_values(bool up)
 }
 
 int sched_updown_migrate_handler(struct ctl_table *table, int write,
-				void *buffer, size_t *lenp,
+				void __user *buffer, size_t *lenp,
 				loff_t *ppos)
 {
 	int ret, i;

@@ -198,8 +198,7 @@ unsigned int sched_get_cpu_util(int cpu)
 {
 	struct rq *rq = cpu_rq(cpu);
 	u64 util;
-	unsigned long capacity;
-	unsigned long flags;
+	unsigned long capacity, flags;
 	unsigned int busy;
 
 	raw_spin_lock_irqsave(&rq->lock, flags);
