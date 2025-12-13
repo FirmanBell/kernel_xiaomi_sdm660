@@ -321,7 +321,7 @@ cfg80211_add_nontrans_list(struct cfg80211_bss *trans_bss,
 			return 0;
 		}
 	}
-	
+
 	rcu_read_unlock();
 
 	/*
@@ -1403,6 +1403,7 @@ cfg80211_inform_single_bss_data(struct wiphy *wiphy,
 				res = NULL;
 			}
 		}
+		spin_unlock_bh(&rdev->bss_lock);
 
 		if (!res)
 			return NULL;

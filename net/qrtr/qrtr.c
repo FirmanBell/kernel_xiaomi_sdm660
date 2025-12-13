@@ -775,8 +775,8 @@ int qrtr_endpoint_post(struct qrtr_endpoint *ep, const void *data, size_t len)
 	const struct qrtr_hdr_v2 *v2;
 	struct sk_buff *skb;
 	struct qrtr_cb *cb;
-	int errcode;
 	size_t size;
+	int errcode;
 	unsigned int ver;
 	size_t hdrlen;
 
@@ -1624,7 +1624,7 @@ static int qrtr_bcast_enqueue(struct qrtr_node *node, struct sk_buff *skb,
 	list_for_each_entry(node, &qrtr_all_epts, item) {
 		if (node->nid == QRTR_EP_NID_AUTO && type != QRTR_TYPE_HELLO)
 			continue;
-		skbn = skb_clone(skb, GFP_KERNEL);
+		skbn = pskb_copy(skb, GFP_KERNEL);
 		if (!skbn)
 			break;
 		skb_set_owner_w(skbn, skb->sk);
