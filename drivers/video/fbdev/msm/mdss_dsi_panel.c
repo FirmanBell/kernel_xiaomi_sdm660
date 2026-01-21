@@ -20,6 +20,7 @@
 #include "mdss_dsi.h"
 #include "mdss_dba_utils.h"
 #include "mdss_debug.h"
+
 #ifdef CONFIG_MACH_ASUS_SDM660
 #include "mdss_panel.h"
 #endif
@@ -189,15 +190,10 @@ static void mdss_dsi_panel_apply_settings(struct mdss_dsi_ctrl_pdata *ctrl,
 	mdss_dsi_cmdlist_put(ctrl, &cmdreq);
 }
 
-<<<<<<< HEAD
-
-static void mdss_dsi_panel_cmds_send(struct mdss_dsi_ctrl_pdata *ctrl,
-=======
 #ifndef CONFIG_MACH_ASUS_SDM660
 static
 #endif
 void mdss_dsi_panel_cmds_send(struct mdss_dsi_ctrl_pdata *ctrl,
->>>>>>> de47e270d4ea (msm: mdss: Import ASUS Changes)
 			struct dsi_panel_cmds *pcmds, u32 flags)
 {
 	struct dcs_cmd_req cmdreq;
