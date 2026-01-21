@@ -22,6 +22,7 @@
 #include "mdss_debug.h"
 #include "mdss_dsi_phy.h"
 #include "mdss_dba_utils.h"
+
 #ifdef CONFIG_MACH_ASUS_SDM660
 #include "mdss_panel.h"
 #endif
@@ -1017,7 +1018,9 @@ static int mdss_dsi_debugfs_setup(struct mdss_panel_data *pdata,
 	ctrl_pdata->debugfs_info = dfs;
 	return 0;
 }
+#endif
 
+#ifdef CONFIG_DEBUG_FS
 static int mdss_dsi_debugfs_init(struct mdss_dsi_ctrl_pdata *ctrl_pdata)
 {
 	int rc;
