@@ -194,11 +194,9 @@ void thaw_fingerprintd(void)
 		if (fp_hidl_thawed)
 			break;
 		if (!fp_hidl_thawed) {
-			if (!memcmp(p->comm, "android.hardware.biometrics.fingerprint@2.1-service", 52) ||
-			    !memcmp(p->comm, "android.hardware.biometrics.fingerprint@2.1-service-asus", 57) ||
-			    !memcmp(p->comm, "android.hardware.biometrics.fingerprint@2.1-service-X01BD", 58) ||
-			    !memcmp(p->comm, "android.hardware.biometrics.fingerprint@2.1-service-X00TD", 58)) {
+			if (strstr(p->comm, "fingerprint")) {
 				__thaw_task(p);
+				pr_info("Thawing %s ..\n", p->comm);
 				fp_hidl_thawed = true;
 				continue;
 			}
