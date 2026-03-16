@@ -476,26 +476,16 @@ static inline void lockdep_set_selftest_task(struct task_struct *task)
 {
 }
 
-<<<<<<< HEAD
 # define lock_acquire(l, s, t, r, c, n, i)	((void)0)
-# define lock_release(l, i)			((void)0)
+# define lock_release(l, n, i)			((void)0)
 # define lock_downgrade(l, i)			((void)0)
 # define lock_set_class(l, n, k, s, i)		((void)0)
 # define lock_set_subclass(l, s, i)		((void)0)
 # define lockdep_init()				((void)0)
-
-=======
-# define lock_acquire(l, s, t, r, c, n, i)	do { } while (0)
-# define lock_release(l, n, i)			do { } while (0)
-# define lock_downgrade(l, i)			do { } while (0)
-# define lock_set_class(l, n, k, s, i)		do { } while (0)
-# define lock_set_subclass(l, s, i)		do { } while (0)
-# define lockdep_init()				do { } while (0)
 # define lockdep_init_map_waits(lock, name, key, sub, inner, outer) \
 		do { (void)(name); (void)(key); } while (0)
 # define lockdep_init_map_wait(lock, name, key, sub, inner) \
 		do { (void)(name); (void)(key); } while (0)
->>>>>>> 30561f2c2077 (lockdep: Introduce wait-type checks)
 # define lockdep_init_map(lock, name, key, sub) \
 		do { (void)(name); (void)(key); } while (0)
 # define lockdep_set_class(lock, key)		do { (void)(key); } while (0)
