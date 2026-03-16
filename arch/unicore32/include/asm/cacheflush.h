@@ -170,8 +170,8 @@ extern void flush_cache_page(struct vm_area_struct *vma,
 #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
 extern void flush_dcache_page(struct page *);
 
-#define flush_dcache_mmap_lock(mapping)		do { } while (0)
-#define flush_dcache_mmap_unlock(mapping)	do { } while (0)
+#define flush_dcache_mmap_lock(mapping)		((void)0)
+#define flush_dcache_mmap_unlock(mapping)	((void)0)
 
 #define flush_icache_user_range(vma, page, addr, len)	\
 	flush_dcache_page(page)
@@ -180,7 +180,7 @@ extern void flush_dcache_page(struct page *);
  * We don't appear to need to do anything here.  In fact, if we did, we'd
  * duplicate cache flushing elsewhere performed by flush_dcache_page().
  */
-#define flush_icache_page(vma, page)	do { } while (0)
+#define flush_icache_page(vma, page)	((void)0)
 
 /*
  * flush_cache_vmap() is used when creating mappings (eg, via vmap,

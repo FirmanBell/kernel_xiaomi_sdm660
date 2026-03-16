@@ -134,16 +134,16 @@ static inline void switch_mm(struct mm_struct *prev,
 }
 
 #define activate_mm(prev, next)		switch_mm((prev),(next),NULL)
-#define deactivate_mm(tsk,mm)		do { } while (0)
-#define enter_lazy_tlb(mm,tsk)		do { } while (0)
+#define deactivate_mm(tsk,mm)		((void)0)
+#define enter_lazy_tlb(mm,tsk)		((void)0)
 
 #else
 
-#define set_asid(asid)			do { } while (0)
+#define set_asid(asid)			((void)0)
 #define get_asid()			(0)
 #define cpu_asid(cpu, mm)		({ (void)cpu; NO_CONTEXT; })
 #define switch_and_save_asid(asid)	(0)
-#define set_TTB(pgd)			do { } while (0)
+#define set_TTB(pgd)			((void)0)
 #define get_TTB()			(0)
 
 #include <asm-generic/mmu_context.h>
@@ -185,8 +185,8 @@ static inline void disable_mmu(void)
  * MMU control handlers for processors lacking memory
  * management hardware.
  */
-#define enable_mmu()	do { } while (0)
-#define disable_mmu()	do { } while (0)
+#define enable_mmu()	((void)0)
+#define disable_mmu()	((void)0)
 #endif
 
 #endif /* __KERNEL__ */

@@ -52,7 +52,7 @@ static inline void s3c2412_init_gpio2(void)
 	s3c24xx_va_gpio2 = S3C24XX_VA_GPIO + 0x10;
 }
 #else
-#define s3c2412_init_gpio2() do { } while(0)
+#define s3c2412_init_gpio2() ((void)0)
 #endif
 
 /* Initial IO mappings */

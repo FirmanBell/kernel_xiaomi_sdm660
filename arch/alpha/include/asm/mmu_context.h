@@ -198,7 +198,7 @@ do {								\
 	}							\
 } while(0)
 #else
-#define check_mmu_context()  do { } while(0)
+#define check_mmu_context()  ((void)0)
 #endif
 
 __EXTERN_INLINE void
@@ -214,7 +214,7 @@ ev4_activate_mm(struct mm_struct *prev_mm, struct mm_struct *next_mm)
 	tbiap();
 }
 
-#define deactivate_mm(tsk,mm)	do { } while (0)
+#define deactivate_mm(tsk,mm)	((void)0)
 
 #ifdef CONFIG_ALPHA_GENERIC
 # define switch_mm(a,b,c)	alpha_mv.mv_switch_mm((a),(b),(c))

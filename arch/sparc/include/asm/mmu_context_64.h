@@ -59,7 +59,7 @@ void tsb_grow(struct mm_struct *mm,
 #ifdef CONFIG_SMP
 void smp_tsb_sync(struct mm_struct *mm);
 #else
-#define smp_tsb_sync(__mm) do { } while (0)
+#define smp_tsb_sync(__mm) ((void)0)
 #endif
 
 /* Set MMU context in the actual hardware. */
@@ -136,7 +136,7 @@ static inline void switch_mm(struct mm_struct *old_mm, struct mm_struct *mm, str
 	spin_unlock_irqrestore(&mm->context.lock, flags);
 }
 
-#define deactivate_mm(tsk,mm)	do { } while (0)
+#define deactivate_mm(tsk,mm)	((void)0)
 #define activate_mm(active_mm, mm) switch_mm(active_mm, mm, NULL)
 
 #define  __HAVE_ARCH_START_CONTEXT_SWITCH

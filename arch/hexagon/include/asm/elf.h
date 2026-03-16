@@ -196,7 +196,7 @@ do {					\
  * in question here, in the pt_regs structure passed.  For now,
  * leave it a null macro.
  */
-#define ELF_PLAT_INIT(regs, load_addr) do { } while (0)
+#define ELF_PLAT_INIT(regs, load_addr) ((void)0)
 
 #define USE_ELF_CORE_DUMP
 #define CORE_DUMP_USE_REGSET

@@ -25,7 +25,7 @@
 		WARN_ON_ONCE(debug_locks && !lockdep_is_held(l));	\
 	} while (0)
 #else
-#define lockdep_assert_held_once(l) do { } while (0)
+#define lockdep_assert_held_once(l) ((void)0)
 #endif
 #endif
 

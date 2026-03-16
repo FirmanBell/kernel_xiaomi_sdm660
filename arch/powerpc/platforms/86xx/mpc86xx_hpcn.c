@@ -40,7 +40,7 @@
 #ifdef DEBUG
 #define DBG(fmt...) do { printk(KERN_ERR fmt); } while(0)
 #else
-#define DBG(fmt...) do { } while(0)
+#define DBG(fmt...) ((void)0)
 #endif
 
 #ifdef CONFIG_PCI

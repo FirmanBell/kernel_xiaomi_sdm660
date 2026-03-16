@@ -292,21 +292,21 @@ static void kmem_cache_node_init(struct kmem_cache_node *parent)
 #define STATS_INC_FREEHIT(x)	atomic_inc(&(x)->freehit)
 #define STATS_INC_FREEMISS(x)	atomic_inc(&(x)->freemiss)
 #else
-#define	STATS_INC_ACTIVE(x)	do { } while (0)
-#define	STATS_DEC_ACTIVE(x)	do { } while (0)
-#define	STATS_INC_ALLOCED(x)	do { } while (0)
-#define	STATS_INC_GROWN(x)	do { } while (0)
+#define	STATS_INC_ACTIVE(x)	((void)0)
+#define	STATS_DEC_ACTIVE(x)	((void)0)
+#define	STATS_INC_ALLOCED(x)	((void)0)
+#define	STATS_INC_GROWN(x)	((void)0)
 #define	STATS_ADD_REAPED(x,y)	do { (void)(y); } while (0)
-#define	STATS_SET_HIGH(x)	do { } while (0)
-#define	STATS_INC_ERR(x)	do { } while (0)
-#define	STATS_INC_NODEALLOCS(x)	do { } while (0)
-#define	STATS_INC_NODEFREES(x)	do { } while (0)
-#define STATS_INC_ACOVERFLOW(x)   do { } while (0)
-#define	STATS_SET_FREEABLE(x, i) do { } while (0)
-#define STATS_INC_ALLOCHIT(x)	do { } while (0)
-#define STATS_INC_ALLOCMISS(x)	do { } while (0)
-#define STATS_INC_FREEHIT(x)	do { } while (0)
-#define STATS_INC_FREEMISS(x)	do { } while (0)
+#define	STATS_SET_HIGH(x)	((void)0)
+#define	STATS_INC_ERR(x)	((void)0)
+#define	STATS_INC_NODEALLOCS(x)	((void)0)
+#define	STATS_INC_NODEFREES(x)	((void)0)
+#define STATS_INC_ACOVERFLOW(x)   ((void)0)
+#define	STATS_SET_FREEABLE(x, i) ((void)0)
+#define STATS_INC_ALLOCHIT(x)	((void)0)
+#define STATS_INC_ALLOCMISS(x)	((void)0)
+#define STATS_INC_FREEHIT(x)	((void)0)
+#define STATS_INC_FREEMISS(x)	((void)0)
 #endif
 
 #if DEBUG
@@ -525,8 +525,8 @@ static void next_reap_node(void)
 }
 
 #else
-#define init_reap_node(cpu) do { } while (0)
-#define next_reap_node(void) do { } while (0)
+#define init_reap_node(cpu) ((void)0)
+#define next_reap_node(void) ((void)0)
 #endif
 
 /*
@@ -619,8 +619,8 @@ static int transfer_objects(struct array_cache *to,
 
 #ifndef CONFIG_NUMA
 
-#define drain_alien_cache(cachep, alien) do { } while (0)
-#define reap_alien(cachep, n) do { } while (0)
+#define drain_alien_cache(cachep, alien) ((void)0)
+#define reap_alien(cachep, n) ((void)0)
 
 static inline struct alien_cache **alloc_alien_cache(int node,
 						int limit, gfp_t gfp)
@@ -2186,11 +2186,11 @@ static void check_spinlock_acquired_node(struct kmem_cache *cachep, int node)
 }
 
 #else
-#define check_irq_off()	do { } while(0)
-#define check_irq_on()	do { } while(0)
-#define check_mutex_acquired()	do { } while(0)
-#define check_spinlock_acquired(x) do { } while(0)
-#define check_spinlock_acquired_node(x, y) do { } while(0)
+#define check_irq_off()	((void)0)
+#define check_irq_on()	((void)0)
+#define check_mutex_acquired()	((void)0)
+#define check_spinlock_acquired(x) ((void)0)
+#define check_spinlock_acquired_node(x, y) ((void)0)
 #endif
 
 static void drain_array_locked(struct kmem_cache *cachep, struct array_cache *ac,
@@ -2823,7 +2823,7 @@ static void *cache_free_debugcheck(struct kmem_cache *cachep, void *objp,
 }
 
 #else
-#define kfree_debugcheck(x) do { } while(0)
+#define kfree_debugcheck(x) ((void)0)
 #define cache_free_debugcheck(x,objp,z) (objp)
 #endif
 

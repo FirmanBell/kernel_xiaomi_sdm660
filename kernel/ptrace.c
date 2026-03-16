@@ -1160,7 +1160,7 @@ int ptrace_request(struct task_struct *child, long request,
 }
 
 #ifndef arch_ptrace_attach
-#define arch_ptrace_attach(child)	do { } while (0)
+#define arch_ptrace_attach(child)	((void)0)
 #endif
 
 SYSCALL_DEFINE4(ptrace, long, request, long, pid, unsigned long, addr,

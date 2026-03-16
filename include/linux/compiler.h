@@ -104,7 +104,7 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
 
 /* workaround for GCC PR82365 if needed */
 #ifndef barrier_before_unreachable
-# define barrier_before_unreachable() do { } while (0)
+# define barrier_before_unreachable() ((void)0)
 #endif
 
 /* Unreachable code */
@@ -190,8 +190,8 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
 #endif
 
 #ifndef instrumentation_begin
-#define instrumentation_begin()		do { } while(0)
-#define instrumentation_end()		do { } while(0)
+#define instrumentation_begin()		((void)0)
+#define instrumentation_end()		((void)0)
 #endif
 
 #ifndef ASM_UNREACHABLE
@@ -365,7 +365,7 @@ static inline void *offset_to_ptr(const int *off)
 			prefix ## suffix();				\
 	} while (0)
 #else
-# define __compiletime_assert(condition, msg, prefix, suffix) do { } while (0)
+# define __compiletime_assert(condition, msg, prefix, suffix) ((void)0)
 #endif
 
 #define _compiletime_assert(condition, msg, prefix, suffix) \

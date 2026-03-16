@@ -185,8 +185,8 @@
 #define pud_none(pud)		(0)
 #define pud_bad(pud)		(0)
 #define pud_present(pud)	(1)
-#define pud_clear(pudp)		do { } while (0)
-#define set_pud(pud,pudp)	do { } while (0)
+#define pud_clear(pudp)		((void)0)
+#define set_pud(pud,pudp)	((void)0)
 
 static inline pmd_t *pmd_offset(pud_t *pud, unsigned long addr)
 {

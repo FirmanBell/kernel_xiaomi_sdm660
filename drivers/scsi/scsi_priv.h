@@ -112,12 +112,12 @@ extern void scsi_proc_host_rm(struct Scsi_Host *);
 extern int scsi_init_procfs(void);
 extern void scsi_exit_procfs(void);
 #else
-# define scsi_proc_hostdir_add(sht)	do { } while (0)
-# define scsi_proc_hostdir_rm(sht)	do { } while (0)
-# define scsi_proc_host_add(shost)	do { } while (0)
-# define scsi_proc_host_rm(shost)	do { } while (0)
+# define scsi_proc_hostdir_add(sht)	((void)0)
+# define scsi_proc_hostdir_rm(sht)	((void)0)
+# define scsi_proc_host_add(shost)	((void)0)
+# define scsi_proc_host_rm(shost)	((void)0)
 # define scsi_init_procfs()		(0)
-# define scsi_exit_procfs()		do { } while (0)
+# define scsi_exit_procfs()		((void)0)
 #endif /* CONFIG_PROC_FS */
 
 /* scsi_scan.c */
@@ -134,7 +134,7 @@ extern int scsi_init_sysctl(void);
 extern void scsi_exit_sysctl(void);
 #else
 # define scsi_init_sysctl()		(0)
-# define scsi_exit_sysctl()		do { } while (0)
+# define scsi_exit_sysctl()		((void)0)
 #endif /* CONFIG_SYSCTL */
 
 /* scsi_sysfs.c */

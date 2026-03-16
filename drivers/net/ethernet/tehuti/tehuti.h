@@ -552,7 +552,7 @@ do {							 \
 #define DBG(fmt, args...)					\
 	pr_err("%s:%-5d: " fmt, __func__, __LINE__, ## args)
 #else
-#define ENTER do {  } while (0)
+#define ENTER ((void)0)
 #define RET(args...)   return args
 #define DBG(fmt, args...)			\
 do {						\

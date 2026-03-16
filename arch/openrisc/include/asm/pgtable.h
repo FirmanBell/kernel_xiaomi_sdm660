@@ -400,8 +400,8 @@ static inline void pmd_set(pmd_t *pmdp, pte_t *ptep)
 #define pte_offset_map_nested(dir, address)     \
 	pte_offset_map(dir, address)
 
-#define pte_unmap(pte)          do { } while (0)
-#define pte_unmap_nested(pte)   do { } while (0)
+#define pte_unmap(pte)          ((void)0)
+#define pte_unmap_nested(pte)   ((void)0)
 #define pte_pfn(x)		((unsigned long)(((x).pte)) >> PAGE_SHIFT)
 #define pfn_pte(pfn, prot)  __pte((((pfn) << PAGE_SHIFT)) | pgprot_val(prot))
 
@@ -449,7 +449,7 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
 /*
  * No page table caches to initialise
  */
-#define pgtable_cache_init()		do { } while (0)
+#define pgtable_cache_init()		((void)0)
 
 typedef pte_t *pte_addr_t;
 

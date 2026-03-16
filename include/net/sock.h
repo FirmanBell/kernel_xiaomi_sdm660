@@ -1287,9 +1287,9 @@ static inline void sk_refcnt_debug_release(const struct sock *sk)
 		       sk->sk_prot->name, sk, refcount_read(&sk->sk_refcnt));
 }
 #else /* SOCK_REFCNT_DEBUG */
-#define sk_refcnt_debug_inc(sk) do { } while (0)
-#define sk_refcnt_debug_dec(sk) do { } while (0)
-#define sk_refcnt_debug_release(sk) do { } while (0)
+#define sk_refcnt_debug_inc(sk) ((void)0)
+#define sk_refcnt_debug_dec(sk) ((void)0)
+#define sk_refcnt_debug_release(sk) ((void)0)
 #endif /* SOCK_REFCNT_DEBUG */
 
 static inline bool sk_stream_memory_free(const struct sock *sk)

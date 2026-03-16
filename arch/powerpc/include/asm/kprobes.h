@@ -61,7 +61,7 @@ extern kprobe_opcode_t optprobe_template_end[];
 #define MAX_OPTINSN_SIZE	(optprobe_template_end - optprobe_template_entry)
 #define RELATIVEJUMP_SIZE	sizeof(kprobe_opcode_t)	/* 4 bytes */
 
-#define flush_insn_slot(p)	do { } while (0)
+#define flush_insn_slot(p)	((void)0)
 #define kretprobe_blacklist_size 0
 
 void kretprobe_trampoline(void);

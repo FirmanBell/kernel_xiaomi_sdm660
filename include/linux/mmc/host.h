@@ -662,7 +662,7 @@ int mmc_of_parse_voltage(struct device_node *np, u32 *mask);
 			"%s: " fmt, __func__, ##__VA_ARGS__);	\
 	} while (0)
 #else
-#define mmc_log_string(mmc_host, fmt, ...)	do { } while (0)
+#define mmc_log_string(mmc_host, fmt, ...)	((void)0)
 #endif
 
 static inline void *mmc_priv(struct mmc_host *host)

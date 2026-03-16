@@ -103,7 +103,7 @@ do {									\
 	}								\
 } while (0)
 #else
-#define ASSERT(x) do { } while (0)
+#define ASSERT(x) ((void)0)
 #endif
 
 static inline int ioapic_in_kernel(struct kvm *kvm)

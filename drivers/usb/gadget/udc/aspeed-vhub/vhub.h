@@ -436,9 +436,9 @@ enum std_req_rc {
 	} while(0)
 
 #else
-#define UDCVDBG(u, fmt...)	do { } while(0)
-#define EPVDBG(ep, fmt, ...)	do { } while(0)
-#define DVDBG(d, fmt, ...)	do { } while(0)
+#define UDCVDBG(u, fmt...)	((void)0)
+#define EPVDBG(ep, fmt, ...)	((void)0)
+#define DVDBG(d, fmt, ...)	((void)0)
 #endif
 
 #ifdef CONFIG_USB_GADGET_DEBUG
@@ -457,9 +457,9 @@ enum std_req_rc {
 		##__VA_ARGS__);				\
 	} while(0)
 #else
-#define UDCDBG(u, fmt...)	do { } while(0)
-#define EPDBG(ep, fmt, ...)	do { } while(0)
-#define DDBG(d, fmt, ...)	do { } while(0)
+#define UDCDBG(u, fmt...)	((void)0)
+#define EPDBG(ep, fmt, ...)	((void)0)
+#define DDBG(d, fmt, ...)	((void)0)
 #endif
 
 static inline void vhub_dma_workaround(void *addr)

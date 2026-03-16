@@ -23,7 +23,7 @@
 
 #define init_new_context(tsk, mm)	0
 
-#define destroy_context(mm)		do { } while (0)
+#define destroy_context(mm)		((void)0)
 
 /*
  * This is called when "tsk" is about to enter lazy TLB mode.
@@ -55,7 +55,7 @@ switch_mm(struct mm_struct *prev, struct mm_struct *next,
 		cpu_switch_mm(next->pgd, next);
 }
 
-#define deactivate_mm(tsk, mm)	do { } while (0)
+#define deactivate_mm(tsk, mm)	((void)0)
 #define activate_mm(prev, next)	switch_mm(prev, next, NULL)
 
 /*

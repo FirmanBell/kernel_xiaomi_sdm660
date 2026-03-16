@@ -1295,7 +1295,7 @@ int mptscsih_show_info(struct seq_file *m, struct Scsi_Host *host)
 }
 
 /*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
-#define ADD_INDEX_LOG(req_ent)	do { } while(0)
+#define ADD_INDEX_LOG(req_ent)	((void)0)
 
 /*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
 /**

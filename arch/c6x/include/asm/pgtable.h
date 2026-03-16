@@ -65,7 +65,7 @@ extern unsigned long empty_zero_page;
 /*
  * No page table caches to initialise
  */
-#define pgtable_cache_init()   do { } while (0)
+#define pgtable_cache_init()   ((void)0)
 
 /*
  * c6x is !MMU, so define the simpliest implementation

@@ -33,7 +33,7 @@
 #ifdef DEBUG
 #define DBG(fmt...) do { printk(fmt); } while(0)
 #else
-#define DBG(fmt...) do { } while(0)
+#define DBG(fmt...) ((void)0)
 #endif
 
 static phys_addr_t tsi108_csr_base = -1;

@@ -20,7 +20,7 @@ typedef insn_size_t kprobe_opcode_t;
 	? (MAX_STACK_SIZE) \
 	: (((unsigned long)current_thread_info()) + THREAD_SIZE - (ADDR)))
 
-#define flush_insn_slot(p)		do { } while (0)
+#define flush_insn_slot(p)		((void)0)
 #define kretprobe_blacklist_size	0
 
 struct kprobe;

@@ -3012,7 +3012,7 @@ static void hp100_isa_cleanup(void)
 }
 #else
 #define hp100_isa_init()	(0)
-#define hp100_isa_cleanup()	do { } while(0)
+#define hp100_isa_cleanup()	((void)0)
 #endif
 
 static int __init hp100_module_init(void)

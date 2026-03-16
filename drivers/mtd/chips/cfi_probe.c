@@ -56,10 +56,10 @@ do { \
 
 #else
 
-#define xip_disable()			do { } while (0)
-#define xip_allowed(base, map)		do { } while (0)
-#define xip_enable(base, map, cfi)	do { } while (0)
-#define xip_disable_qry(base, map, cfi) do { } while (0)
+#define xip_disable()			((void)0)
+#define xip_allowed(base, map)		((void)0)
+#define xip_enable(base, map, cfi)	((void)0)
+#define xip_disable_qry(base, map, cfi) ((void)0)
 
 #endif
 

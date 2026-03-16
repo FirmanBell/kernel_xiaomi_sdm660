@@ -78,25 +78,25 @@ static inline void jffs2_init_inode_info(struct jffs2_inode_info *f)
 
 #define jffs2_flash_write(c, ofs, len, retlen, buf) jffs2_flash_direct_write(c, ofs, len, retlen, buf)
 #define jffs2_flash_read(c, ofs, len, retlen, buf) (mtd_read((c)->mtd, ofs, len, retlen, buf))
-#define jffs2_flush_wbuf_pad(c) ({ do{} while(0); (void)(c), 0; })
-#define jffs2_flush_wbuf_gc(c, i) ({ do{} while(0); (void)(c), (void) i, 0; })
+#define jffs2_flush_wbuf_pad(c) ({ ((void)0); (void)(c), 0; })
+#define jffs2_flush_wbuf_gc(c, i) ({ ((void)0); (void)(c), (void) i, 0; })
 #define jffs2_write_nand_badblock(c,jeb,bad_offset) (1)
 #define jffs2_nand_flash_setup(c) (0)
-#define jffs2_nand_flash_cleanup(c) do {} while(0)
+#define jffs2_nand_flash_cleanup(c) ((void)0)
 #define jffs2_wbuf_dirty(c) (0)
 #define jffs2_flash_writev(a,b,c,d,e,f) jffs2_flash_direct_writev(a,b,c,d,e)
 #define jffs2_wbuf_timeout NULL
 #define jffs2_wbuf_process NULL
 #define jffs2_dataflash(c) (0)
 #define jffs2_dataflash_setup(c) (0)
-#define jffs2_dataflash_cleanup(c) do {} while (0)
+#define jffs2_dataflash_cleanup(c) ((void)0)
 #define jffs2_nor_wbuf_flash(c) (0)
 #define jffs2_nor_wbuf_flash_setup(c) (0)
-#define jffs2_nor_wbuf_flash_cleanup(c) do {} while (0)
+#define jffs2_nor_wbuf_flash_cleanup(c) ((void)0)
 #define jffs2_ubivol(c) (0)
 #define jffs2_ubivol_setup(c) (0)
-#define jffs2_ubivol_cleanup(c) do {} while (0)
-#define jffs2_dirty_trigger(c) do {} while (0)
+#define jffs2_ubivol_cleanup(c) ((void)0)
+#define jffs2_dirty_trigger(c) ((void)0)
 
 #else /* NAND and/or ECC'd NOR support present */
 

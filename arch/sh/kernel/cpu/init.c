@@ -69,7 +69,7 @@ static void speculative_execution_init(void)
 	ctrl_barrier();
 }
 #else
-#define speculative_execution_init()	do { } while (0)
+#define speculative_execution_init()	((void)0)
 #endif
 
 #ifdef CONFIG_CPU_SH4A
@@ -95,7 +95,7 @@ static void expmask_init(void)
 	ctrl_barrier();
 }
 #else
-#define expmask_init()	do { } while (0)
+#define expmask_init()	((void)0)
 #endif
 
 /* 2nd-level cache init */
@@ -193,7 +193,7 @@ static void cache_init(void)
 	back_to_cached();
 }
 #else
-#define cache_init()	do { } while (0)
+#define cache_init()	((void)0)
 #endif
 
 #define CSHAPE(totalsize, linesize, assoc) \

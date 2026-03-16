@@ -90,7 +90,7 @@
 #ifdef HE_DEBUG
 #define HPRINTK(fmt,args...)	printk(KERN_DEBUG DEV_LABEL "%d: " fmt, he_dev->number , ##args)
 #else /* !HE_DEBUG */
-#define HPRINTK(fmt,args...)	do { } while (0)
+#define HPRINTK(fmt,args...)	((void)0)
 #endif /* HE_DEBUG */
 
 /* declarations */

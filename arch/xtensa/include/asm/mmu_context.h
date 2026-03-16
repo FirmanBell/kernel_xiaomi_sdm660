@@ -137,7 +137,7 @@ static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next,
 }
 
 #define activate_mm(prev, next)	switch_mm((prev), (next), NULL)
-#define deactivate_mm(tsk, mm)	do { } while (0)
+#define deactivate_mm(tsk, mm)	((void)0)
 
 /*
  * Destroy context related info for an mm_struct that is about

@@ -1035,7 +1035,7 @@ static inline void ftrace_clear_pids(struct trace_array *tr) { }
 static inline int init_function_trace(void) { return 0; }
 static inline void ftrace_pid_follow_fork(struct trace_array *tr, bool enable) { }
 /* ftace_func_t type is not defined, use macro instead of static inline */
-#define ftrace_init_array_ops(tr, func) do { } while (0)
+#define ftrace_init_array_ops(tr, func) ((void)0)
 #endif /* CONFIG_FUNCTION_TRACER */
 
 #if defined(CONFIG_FUNCTION_TRACER) && defined(CONFIG_DYNAMIC_FTRACE)
@@ -1105,8 +1105,8 @@ static inline void clear_ftrace_function_probes(struct trace_array *tr)
  * The ops parameter passed in is usually undefined.
  * This must be a macro.
  */
-#define ftrace_create_filter_files(ops, parent) do { } while (0)
-#define ftrace_destroy_filter_files(ops) do { } while (0)
+#define ftrace_create_filter_files(ops, parent) ((void)0)
+#define ftrace_destroy_filter_files(ops) ((void)0)
 #endif /* CONFIG_FUNCTION_TRACER && CONFIG_DYNAMIC_FTRACE */
 
 bool ftrace_event_is_function(struct trace_event_call *call);

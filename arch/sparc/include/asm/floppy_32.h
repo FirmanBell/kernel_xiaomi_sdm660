@@ -21,7 +21,7 @@
 /* We don't need no stinkin' I/O port allocation crap. */
 #undef release_region
 #undef request_region
-#define release_region(X, Y)	do { } while(0)
+#define release_region(X, Y)	((void)0)
 #define request_region(X, Y, Z)	(1)
 
 /* References:

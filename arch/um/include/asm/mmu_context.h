@@ -41,7 +41,7 @@ static inline bool arch_vma_access_permitted(struct vm_area_struct *vma,
  * end asm-generic/mm_hooks.h functions
  */
 
-#define deactivate_mm(tsk,mm)	do { } while (0)
+#define deactivate_mm(tsk,mm)	((void)0)
 
 extern void force_flush_all(void);
 

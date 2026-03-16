@@ -32,7 +32,7 @@
 #ifdef DEBUG
 #define dprintk printk
 #else
-#define dprintk(...) do { } while(0);
+#define dprintk(...) ((void)0);
 #endif
 
 #define OP_LFS			48

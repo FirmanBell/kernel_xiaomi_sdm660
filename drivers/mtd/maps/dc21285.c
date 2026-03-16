@@ -48,7 +48,7 @@ static void nw_en_write(void)
 	udelay(25);
 }
 #else
-#define nw_en_write() do { } while (0)
+#define nw_en_write() ((void)0)
 #endif
 
 static map_word dc21285_read8(struct map_info *map, unsigned long ofs)

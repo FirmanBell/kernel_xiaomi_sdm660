@@ -59,7 +59,7 @@ int mpc_proc_init(void);
 void mpc_proc_clean(void);
 #else
 #define mpc_proc_init() (0)
-#define mpc_proc_clean() do { } while(0)
+#define mpc_proc_clean() ((void)0)
 #endif
 
 #endif /* _MPC_H_ */

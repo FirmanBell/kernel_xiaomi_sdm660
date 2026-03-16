@@ -57,8 +57,8 @@ do {									\
 #else
 
 #define is_dsp_enabled(tsk)	(0)
-#define __save_dsp(tsk)		do { } while (0)
-#define __restore_dsp(tsk)	do { } while (0)
+#define __save_dsp(tsk)		((void)0)
+#define __restore_dsp(tsk)	((void)0)
 #endif
 
 struct task_struct *__switch_to(struct task_struct *prev,

@@ -30,7 +30,7 @@
 #ifdef DEBUG
 #define DBG(fmt...) do { printk(KERN_DEBUG "gef_pic: " fmt); } while (0)
 #else
-#define DBG(fmt...) do { } while (0)
+#define DBG(fmt...) ((void)0)
 #endif
 
 #define GEF_PIC_NUM_IRQS	32

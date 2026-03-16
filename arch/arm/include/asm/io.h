@@ -230,8 +230,8 @@ static inline void __iomem *__typesafe_io(unsigned long addr)
 #define __iormb()		rmb()
 #define __iowmb()		wmb()
 #else
-#define __iormb()		do { } while (0)
-#define __iowmb()		do { } while (0)
+#define __iormb()		((void)0)
+#define __iowmb()		((void)0)
 #endif
 
 /* PCI fixed i/o mapping */

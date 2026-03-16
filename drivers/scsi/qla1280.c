@@ -592,9 +592,9 @@ static int ql_debug_level = 1;
 	if (ql_debug_level >= level) __qla1280_print_scsi_cmd(cmd)
 #else
 #define ql_debug_level			0
-#define dprintk(level, format, a...)	do{}while(0)
-#define qla1280_dump_buffer(a, b, c)	do{}while(0)
-#define qla1280_print_scsi_cmd(a, b)	do{}while(0)
+#define dprintk(level, format, a...)	((void)0)
+#define qla1280_dump_buffer(a, b, c)	((void)0)
+#define qla1280_print_scsi_cmd(a, b)	((void)0)
 #endif
 
 #define ENTER(x)		dprintk(3, "qla1280 : Entering %s()\n", x);

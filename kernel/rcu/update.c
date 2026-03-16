@@ -61,10 +61,10 @@
 	})
 #endif
 #ifndef ASSERT_EXCLUSIVE_WRITER
-#define ASSERT_EXCLUSIVE_WRITER(var) do { } while (0)
+#define ASSERT_EXCLUSIVE_WRITER(var) ((void)0)
 #endif
 #ifndef ASSERT_EXCLUSIVE_ACCESS
-#define ASSERT_EXCLUSIVE_ACCESS(var) do { } while (0)
+#define ASSERT_EXCLUSIVE_ACCESS(var) ((void)0)
 #endif
 
 #ifndef CONFIG_TINY_RCU
@@ -508,7 +508,7 @@ void do_trace_rcu_torture_read(const char *rcutorturename, struct rcu_head *rhp,
 EXPORT_SYMBOL_GPL(do_trace_rcu_torture_read);
 #else
 #define do_trace_rcu_torture_read(rcutorturename, rhp, secs, c_old, c) \
-	do { } while (0)
+	((void)0)
 #endif
 
 #if IS_ENABLED(CONFIG_RCU_TORTURE_TEST) || IS_MODULE(CONFIG_RCU_TORTURE_TEST)

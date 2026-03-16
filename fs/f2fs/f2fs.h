@@ -1912,7 +1912,7 @@ static inline bool time_to_inject(struct f2fs_sb_info *sbi, int type)
 	return false;
 }
 #else
-#define f2fs_show_injection_info(sbi, type) do { } while (0)
+#define f2fs_show_injection_info(sbi, type) ((void)0)
 static inline bool time_to_inject(struct f2fs_sb_info *sbi, int type)
 {
 	return false;
@@ -4084,41 +4084,41 @@ void __init f2fs_create_root_stats(void);
 void f2fs_destroy_root_stats(void);
 void f2fs_update_sit_info(struct f2fs_sb_info *sbi);
 #else
-#define stat_inc_cp_count(si)				do { } while (0)
-#define stat_inc_bg_cp_count(si)			do { } while (0)
-#define stat_inc_call_count(si)				do { } while (0)
-#define stat_inc_bggc_count(si)				do { } while (0)
-#define stat_io_skip_bggc_count(sbi)			do { } while (0)
-#define stat_other_skip_bggc_count(sbi)			do { } while (0)
-#define stat_inc_dirty_inode(sbi, type)			do { } while (0)
-#define stat_dec_dirty_inode(sbi, type)			do { } while (0)
-#define stat_inc_total_hit(sbi, type)			do { } while (0)
-#define stat_inc_rbtree_node_hit(sbi, type)		do { } while (0)
-#define stat_inc_largest_node_hit(sbi)			do { } while (0)
-#define stat_inc_cached_node_hit(sbi, type)		do { } while (0)
-#define stat_inc_inline_xattr(inode)			do { } while (0)
-#define stat_dec_inline_xattr(inode)			do { } while (0)
-#define stat_inc_inline_inode(inode)			do { } while (0)
-#define stat_dec_inline_inode(inode)			do { } while (0)
-#define stat_inc_inline_dir(inode)			do { } while (0)
-#define stat_dec_inline_dir(inode)			do { } while (0)
-#define stat_inc_compr_inode(inode)			do { } while (0)
-#define stat_dec_compr_inode(inode)			do { } while (0)
-#define stat_add_compr_blocks(inode, blocks)		do { } while (0)
-#define stat_sub_compr_blocks(inode, blocks)		do { } while (0)
-#define stat_inc_swapfile_inode(inode)			do { } while (0)
-#define stat_dec_swapfile_inode(inode)			do { } while (0)
-#define stat_inc_atomic_inode(inode)			do { } while (0)
-#define stat_dec_atomic_inode(inode)			do { } while (0)
-#define stat_update_max_atomic_write(inode)		do { } while (0)
-#define stat_inc_meta_count(sbi, blkaddr)		do { } while (0)
-#define stat_inc_seg_type(sbi, curseg)			do { } while (0)
-#define stat_inc_block_count(sbi, curseg)		do { } while (0)
-#define stat_inc_inplace_blocks(sbi)			do { } while (0)
-#define stat_inc_seg_count(sbi, type, gc_type)		do { } while (0)
-#define stat_inc_tot_blk_count(si, blks)		do { } while (0)
-#define stat_inc_data_blk_count(sbi, blks, gc_type)	do { } while (0)
-#define stat_inc_node_blk_count(sbi, blks, gc_type)	do { } while (0)
+#define stat_inc_cp_count(si)				((void)0)
+#define stat_inc_bg_cp_count(si)			((void)0)
+#define stat_inc_call_count(si)				((void)0)
+#define stat_inc_bggc_count(si)				((void)0)
+#define stat_io_skip_bggc_count(sbi)			((void)0)
+#define stat_other_skip_bggc_count(sbi)			((void)0)
+#define stat_inc_dirty_inode(sbi, type)			((void)0)
+#define stat_dec_dirty_inode(sbi, type)			((void)0)
+#define stat_inc_total_hit(sbi, type)			((void)0)
+#define stat_inc_rbtree_node_hit(sbi, type)		((void)0)
+#define stat_inc_largest_node_hit(sbi)			((void)0)
+#define stat_inc_cached_node_hit(sbi, type)		((void)0)
+#define stat_inc_inline_xattr(inode)			((void)0)
+#define stat_dec_inline_xattr(inode)			((void)0)
+#define stat_inc_inline_inode(inode)			((void)0)
+#define stat_dec_inline_inode(inode)			((void)0)
+#define stat_inc_inline_dir(inode)			((void)0)
+#define stat_dec_inline_dir(inode)			((void)0)
+#define stat_inc_compr_inode(inode)			((void)0)
+#define stat_dec_compr_inode(inode)			((void)0)
+#define stat_add_compr_blocks(inode, blocks)		((void)0)
+#define stat_sub_compr_blocks(inode, blocks)		((void)0)
+#define stat_inc_swapfile_inode(inode)			((void)0)
+#define stat_dec_swapfile_inode(inode)			((void)0)
+#define stat_inc_atomic_inode(inode)			((void)0)
+#define stat_dec_atomic_inode(inode)			((void)0)
+#define stat_update_max_atomic_write(inode)		((void)0)
+#define stat_inc_meta_count(sbi, blkaddr)		((void)0)
+#define stat_inc_seg_type(sbi, curseg)			((void)0)
+#define stat_inc_block_count(sbi, curseg)		((void)0)
+#define stat_inc_inplace_blocks(sbi)			((void)0)
+#define stat_inc_seg_count(sbi, type, gc_type)		((void)0)
+#define stat_inc_tot_blk_count(si, blks)		((void)0)
+#define stat_inc_data_blk_count(sbi, blks, gc_type)	((void)0)
+#define stat_inc_node_blk_count(sbi, blks, gc_type)	((void)0)
 
 static inline int f2fs_build_stats(struct f2fs_sb_info *sbi) { return 0; }
 static inline void f2fs_destroy_stats(struct f2fs_sb_info *sbi) { }
@@ -4377,7 +4377,7 @@ static inline bool f2fs_load_compressed_page(struct f2fs_sb_info *sbi,
 				struct page *page, block_t blkaddr) { return false; }
 static inline void f2fs_invalidate_compress_pages(struct f2fs_sb_info *sbi,
 							nid_t ino) { }
-#define inc_compr_inode_stat(inode)		do { } while (0)
+#define inc_compr_inode_stat(inode)		((void)0)
 static inline void f2fs_update_read_extent_tree_range_compressed(
 				struct inode *inode,
 				pgoff_t fofs, block_t blkaddr,
@@ -4624,7 +4624,7 @@ static inline bool f2fs_need_verity(const struct inode *inode, pgoff_t idx)
 extern void f2fs_build_fault_attr(struct f2fs_sb_info *sbi, unsigned int rate,
 							unsigned int type);
 #else
-#define f2fs_build_fault_attr(sbi, rate, type)		do { } while (0)
+#define f2fs_build_fault_attr(sbi, rate, type)		((void)0)
 #endif
 
 static inline bool is_journalled_quota(struct f2fs_sb_info *sbi)

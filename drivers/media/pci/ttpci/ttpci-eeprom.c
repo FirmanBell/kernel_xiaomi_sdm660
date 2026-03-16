@@ -43,7 +43,7 @@
 #if 1
 #define dprintk(x...) do { printk(x); } while (0)
 #else
-#define dprintk(x...) do { } while (0)
+#define dprintk(x...) ((void)0)
 #endif
 
 

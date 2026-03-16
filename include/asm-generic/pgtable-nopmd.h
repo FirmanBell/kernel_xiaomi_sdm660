@@ -33,7 +33,7 @@ static inline int pud_present(pud_t pud)	{ return 1; }
 static inline void pud_clear(pud_t *pud)	{ }
 #define pmd_ERROR(pmd)				(pud_ERROR((pmd).pud))
 
-#define pud_populate(mm, pmd, pte)		do { } while (0)
+#define pud_populate(mm, pmd, pte)		((void)0)
 
 /*
  * (pmds are folded into puds so this doesn't get actually called,
@@ -60,7 +60,7 @@ static inline pmd_t * pmd_offset(pud_t * pud, unsigned long address)
 static inline void pmd_free(struct mm_struct *mm, pmd_t *pmd)
 {
 }
-#define __pmd_free_tlb(tlb, x, a)		do { } while (0)
+#define __pmd_free_tlb(tlb, x, a)		((void)0)
 
 #undef  pmd_addr_end
 #define pmd_addr_end(addr, end)			(end)

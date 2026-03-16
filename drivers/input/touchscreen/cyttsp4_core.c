@@ -74,7 +74,7 @@ static void cyttsp4_pr_buf(struct device *dev, u8 *pr_buf, u8 *dptr, int size,
 			pr_buf, size <= max ? "" : CY_PR_TRUNCATED);
 }
 #else
-#define cyttsp4_pr_buf(dev, pr_buf, dptr, size, data_name) do { } while (0)
+#define cyttsp4_pr_buf(dev, pr_buf, dptr, size, data_name) ((void)0)
 #endif
 
 static int cyttsp4_load_status_regs(struct cyttsp4 *cd)

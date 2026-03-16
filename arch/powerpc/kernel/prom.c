@@ -241,7 +241,7 @@ static void __init init_mmu_slb_size(unsigned long node)
 		mmu_slb_size = be32_to_cpup(slb_size_ptr);
 }
 #else
-#define init_mmu_slb_size(node) do { } while(0)
+#define init_mmu_slb_size(node) ((void)0)
 #endif
 
 static struct feature_property {
@@ -285,7 +285,7 @@ static __init void identical_pvr_fixup(unsigned long node)
 	}
 }
 #else
-#define identical_pvr_fixup(node) do { } while(0)
+#define identical_pvr_fixup(node) ((void)0)
 #endif
 
 static void __init check_cpu_feature_properties(unsigned long node)

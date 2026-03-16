@@ -246,5 +246,5 @@ sl811_read_buf(struct sl811 *sl811, int addr, void *buf, size_t count)
 #ifdef PACKET_TRACE
 #    define PACKET		pr_debug("sl811: "stuff)
 #else
-#    define PACKET(stuff...)	do{}while(0)
+#    define PACKET(stuff...)	((void)0)
 #endif

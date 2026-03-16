@@ -1774,7 +1774,7 @@ struct ipr_ucode_image_header {
 #define ipr_remove_trace_file(kobj, attr) sysfs_remove_bin_file(kobj, attr)
 #else
 #define ipr_create_trace_file(kobj, attr) 0
-#define ipr_remove_trace_file(kobj, attr) do { } while(0)
+#define ipr_remove_trace_file(kobj, attr) ((void)0)
 #endif
 
 #ifdef CONFIG_SCSI_IPR_DUMP
@@ -1782,7 +1782,7 @@ struct ipr_ucode_image_header {
 #define ipr_remove_dump_file(kobj, attr) sysfs_remove_bin_file(kobj, attr)
 #else
 #define ipr_create_dump_file(kobj, attr) 0
-#define ipr_remove_dump_file(kobj, attr) do { } while(0)
+#define ipr_remove_dump_file(kobj, attr) ((void)0)
 #endif
 
 /*

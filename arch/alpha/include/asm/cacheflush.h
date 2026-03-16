@@ -5,17 +5,17 @@
 #include <linux/mm.h>
 
 /* Caches aren't brain-dead on the Alpha. */
-#define flush_cache_all()			do { } while (0)
-#define flush_cache_mm(mm)			do { } while (0)
-#define flush_cache_dup_mm(mm)			do { } while (0)
-#define flush_cache_range(vma, start, end)	do { } while (0)
-#define flush_cache_page(vma, vmaddr, pfn)	do { } while (0)
+#define flush_cache_all()			((void)0)
+#define flush_cache_mm(mm)			((void)0)
+#define flush_cache_dup_mm(mm)			((void)0)
+#define flush_cache_range(vma, start, end)	((void)0)
+#define flush_cache_page(vma, vmaddr, pfn)	((void)0)
 #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 0
-#define flush_dcache_page(page)			do { } while (0)
-#define flush_dcache_mmap_lock(mapping)		do { } while (0)
-#define flush_dcache_mmap_unlock(mapping)	do { } while (0)
-#define flush_cache_vmap(start, end)		do { } while (0)
-#define flush_cache_vunmap(start, end)		do { } while (0)
+#define flush_dcache_page(page)			((void)0)
+#define flush_dcache_mmap_lock(mapping)		((void)0)
+#define flush_dcache_mmap_unlock(mapping)	((void)0)
+#define flush_cache_vmap(start, end)		((void)0)
+#define flush_cache_vunmap(start, end)		((void)0)
 
 /* Note that the following two definitions are _highly_ dependent
    on the contexts in which they are used in the kernel.  I personally

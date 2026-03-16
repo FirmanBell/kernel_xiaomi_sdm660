@@ -488,7 +488,7 @@ void do_trace_rcu_torture_read(const char *rcutorturename,
 			       unsigned long c);
 #else
 #define do_trace_rcu_torture_read(rcutorturename, rhp, secs, c_old, c) \
-	do { } while (0)
+	((void)0)
 #endif
 static inline void rcu_gp_set_torture_wait(int duration) { }
 #endif

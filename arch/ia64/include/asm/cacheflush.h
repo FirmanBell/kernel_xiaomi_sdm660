@@ -17,14 +17,14 @@
  * to avoid them whenever possible.
  */
 
-#define flush_cache_all()			do { } while (0)
-#define flush_cache_mm(mm)			do { } while (0)
-#define flush_cache_dup_mm(mm)			do { } while (0)
-#define flush_cache_range(vma, start, end)	do { } while (0)
-#define flush_cache_page(vma, vmaddr, pfn)	do { } while (0)
-#define flush_icache_page(vma,page)		do { } while (0)
-#define flush_cache_vmap(start, end)		do { } while (0)
-#define flush_cache_vunmap(start, end)		do { } while (0)
+#define flush_cache_all()			((void)0)
+#define flush_cache_mm(mm)			((void)0)
+#define flush_cache_dup_mm(mm)			((void)0)
+#define flush_cache_range(vma, start, end)	((void)0)
+#define flush_cache_page(vma, vmaddr, pfn)	((void)0)
+#define flush_icache_page(vma,page)		((void)0)
+#define flush_cache_vmap(start, end)		((void)0)
+#define flush_cache_vunmap(start, end)		((void)0)
 
 #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
 #define flush_dcache_page(page)			\
@@ -32,8 +32,8 @@ do {						\
 	clear_bit(PG_arch_1, &(page)->flags);	\
 } while (0)
 
-#define flush_dcache_mmap_lock(mapping)		do { } while (0)
-#define flush_dcache_mmap_unlock(mapping)	do { } while (0)
+#define flush_dcache_mmap_lock(mapping)		((void)0)
+#define flush_dcache_mmap_unlock(mapping)	((void)0)
 
 extern void flush_icache_range (unsigned long start, unsigned long end);
 extern void clflush_cache_range(void *addr, int size);

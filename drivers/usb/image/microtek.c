@@ -190,7 +190,7 @@ static struct usb_driver mts_usb_driver = {
 	   } while(0)
 #else
 
-#define MTS_NUL_STATEMENT do { } while(0)
+#define MTS_NUL_STATEMENT ((void)0)
 
 #define MTS_DEBUG(x...)	MTS_NUL_STATEMENT
 #define MTS_DEBUG_GOT_HERE() MTS_NUL_STATEMENT

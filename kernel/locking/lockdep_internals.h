@@ -235,9 +235,9 @@ static inline unsigned long debug_class_ops_read(struct lock_class *class)
 }
 
 #else
-# define __debug_atomic_inc(ptr)	do { } while (0)
-# define debug_atomic_inc(ptr)		do { } while (0)
-# define debug_atomic_dec(ptr)		do { } while (0)
+# define __debug_atomic_inc(ptr)	((void)0)
+# define debug_atomic_inc(ptr)		((void)0)
+# define debug_atomic_dec(ptr)		((void)0)
 # define debug_atomic_read(ptr)		0
-# define debug_class_ops_inc(ptr)	do { } while (0)
+# define debug_class_ops_inc(ptr)	((void)0)
 #endif

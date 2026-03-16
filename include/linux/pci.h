@@ -1667,7 +1667,7 @@ static inline struct pci_dev *pci_get_class(unsigned int class,
 
 #define pci_dev_present(ids)	(0)
 #define no_pci_devices()	(1)
-#define pci_dev_put(dev)	do { } while (0)
+#define pci_dev_put(dev)	((void)0)
 
 static inline void pci_set_master(struct pci_dev *dev) { }
 static inline void pci_clear_master(struct pci_dev *dev) { }

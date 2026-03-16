@@ -151,7 +151,7 @@ int kswapd_threads_current = DEF_KSWAPD_THREADS_PER_NODE;
 		}							\
 	} while (0)
 #else
-#define prefetch_prev_lru_page(_page, _base, _field) do { } while (0)
+#define prefetch_prev_lru_page(_page, _base, _field) ((void)0)
 #endif
 
 #ifdef ARCH_HAS_PREFETCHW
@@ -165,7 +165,7 @@ int kswapd_threads_current = DEF_KSWAPD_THREADS_PER_NODE;
 		}							\
 	} while (0)
 #else
-#define prefetchw_prev_lru_page(_page, _base, _field) do { } while (0)
+#define prefetchw_prev_lru_page(_page, _base, _field) ((void)0)
 #endif
 
 /*

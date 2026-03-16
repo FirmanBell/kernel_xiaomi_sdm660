@@ -297,7 +297,7 @@ static inline u32 read_rcsr(void)
 }
 static inline void write_wdtsr(u32 val)
 {
-	do { } while (0);
+	((void)0);
 }
 
 extern struct platform_device iop3xx_dma_0_channel;

@@ -128,9 +128,9 @@ static inline void __tlb_flush_mm_lazy(struct mm_struct * mm)
  * only one user. At the end of the update the flush_tlb_mm and
  * flush_tlb_range functions need to do the flush.
  */
-#define flush_tlb()				do { } while (0)
-#define flush_tlb_all()				do { } while (0)
-#define flush_tlb_page(vma, addr)		do { } while (0)
+#define flush_tlb()				((void)0)
+#define flush_tlb_all()				((void)0)
+#define flush_tlb_page(vma, addr)		((void)0)
 
 static inline void flush_tlb_mm(struct mm_struct *mm)
 {

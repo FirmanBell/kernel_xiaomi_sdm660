@@ -587,7 +587,7 @@ static inline void mapping_allow_writable(struct address_space *mapping)
 #define __NEED_I_SIZE_ORDERED
 #define i_size_ordered_init(inode) seqcount_init(&inode->i_size_seqcount)
 #else
-#define i_size_ordered_init(inode) do { } while (0)
+#define i_size_ordered_init(inode) ((void)0)
 #endif
 
 struct posix_acl;

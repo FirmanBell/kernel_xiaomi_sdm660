@@ -70,7 +70,7 @@ extern int mips_revision_sconid;
 #ifdef CONFIG_PCI
 extern void mips_pcibios_init(void);
 #else
-#define mips_pcibios_init() do { } while (0)
+#define mips_pcibios_init() ((void)0)
 #endif
 
 extern void mips_scroll_message(void);

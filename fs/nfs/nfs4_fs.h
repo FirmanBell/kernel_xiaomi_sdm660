@@ -594,10 +594,10 @@ static inline bool nfs4_state_match_open_stateid_other(const struct nfs4_state *
 
 #else
 
-#define nfs4_close_state(a, b) do { } while (0)
-#define nfs4_close_sync(a, b) do { } while (0)
-#define nfs4_state_protect(a, b, c, d) do { } while (0)
-#define nfs4_state_protect_write(a, b, c, d) do { } while (0)
+#define nfs4_close_state(a, b) ((void)0)
+#define nfs4_close_sync(a, b) ((void)0)
+#define nfs4_state_protect(a, b, c, d) ((void)0)
+#define nfs4_state_protect_write(a, b, c, d) ((void)0)
 
 #endif /* CONFIG_NFS_V4 */
 #endif /* __LINUX_FS_NFS_NFS4_FS.H */

@@ -424,7 +424,7 @@ static inline int nfsd4_is_junction(struct dentry *dentry)
 }
 
 #define register_cld_notifier() 0
-#define unregister_cld_notifier() do { } while(0)
+#define unregister_cld_notifier() ((void)0)
 
 #endif /* CONFIG_NFSD_V4 */
 

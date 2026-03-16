@@ -184,7 +184,7 @@ struct omap_udc {
 #ifdef VERBOSE
 #    define VDBG		DBG
 #else
-#    define VDBG(stuff...)	do{}while(0)
+#    define VDBG(stuff...)	((void)0)
 #endif
 
 #define ERR(stuff...)		pr_err("udc: " stuff)

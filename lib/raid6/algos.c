@@ -263,7 +263,7 @@ int __init raid6_select_algo(void)
 
 static void raid6_exit(void)
 {
-	do { } while (0);
+	((void)0);
 }
 
 subsys_initcall(raid6_select_algo);

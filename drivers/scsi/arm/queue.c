@@ -42,7 +42,7 @@ typedef struct queue_entry {
 #define SET_MAGIC(q,m)	((q)->magic = (m))
 #define BAD_MAGIC(q,m)	((q)->magic != (m))
 #else
-#define SET_MAGIC(q,m)	do { } while (0)
+#define SET_MAGIC(q,m)	((void)0)
 #define BAD_MAGIC(q,m)	(0)
 #endif
 

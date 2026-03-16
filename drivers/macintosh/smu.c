@@ -58,7 +58,7 @@
 #ifdef DEBUG_SMU
 #define DPRINTK(fmt, args...) do { printk(KERN_DEBUG fmt , ##args); } while (0)
 #else
-#define DPRINTK(fmt, args...) do { } while (0)
+#define DPRINTK(fmt, args...) ((void)0)
 #endif
 
 /*

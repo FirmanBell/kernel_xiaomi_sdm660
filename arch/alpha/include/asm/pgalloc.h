@@ -87,6 +87,6 @@ pte_free(struct mm_struct *mm, pgtable_t page)
 	__free_page(page);
 }
 
-#define check_pgt_cache()	do { } while (0)
+#define check_pgt_cache()	((void)0)
 
 #endif /* _ALPHA_PGALLOC_H */

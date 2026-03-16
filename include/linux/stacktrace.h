@@ -44,15 +44,15 @@ extern int snprint_stack_trace(char *buf, size_t size,
 #ifdef CONFIG_USER_STACKTRACE_SUPPORT
 extern void save_stack_trace_user(struct stack_trace *trace);
 #else
-# define save_stack_trace_user(trace)              do { } while (0)
+# define save_stack_trace_user(trace)              ((void)0)
 #endif
 
 #else /* !CONFIG_STACKTRACE */
-# define save_stack_trace(trace)			do { } while (0)
-# define save_stack_trace_tsk(tsk, trace)		do { } while (0)
-# define save_stack_trace_user(trace)			do { } while (0)
-# define print_stack_trace(trace, spaces)		do { } while (0)
-# define snprint_stack_trace(buf, size, trace, spaces)	do { } while (0)
+# define save_stack_trace(trace)			((void)0)
+# define save_stack_trace_tsk(tsk, trace)		((void)0)
+# define save_stack_trace_user(trace)			((void)0)
+# define print_stack_trace(trace, spaces)		((void)0)
+# define snprint_stack_trace(buf, size, trace, spaces)	((void)0)
 # define save_stack_trace_tsk_reliable(tsk, trace)	({ -ENOSYS; })
 #endif /* CONFIG_STACKTRACE */
 

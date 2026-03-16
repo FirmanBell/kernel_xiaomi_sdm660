@@ -15,7 +15,7 @@
 #ifdef VERBOSE_DEBUG
 #define VLDBG	LDBG
 #else
-#define VLDBG(lun, fmt, args...) do { } while (0)
+#define VLDBG(lun, fmt, args...) ((void)0)
 #endif /* VERBOSE_DEBUG */
 
 #define _LMSG(func, lun, fmt, args...)					\
@@ -45,12 +45,12 @@ do {									\
 	}								\
 } while (0)
 
-#  define dump_cdb(fsg) do { } while (0)
+#  define dump_cdb(fsg) ((void)0)
 
 #else
 
 #  define dump_msg(fsg, /* const char * */ label, \
-		   /* const u8 * */ buf, /* unsigned */ length) do { } while (0)
+		   /* const u8 * */ buf, /* unsigned */ length) ((void)0)
 
 #  ifdef VERBOSE_DEBUG
 
@@ -60,7 +60,7 @@ do {									\
 
 #  else
 
-#    define dump_cdb(fsg) do { } while (0)
+#    define dump_cdb(fsg) ((void)0)
 
 #  endif /* VERBOSE_DEBUG */
 

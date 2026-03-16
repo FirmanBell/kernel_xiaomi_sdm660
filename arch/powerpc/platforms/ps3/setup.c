@@ -153,7 +153,7 @@ static int __init early_parse_ps3fb(char *p)
 }
 early_param("ps3fb", early_parse_ps3fb);
 #else
-#define prealloc_ps3fb_videomemory()	do { } while (0)
+#define prealloc_ps3fb_videomemory()	((void)0)
 #endif
 
 #if defined(CONFIG_PS3_FLASH) || defined(CONFIG_PS3_FLASH_MODULE)
@@ -177,7 +177,7 @@ static int __init early_parse_ps3flash(char *p)
 }
 early_param("ps3flash", early_parse_ps3flash);
 #else
-#define prealloc_ps3flash_bounce_buffer()	do { } while (0)
+#define prealloc_ps3flash_bounce_buffer()	((void)0)
 #endif
 
 static int ps3_set_dabr(unsigned long dabr, unsigned long dabrx)

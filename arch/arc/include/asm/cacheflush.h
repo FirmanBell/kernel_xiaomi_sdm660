@@ -44,8 +44,8 @@ void dma_cache_wback_inv(phys_addr_t start, unsigned long sz);
 void dma_cache_inv(phys_addr_t start, unsigned long sz);
 void dma_cache_wback(phys_addr_t start, unsigned long sz);
 
-#define flush_dcache_mmap_lock(mapping)		do { } while (0)
-#define flush_dcache_mmap_unlock(mapping)	do { } while (0)
+#define flush_dcache_mmap_lock(mapping)		((void)0)
+#define flush_dcache_mmap_unlock(mapping)	((void)0)
 
 /* TBD: optimize this */
 #define flush_cache_vmap(start, end)		flush_cache_all()

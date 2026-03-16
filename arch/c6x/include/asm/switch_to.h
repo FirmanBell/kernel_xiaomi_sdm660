@@ -13,7 +13,7 @@
 
 #include <linux/linkage.h>
 
-#define prepare_to_switch()    do { } while (0)
+#define prepare_to_switch()    ((void)0)
 
 struct task_struct;
 struct thread_struct;

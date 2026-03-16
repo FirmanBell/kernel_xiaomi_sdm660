@@ -46,8 +46,8 @@ static inline void pgd_free(struct mm_struct *mm, pgd_t *pgd)
  * the pgd will always be present..
  */
 /* #define pmd_alloc_one(mm,address)       ({ BUG(); ((pmd_t *)2); }) */
-#define pmd_free(mm, x) 		do { } while (0)
-#define __pmd_free_tlb(tlb,x,a)		do { } while (0)
+#define pmd_free(mm, x) 		((void)0)
+#define __pmd_free_tlb(tlb,x,a)		((void)0)
 /* #define pgd_populate(mm, pmd, pte)      BUG() */
 
 #ifndef CONFIG_BOOKE
@@ -108,7 +108,7 @@ static inline void pgtable_free(void *table, unsigned index_size)
 	}
 }
 
-#define check_pgt_cache()	do { } while (0)
+#define check_pgt_cache()	((void)0)
 #define get_hugepd_cache_index(x)	(x)
 
 #ifdef CONFIG_SMP

@@ -138,7 +138,7 @@ unsigned long get_wchan(struct task_struct *p);
 #  define KSTK_ESP(task)	(task_sp(task))
 
 /* FIXME */
-#  define deactivate_mm(tsk, mm)	do { } while (0)
+#  define deactivate_mm(tsk, mm)	((void)0)
 
 #  define STACK_TOP	TASK_SIZE
 #  define STACK_TOP_MAX	STACK_TOP

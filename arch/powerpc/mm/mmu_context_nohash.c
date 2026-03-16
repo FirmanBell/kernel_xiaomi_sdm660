@@ -36,8 +36,8 @@
 #define pr_hard(args...)	printk(KERN_DEBUG args)
 #define pr_hardcont(args...)	printk(KERN_CONT args)
 #else
-#define pr_hard(args...)	do { } while(0)
-#define pr_hardcont(args...)	do { } while(0)
+#define pr_hard(args...)	((void)0)
+#define pr_hardcont(args...)	((void)0)
 #endif
 
 #include <linux/kernel.h>

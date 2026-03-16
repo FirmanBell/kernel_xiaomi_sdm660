@@ -26,7 +26,7 @@ void destroy_context(struct mm_struct *mm);
 void switch_mm(struct mm_struct *old_mm, struct mm_struct *mm,
 	       struct task_struct *tsk);
 
-#define deactivate_mm(tsk,mm)	do { } while (0)
+#define deactivate_mm(tsk,mm)	((void)0)
 
 /* Activate a new MM instance for the current task. */
 #define activate_mm(active_mm, mm) switch_mm((active_mm), (mm), NULL)

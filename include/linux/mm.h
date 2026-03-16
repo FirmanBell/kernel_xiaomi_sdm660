@@ -1344,7 +1344,7 @@ static inline void set_page_address(struct page *page, void *address)
 {
 	page->virtual = address;
 }
-#define page_address_init()  do { } while(0)
+#define page_address_init()  ((void)0)
 #endif
 
 #if defined(HASHED_PAGE_VIRTUAL)
@@ -1355,8 +1355,8 @@ void page_address_init(void);
 
 #if !defined(HASHED_PAGE_VIRTUAL) && !defined(WANT_PAGE_VIRTUAL)
 #define page_address(page) lowmem_page_address(page)
-#define set_page_address(page, address)  do { } while(0)
-#define page_address_init()  do { } while(0)
+#define set_page_address(page, address)  ((void)0)
+#define page_address_init()  ((void)0)
 #endif
 
 extern void *page_rmapping(struct page *page);

@@ -1913,7 +1913,7 @@ static int ip_mc_del1_src(struct ip_mc_list *pmc, int sfmode,
 }
 
 #ifndef CONFIG_IP_MULTICAST
-#define igmp_ifc_event(x)	do { } while (0)
+#define igmp_ifc_event(x)	((void)0)
 #endif
 
 static int ip_mc_del_src(struct in_device *in_dev, __be32 *pmca, int sfmode,

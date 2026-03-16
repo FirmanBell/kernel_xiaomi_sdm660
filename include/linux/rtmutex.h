@@ -55,7 +55,7 @@ struct hrtimer_sleeper;
  {
 	return 0;
  }
-# define rt_mutex_debug_check_no_locks_held(task)	do { } while (0)
+# define rt_mutex_debug_check_no_locks_held(task)	((void)0)
 #endif
 
 #ifdef CONFIG_DEBUG_RT_MUTEXES
@@ -72,7 +72,7 @@ do { \
 #else
 # define __DEBUG_RT_MUTEX_INITIALIZER(mutexname)
 # define rt_mutex_init(mutex)			__rt_mutex_init(mutex, NULL, NULL)
-# define rt_mutex_debug_task_free(t)			do { } while (0)
+# define rt_mutex_debug_task_free(t)			((void)0)
 #endif
 
 #ifdef CONFIG_DEBUG_LOCK_ALLOC

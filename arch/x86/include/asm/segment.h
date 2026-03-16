@@ -369,8 +369,8 @@ static inline void __loadsegment_fs(unsigned short value)
 #  define get_user_gs(regs)		(u16)((regs)->gs)
 #  define set_user_gs(regs, v)		do { (regs)->gs = (v); } while (0)
 #  define task_user_gs(tsk)		(task_pt_regs(tsk)->gs)
-#  define lazy_save_gs(v)		do { } while (0)
-#  define lazy_load_gs(v)		do { } while (0)
+#  define lazy_save_gs(v)		((void)0)
+#  define lazy_load_gs(v)		((void)0)
 # endif	/* X86_32_LAZY_GS */
 #endif	/* X86_32 */
 

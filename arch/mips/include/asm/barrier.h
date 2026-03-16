@@ -118,7 +118,7 @@
 		: /* no input */		\
 		: "memory")
 #else
-#define __sync()	do { } while(0)
+#define __sync()	((void)0)
 #endif
 
 #define __fast_iob()				\
@@ -138,7 +138,7 @@
 # define fast_wmb()	__syncw()
 # define fast_rmb()	barrier()
 # define fast_mb()	__sync()
-# define fast_iob()	do { } while (0)
+# define fast_iob()	((void)0)
 #else /* ! CONFIG_CPU_CAVIUM_OCTEON */
 # define fast_wmb()	__sync()
 # define fast_rmb()	__sync()

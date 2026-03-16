@@ -83,10 +83,10 @@ void *tah_dump_regs(struct platform_device *ofdev, void *buf);
 #else
 
 # define tah_init()		0
-# define tah_exit()		do { } while(0)
+# define tah_exit()		((void)0)
 # define tah_attach(x,y)	(-ENXIO)
-# define tah_detach(x,y)	do { } while(0)
-# define tah_reset(x)		do { } while(0)
+# define tah_detach(x,y)	((void)0)
+# define tah_reset(x)		((void)0)
 # define tah_get_regs_len(x)	0
 # define tah_dump_regs(x,buf)	(buf)
 

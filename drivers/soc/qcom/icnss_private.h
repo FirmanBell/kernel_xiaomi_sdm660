@@ -84,7 +84,7 @@
 		}							\
 	} while (0)
 #else
-#define ICNSS_ASSERT(_condition) do { } while (0)
+#define ICNSS_ASSERT(_condition) ((void)0)
 #endif
 
 #define icnss_fatal_err(_fmt, ...)					\

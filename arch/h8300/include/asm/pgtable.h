@@ -3,7 +3,7 @@
 #define _H8300_PGTABLE_H
 #define __ARCH_USE_5LEVEL_HACK
 #include <asm-generic/pgtable-nopud.h>
-#define pgtable_cache_init()   do { } while (0)
+#define pgtable_cache_init()   ((void)0)
 extern void paging_init(void);
 #define PAGE_NONE		__pgprot(0)    /* these mean nothing to NO_MM */
 #define PAGE_SHARED		__pgprot(0)    /* these mean nothing to NO_MM */
@@ -36,7 +36,7 @@ extern int is_in_rom(unsigned long);
 /*
  * No page table caches to initialise
  */
-#define pgtable_cache_init()   do { } while (0)
+#define pgtable_cache_init()   ((void)0)
 
 /*
  * All 32bit addresses are effectively valid for vmalloc...
@@ -45,6 +45,6 @@ extern int is_in_rom(unsigned long);
 #define	VMALLOC_START	0
 #define	VMALLOC_END	0xffffffff
 
-#define arch_enter_lazy_cpu_mode()    do {} while (0)
+#define arch_enter_lazy_cpu_mode()    ((void)0)
 
 #endif /* _H8300_PGTABLE_H */

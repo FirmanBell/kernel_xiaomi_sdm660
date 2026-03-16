@@ -181,8 +181,8 @@ static void compact_inbuf(struct hvsi_struct *hp, uint8_t *read_to)
 #define dbg_dump_packet(packet) dump_packet(packet)
 #define dbg_dump_hex(data, len) dump_hex(data, len)
 #else
-#define dbg_dump_packet(packet) do { } while (0)
-#define dbg_dump_hex(data, len) do { } while (0)
+#define dbg_dump_packet(packet) ((void)0)
+#define dbg_dump_hex(data, len) ((void)0)
 #endif
 
 static void dump_hex(const uint8_t *data, int len)

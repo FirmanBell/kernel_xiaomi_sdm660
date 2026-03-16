@@ -270,14 +270,14 @@ struct goku_udc {
 	xprintk(dev , KERN_DEBUG , fmt , ## args)
 #else
 #define DBG(dev,fmt,args...) \
-	do { } while (0)
+	((void)0)
 #endif /* DEBUG */
 
 #ifdef VERBOSE
 #define VDBG DBG
 #else
 #define VDBG(dev,fmt,args...) \
-	do { } while (0)
+	((void)0)
 #endif	/* VERBOSE */
 
 #define ERROR(dev,fmt,args...) \

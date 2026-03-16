@@ -182,6 +182,6 @@ static inline void __pte_free_tlb(struct mmu_gather *tlb, pgtable_t table,
 
 #endif /* CONFIG_PPC_64K_PAGES */
 
-#define check_pgt_cache()	do { } while (0)
+#define check_pgt_cache()	((void)0)
 
 #endif /* _ASM_POWERPC_PGALLOC_64_H */

@@ -27,11 +27,11 @@ static inline void local_bh_enable(void) {}
 #else
 
 /* The simple custom synchronize_srcu is ok with try_check_zero failing. */
-#define udelay(x) do { } while (0)
+#define udelay(x) ((void)0)
 #endif
 
 #define trace_rcu_torture_read(rcutorturename, rhp, secs, c_old, c) \
-	do { } while (0)
+	((void)0)
 
 #define notrace
 
@@ -43,10 +43,10 @@ struct rcu_synchronize {
 
 void wakeme_after_rcu(struct rcu_head *head);
 
-#define rcu_lock_acquire(a) do { } while (0)
-#define rcu_lock_release(a) do { } while (0)
-#define rcu_lockdep_assert(c, s) do { } while (0)
-#define RCU_LOCKDEP_WARN(c, s) do { } while (0)
+#define rcu_lock_acquire(a) ((void)0)
+#define rcu_lock_release(a) ((void)0)
+#define rcu_lockdep_assert(c, s) ((void)0)
+#define RCU_LOCKDEP_WARN(c, s) ((void)0)
 
 /* Let CBMC non-deterministically choose switch between normal and expedited. */
 bool rcu_gp_is_normal(void);

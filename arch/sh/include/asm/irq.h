@@ -53,8 +53,8 @@ extern void irq_ctx_init(int cpu);
 extern void irq_ctx_exit(int cpu);
 # define __ARCH_HAS_DO_SOFTIRQ
 #else
-# define irq_ctx_init(cpu) do { } while (0)
-# define irq_ctx_exit(cpu) do { } while (0)
+# define irq_ctx_init(cpu) ((void)0)
+# define irq_ctx_exit(cpu) ((void)0)
 #endif
 
 #ifdef CONFIG_INTC_BALANCING
@@ -62,7 +62,7 @@ extern unsigned int irq_lookup(unsigned int irq);
 extern void irq_finish(unsigned int irq);
 #else
 #define irq_lookup(irq)		(irq)
-#define irq_finish(irq)		do { } while (0)
+#define irq_finish(irq)		((void)0)
 #endif
 
 #include <asm-generic/irq.h>

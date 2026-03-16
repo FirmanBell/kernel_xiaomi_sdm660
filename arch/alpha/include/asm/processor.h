@@ -63,7 +63,7 @@ unsigned long get_wchan(struct task_struct *p);
 
 #ifndef CONFIG_SMP
 /* Nothing to prefetch. */
-#define spin_lock_prefetch(lock)  	do { } while (0)
+#define spin_lock_prefetch(lock)  	((void)0)
 #endif
 
 extern inline void prefetch(const void *ptr)  

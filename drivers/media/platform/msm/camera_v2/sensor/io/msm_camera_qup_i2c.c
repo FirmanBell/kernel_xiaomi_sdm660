@@ -19,8 +19,8 @@
 #define CDBG(fmt, args...) pr_debug(fmt, ##args)
 #define S_I2C_DBG(fmt, args...) pr_debug(fmt, ##args)
 #else
-#define CDBG(fmt, args...) do { } while (0)
-#define S_I2C_DBG(fmt, args...) do { } while (0)
+#define CDBG(fmt, args...) ((void)0)
+#define S_I2C_DBG(fmt, args...) ((void)0)
 #endif
 
 static int32_t msm_camera_qup_i2c_rxdata(

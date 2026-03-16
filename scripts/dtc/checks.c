@@ -14,7 +14,7 @@
 		fprintf(stderr, "\n"); \
 	} while (0)
 #else
-#define TRACE(c, fmt, ...)	do { } while (0)
+#define TRACE(c, fmt, ...)	((void)0)
 #endif
 
 enum checkstatus {

@@ -115,8 +115,8 @@ void flush_cache_page(struct vm_area_struct *vma, unsigned long user_addr, unsig
 }
 
 #else
-#define flush_pfn_alias(pfn,vaddr)		do { } while (0)
-#define flush_icache_alias(pfn,vaddr,len)	do { } while (0)
+#define flush_pfn_alias(pfn,vaddr)		((void)0)
+#define flush_icache_alias(pfn,vaddr,len)	((void)0)
 #endif
 
 #define FLAG_PA_IS_EXEC 1

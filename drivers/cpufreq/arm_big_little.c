@@ -48,10 +48,10 @@ static bool bL_switching_enabled;
 #define set_switching_enabled(x)	(bL_switching_enabled = (x))
 #else
 #define is_bL_switching_enabled()	false
-#define set_switching_enabled(x)	do { } while (0)
-#define bL_switch_request(...)		do { } while (0)
-#define bL_switcher_put_enabled()	do { } while (0)
-#define bL_switcher_get_enabled()	do { } while (0)
+#define set_switching_enabled(x)	((void)0)
+#define bL_switch_request(...)		((void)0)
+#define bL_switcher_put_enabled()	((void)0)
+#define bL_switcher_get_enabled()	((void)0)
 #endif
 
 #define ACTUAL_FREQ(cluster, freq)  ((cluster == A7_CLUSTER) ? freq << 1 : freq)

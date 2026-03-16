@@ -18,7 +18,7 @@
 #include <linux/printk.h>
 #else
 #ifndef no_printk
-#define no_printk(format, args...) do { } while (0)
+#define no_printk(format, args...) ((void)0)
 #endif
 #endif
 

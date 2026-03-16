@@ -1151,7 +1151,7 @@
 #else
 #define get_isa16_mode(x)		0
 #define msk_isa16_mode(x)		(x)
-#define set_isa16_mode(x)		do { } while(0)
+#define set_isa16_mode(x)		((void)0)
 #endif
 
 /*

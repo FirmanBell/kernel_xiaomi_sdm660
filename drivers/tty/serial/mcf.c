@@ -41,7 +41,7 @@
 #define	mcf_getppdtr(p)		(1)
 #endif
 #if !defined(mcf_setppdtr)
-#define	mcf_setppdtr(p, v)	do { } while (0)
+#define	mcf_setppdtr(p, v)	((void)0)
 #endif
 
 /****************************************************************************/

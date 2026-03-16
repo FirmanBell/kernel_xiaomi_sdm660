@@ -61,7 +61,7 @@ MODULE_DESCRIPTION("AudioScience ALSA ASI5xxx ASI6xxx ASI87xx ASI89xx "
 #define snd_printddd(format, args...) \
 	__snd_printk(3, __FILE__, __LINE__, format, ##args)
 #else
-#define snd_printddd(format, args...) do { } while (0)
+#define snd_printddd(format, args...) ((void)0)
 #endif
 
 static int index[SNDRV_CARDS] = SNDRV_DEFAULT_IDX;	/* index 0-MAX */

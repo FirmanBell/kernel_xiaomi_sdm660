@@ -25,7 +25,7 @@
 /* XXX */
 #include <asm/udbg.h>
 //#define DBG(fmt...) udbg_printf(fmt)
-#define DBG(fmt...) do { } while(0)
+#define DBG(fmt...) ((void)0)
 
 static inline void __iomem *get_tima_phys(void)
 {

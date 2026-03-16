@@ -104,7 +104,7 @@ init_new_context(struct task_struct *tsk, struct mm_struct *mm)
 
 #endif	/* CONFIG_CPU_HAS_ASID */
 
-#define destroy_context(mm)		do { } while(0)
+#define destroy_context(mm)		((void)0)
 #define activate_mm(prev,next)		switch_mm(prev, next, NULL)
 
 /*
@@ -152,6 +152,6 @@ switch_mm(struct mm_struct *prev, struct mm_struct *next,
 #endif
 }
 
-#define deactivate_mm(tsk,mm)	do { } while (0)
+#define deactivate_mm(tsk,mm)	((void)0)
 
 #endif

@@ -186,7 +186,7 @@ void __snd_pcm_xrun(struct snd_pcm_substream *substream)
 
 #else /* ! CONFIG_SND_PCM_XRUN_DEBUG */
 
-#define hw_ptr_error(substream, fmt, args...) do { } while (0)
+#define hw_ptr_error(substream, fmt, args...) ((void)0)
 
 #endif
 

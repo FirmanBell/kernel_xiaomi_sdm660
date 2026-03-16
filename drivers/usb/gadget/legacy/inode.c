@@ -245,14 +245,14 @@ static const char *CHIP;
 	xprintk(dev , KERN_DEBUG , fmt , ## args)
 #else
 #define DBG(dev,fmt,args...) \
-	do { } while (0)
+	((void)0)
 #endif /* DEBUG */
 
 #ifdef VERBOSE_DEBUG
 #define VDEBUG	DBG
 #else
 #define VDEBUG(dev,fmt,args...) \
-	do { } while (0)
+	((void)0)
 #endif /* DEBUG */
 
 #define ERROR(dev,fmt,args...) \

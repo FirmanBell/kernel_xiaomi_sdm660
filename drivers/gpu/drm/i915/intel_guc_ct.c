@@ -27,7 +27,7 @@
 #ifdef CONFIG_DRM_I915_DEBUG_GUC
 #define CT_DEBUG_DRIVER(...)	DRM_DEBUG_DRIVER(__VA_ARGS__)
 #else
-#define CT_DEBUG_DRIVER(...)	do { } while (0)
+#define CT_DEBUG_DRIVER(...)	((void)0)
 #endif
 
 struct ct_request {

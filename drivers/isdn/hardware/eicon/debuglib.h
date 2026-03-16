@@ -103,30 +103,30 @@
 #define DL_TO_KERNEL    0x40000000
 
 #ifdef DIVA_NO_DEBUGLIB
-#define myDbgPrint_LOG(x...) do { } while (0);
-#define myDbgPrint_FTL(x...) do { } while (0);
-#define myDbgPrint_ERR(x...) do { } while (0);
-#define myDbgPrint_TRC(x...) do { } while (0);
-#define myDbgPrint_MXLOG(x...) do { } while (0);
-#define myDbgPrint_EVL(x...) do { } while (0);
-#define myDbgPrint_REG(x...) do { } while (0);
-#define myDbgPrint_MEM(x...) do { } while (0);
-#define myDbgPrint_SPL(x...) do { } while (0);
-#define myDbgPrint_IRP(x...) do { } while (0);
-#define myDbgPrint_TIM(x...) do { } while (0);
-#define myDbgPrint_BLK(x...) do { } while (0);
-#define myDbgPrint_TAPI(x...) do { } while (0);
-#define myDbgPrint_NDIS(x...) do { } while (0);
-#define myDbgPrint_CONN(x...) do { } while (0);
-#define myDbgPrint_STAT(x...) do { } while (0);
-#define myDbgPrint_SEND(x...) do { } while (0);
-#define myDbgPrint_RECV(x...) do { } while (0);
-#define myDbgPrint_PRV0(x...) do { } while (0);
-#define myDbgPrint_PRV1(x...) do { } while (0);
-#define myDbgPrint_PRV2(x...) do { } while (0);
-#define myDbgPrint_PRV3(x...) do { } while (0);
-#define DBG_TEST(func, args) do { } while (0);
-#define DBG_EVL_ID(args) do { } while (0);
+#define myDbgPrint_LOG(x...) ((void)0);
+#define myDbgPrint_FTL(x...) ((void)0);
+#define myDbgPrint_ERR(x...) ((void)0);
+#define myDbgPrint_TRC(x...) ((void)0);
+#define myDbgPrint_MXLOG(x...) ((void)0);
+#define myDbgPrint_EVL(x...) ((void)0);
+#define myDbgPrint_REG(x...) ((void)0);
+#define myDbgPrint_MEM(x...) ((void)0);
+#define myDbgPrint_SPL(x...) ((void)0);
+#define myDbgPrint_IRP(x...) ((void)0);
+#define myDbgPrint_TIM(x...) ((void)0);
+#define myDbgPrint_BLK(x...) ((void)0);
+#define myDbgPrint_TAPI(x...) ((void)0);
+#define myDbgPrint_NDIS(x...) ((void)0);
+#define myDbgPrint_CONN(x...) ((void)0);
+#define myDbgPrint_STAT(x...) ((void)0);
+#define myDbgPrint_SEND(x...) ((void)0);
+#define myDbgPrint_RECV(x...) ((void)0);
+#define myDbgPrint_PRV0(x...) ((void)0);
+#define myDbgPrint_PRV1(x...) ((void)0);
+#define myDbgPrint_PRV2(x...) ((void)0);
+#define myDbgPrint_PRV3(x...) ((void)0);
+#define DBG_TEST(func, args) ((void)0);
+#define DBG_EVL_ID(args) ((void)0);
 
 #else /* DIVA_NO_DEBUGLIB */
 /*
@@ -214,9 +214,9 @@ DBG_DECL(PRV3)
  * prototypes for debug register/deregister functions in "debuglib.c"
  */
 #ifdef DIVA_NO_DEBUGLIB
-#define DbgRegister(name, tag, mask) do { } while (0)
-#define DbgDeregister() do { } while (0)
-#define DbgSetLevel(mask) do { } while (0)
+#define DbgRegister(name, tag, mask) ((void)0)
+#define DbgDeregister() ((void)0)
+#define DbgSetLevel(mask) ((void)0)
 #else
 extern DIVA_DI_PRINTF dprintf;
 extern int  DbgRegister(char *drvName, char *drvTag, unsigned long dbgMask);

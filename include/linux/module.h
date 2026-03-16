@@ -601,8 +601,8 @@ static inline void module_put(struct module *module)
 static inline void __module_get(struct module *module)
 {
 }
-#define symbol_put(x) do { } while (0)
-#define symbol_put_addr(p) do { } while (0)
+#define symbol_put(x) ((void)0)
+#define symbol_put_addr(p) ((void)0)
 
 #endif /* CONFIG_MODULE_UNLOAD */
 
@@ -702,8 +702,8 @@ static inline bool within_module(unsigned long addr, const struct module *mod)
 
 /* Get/put a kernel symbol (calls should be symmetric) */
 #define symbol_get(x) ({ extern typeof(x) x __attribute__((weak)); &(x); })
-#define symbol_put(x) do { } while (0)
-#define symbol_put_addr(x) do { } while (0)
+#define symbol_put(x) ((void)0)
+#define symbol_put_addr(x) ((void)0)
 
 static inline void __module_get(struct module *module)
 {

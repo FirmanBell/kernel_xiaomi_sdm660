@@ -48,7 +48,7 @@
  */
 
 #define MTHCA_DECLARE_DOORBELL_LOCK(name)
-#define MTHCA_INIT_DOORBELL_LOCK(ptr)    do { } while (0)
+#define MTHCA_INIT_DOORBELL_LOCK(ptr)    ((void)0)
 #define MTHCA_GET_DOORBELL_LOCK(ptr)      (NULL)
 
 static inline void mthca_write64_raw(__be64 val, void __iomem *dest)

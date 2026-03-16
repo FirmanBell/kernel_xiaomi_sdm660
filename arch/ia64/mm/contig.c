@@ -137,7 +137,7 @@ setup_per_cpu_areas(void)
 	pcpu_free_alloc_info(ai);
 }
 #else
-#define alloc_per_cpu_data() do { } while (0)
+#define alloc_per_cpu_data() ((void)0)
 #endif /* CONFIG_SMP */
 
 /**

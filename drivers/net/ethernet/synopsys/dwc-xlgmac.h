@@ -654,7 +654,7 @@ int xlgmac_drv_remove(struct device *dev);
 #define XLGMAC_PR(fmt, args...) \
 	pr_alert("[%s,%d]:" fmt, __func__, __LINE__, ## args)
 #else
-#define XLGMAC_PR(x...)		do { } while (0)
+#define XLGMAC_PR(x...)		((void)0)
 #endif
 
 #endif /* __DWC_XLGMAC_H__ */

@@ -601,7 +601,7 @@ static void __init acpi_parse_and_init_cpus(void)
 		early_map_cpu_to_node(i, acpi_numa_get_nid(i));
 }
 #else
-#define acpi_parse_and_init_cpus(...)	do { } while (0)
+#define acpi_parse_and_init_cpus(...)	((void)0)
 #endif
 void (*__smp_cross_call)(const struct cpumask *, unsigned int);
 /* Dummy vendor field */

@@ -713,7 +713,7 @@ static inline void latency_notifier_init(struct notifier_block *n)
 
 #else /* CONFIG_SMP */
 
-#define latency_notifier_init(x) do { } while (0)
+#define latency_notifier_init(x) ((void)0)
 
 #endif /* CONFIG_SMP */
 

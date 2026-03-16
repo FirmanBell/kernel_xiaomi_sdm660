@@ -689,6 +689,6 @@ pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
 /*
  * No page table caches to initialise
  */
-#define pgtable_cache_init()	do { } while (0)
+#define pgtable_cache_init()	((void)0)
 
 #endif /* _ASM_PGTABLE_H */

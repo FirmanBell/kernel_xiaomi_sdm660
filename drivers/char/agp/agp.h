@@ -37,7 +37,7 @@
 #ifdef AGP_DEBUG
 #define DBG(x,y...) printk (KERN_DEBUG PFX "%s: " x "\n", __func__ , ## y)
 #else
-#define DBG(x,y...) do { } while (0)
+#define DBG(x,y...) ((void)0)
 #endif
 
 extern struct agp_bridge_data *agp_bridge;

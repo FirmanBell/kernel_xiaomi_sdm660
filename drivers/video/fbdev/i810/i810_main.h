@@ -57,7 +57,7 @@ static inline void flush_cache(void)
 	asm volatile ("wbinvd":::"memory");
 }
 #else
-#define flush_cache() do { } while(0)
+#define flush_cache() ((void)0)
 #endif 
 
 #ifdef CONFIG_FB_I810_GTF

@@ -34,13 +34,13 @@
 #ifdef DEBUG_MMU
 #define dprintk_mmu(a, ...) printk(KERN_INFO a, __VA_ARGS__)
 #else
-#define dprintk_mmu(a, ...) do { } while(0)
+#define dprintk_mmu(a, ...) ((void)0)
 #endif
 
 #ifdef DEBUG_SR
 #define dprintk_sr(a, ...) printk(KERN_INFO a, __VA_ARGS__)
 #else
-#define dprintk_sr(a, ...) do { } while(0)
+#define dprintk_sr(a, ...) ((void)0)
 #endif
 
 #if PAGE_SHIFT != 12

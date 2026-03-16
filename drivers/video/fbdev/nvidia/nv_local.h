@@ -108,7 +108,7 @@ do {                            \
 	a[3] = bitrev8(a[3]);   \
 } while(0)
 #else
-#define reverse_order(l) do { } while(0)
+#define reverse_order(l) ((void)0)
 #endif                          /* __LITTLE_ENDIAN */
 
 #endif				/* __NV_LOCAL_H__ */

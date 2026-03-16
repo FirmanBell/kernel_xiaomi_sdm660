@@ -161,13 +161,13 @@ struct at91_request {
 #ifdef VERBOSE_DEBUG
 #    define VDBG		DBG
 #else
-#    define VDBG(stuff...)	do{}while(0)
+#    define VDBG(stuff...)	((void)0)
 #endif
 
 #ifdef PACKET_TRACE
 #    define PACKET		VDBG
 #else
-#    define PACKET(stuff...)	do{}while(0)
+#    define PACKET(stuff...)	((void)0)
 #endif
 
 #define ERR(stuff...)		pr_err("udc: " stuff)

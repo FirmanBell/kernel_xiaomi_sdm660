@@ -64,7 +64,7 @@
 /* Assembly files may be compiled with -traditional .. */
 #ifndef __ASSEMBLY__
 #ifndef asmlinkage_protect
-# define asmlinkage_protect(n, ret, args...)	do { } while (0)
+# define asmlinkage_protect(n, ret, args...)	((void)0)
 #endif
 #endif
 

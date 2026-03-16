@@ -30,7 +30,7 @@ static inline int pgd_present(pgd_t pgd)	{ return 1; }
 static inline void pgd_clear(pgd_t *pgd)	{ }
 #define pud_ERROR(pud)				(pgd_ERROR((pud).pgd))
 
-#define pgd_populate(mm, pgd, pud)		do { } while (0)
+#define pgd_populate(mm, pgd, pud)		((void)0)
 /*
  * (puds are folded into pgds so this doesn't get actually called,
  * but the define is needed for a generic inline function.)
@@ -53,8 +53,8 @@ static inline pud_t *pud_offset(pgd_t *pgd, unsigned long address)
  * inside the pgd, so has no extra memory associated with it.
  */
 #define pud_alloc_one(mm, address)		NULL
-#define pud_free(mm, x)				do { } while (0)
-#define __pud_free_tlb(tlb, x, a)		do { } while (0)
+#define pud_free(mm, x)				((void)0)
+#define __pud_free_tlb(tlb, x, a)		((void)0)
 
 #undef  pud_addr_end
 #define pud_addr_end(addr, end)			(end)

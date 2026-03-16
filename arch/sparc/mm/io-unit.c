@@ -32,7 +32,7 @@
 #ifdef IOUNIT_DEBUG
 #define IOD(x) printk(x)
 #else
-#define IOD(x) do { } while (0)
+#define IOD(x) ((void)0)
 #endif
 
 #define IOPERM        (IOUPTE_CACHE | IOUPTE_WRITE | IOUPTE_VALID)

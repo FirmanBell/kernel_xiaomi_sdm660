@@ -135,9 +135,9 @@
 				++base[MAX_NUM_EXCP - 1];	\
 			} while (0)
 #else
-#define IPA_STATS_INC_CNT(x) do { } while (0)
+#define IPA_STATS_INC_CNT(x) ((void)0)
 #define IPA_STATS_DEC_CNT(x)
-#define IPA_STATS_EXCP_CNT(flags, base) do { } while (0)
+#define IPA_STATS_EXCP_CNT(flags, base) ((void)0)
 #endif
 
 #define IPA_TOS_EQ			BIT(0)

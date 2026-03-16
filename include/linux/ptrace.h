@@ -237,7 +237,7 @@ static inline void ptrace_release_task(struct task_struct *task)
  * other means (e.g., in user-level, by passing an extra argument to the
  * syscall handler, or something along those lines).
  */
-#define force_successful_syscall_return() do { } while (0)
+#define force_successful_syscall_return() ((void)0)
 #endif
 
 #ifndef is_syscall_success
@@ -375,7 +375,7 @@ static inline void user_single_step_siginfo(struct task_struct *tsk,
  * we only do it when the arch requires it for this particular stop, as
  * indicated by arch_ptrace_stop_needed().
  */
-#define arch_ptrace_stop(code, info)		do { } while (0)
+#define arch_ptrace_stop(code, info)		((void)0)
 #endif
 
 #ifndef current_pt_regs

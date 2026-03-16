@@ -57,7 +57,7 @@
 #define DEBUG_LOG_FRAME(imx21, etd, event) \
 	(etd)->event##_frame = readl((imx21)->regs + USBH_FRMNUB)
 #else
-#define DEBUG_LOG_FRAME(imx21, etd, event) do { } while (0)
+#define DEBUG_LOG_FRAME(imx21, etd, event) ((void)0)
 #endif
 
 static const char hcd_name[] = "imx21-hcd";

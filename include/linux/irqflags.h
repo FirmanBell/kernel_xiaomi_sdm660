@@ -69,8 +69,8 @@ do {						\
 	  } while (0)
 
 #else
-# define trace_hardirqs_on()		do { } while (0)
-# define trace_hardirqs_off()		do { } while (0)
+# define trace_hardirqs_on()		((void)0)
+# define trace_hardirqs_off()		((void)0)
 # define trace_hardirq_context(p)	0
 # define trace_softirq_context(p)	0
 # define trace_hardirqs_enabled(p)	0
@@ -89,8 +89,8 @@ do {						\
  extern void stop_critical_timings(void);
  extern void start_critical_timings(void);
 #else
-# define stop_critical_timings() do { } while (0)
-# define start_critical_timings() do { } while (0)
+# define stop_critical_timings() ((void)0)
+# define start_critical_timings() ((void)0)
 #endif
 
 /*

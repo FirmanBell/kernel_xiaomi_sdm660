@@ -101,8 +101,8 @@ extern int g_debuglevel; /* the variable is only declared,
         }                                                \
     } while (0)
 #else
-#  define RAWLOG(l, ...)   do { } while (0)    /* disabled */
-#  define DEBUGLOG(l, ...) do { } while (0)    /* disabled */
+#  define RAWLOG(l, ...)   ((void)0)    /* disabled */
+#  define DEBUGLOG(l, ...) ((void)0)    /* disabled */
 #endif
 
 #endif /* DEBUG_H_12987983217 */

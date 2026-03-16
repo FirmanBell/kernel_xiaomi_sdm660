@@ -40,7 +40,7 @@
 #ifdef STATS
 #define DO_STATS(X) do { X ; } while (0)
 #else
-#define DO_STATS(X) do { } while (0)
+#define DO_STATS(X) ((void)0)
 #endif
 
 /* ************************************************** */

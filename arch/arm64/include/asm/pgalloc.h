@@ -24,7 +24,7 @@
 #include <asm/cacheflush.h>
 #include <asm/tlbflush.h>
 
-#define check_pgt_cache()		do { } while (0)
+#define check_pgt_cache()		((void)0)
 
 #define PGALLOC_GFP	(GFP_KERNEL | __GFP_ZERO)
 #define PGD_SIZE	(PTRS_PER_PGD * sizeof(pgd_t))

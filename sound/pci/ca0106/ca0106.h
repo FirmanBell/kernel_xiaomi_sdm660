@@ -737,6 +737,6 @@ int snd_ca0106_spi_write(struct snd_ca0106 * emu,
 void snd_ca0106_mixer_suspend(struct snd_ca0106 *chip);
 void snd_ca0106_mixer_resume(struct snd_ca0106 *chip);
 #else
-#define snd_ca0106_mixer_suspend(chip)	do { } while (0)
-#define snd_ca0106_mixer_resume(chip)	do { } while (0)
+#define snd_ca0106_mixer_suspend(chip)	((void)0)
+#define snd_ca0106_mixer_resume(chip)	((void)0)
 #endif

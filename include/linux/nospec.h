@@ -10,7 +10,7 @@
 struct task_struct;
 
 #ifndef barrier_nospec
-# define barrier_nospec() do { } while (0)
+# define barrier_nospec() ((void)0)
 #endif
 
 /**

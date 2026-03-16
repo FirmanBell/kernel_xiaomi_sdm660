@@ -57,7 +57,7 @@
 #ifndef CONFIG_SPARC64
 #define ZSDELAY()		udelay(5)
 #define ZSDELAY_LONG()		udelay(20)
-#define ZS_WSYNC(channel)	do { } while (0)
+#define ZS_WSYNC(channel)	((void)0)
 #else
 #define ZSDELAY()
 #define ZSDELAY_LONG()

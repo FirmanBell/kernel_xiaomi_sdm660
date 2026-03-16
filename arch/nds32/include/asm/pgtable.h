@@ -197,8 +197,8 @@ extern void paging_init(void);
 #define pte_offset_map_nested(dir, address)  pte_offset_map(dir, address)
 #define pmd_page_kernel(pmd)	  	     ((unsigned long) __va(pmd_val(pmd) & PAGE_MASK))
 
-#define pte_unmap(pte)		do { } while (0)
-#define pte_unmap_nested(pte)	do { } while (0)
+#define pte_unmap(pte)		((void)0)
+#define pte_unmap_nested(pte)	((void)0)
 
 #define pmd_off_k(address)	pmd_offset(pgd_offset_k(address), address)
 
@@ -349,7 +349,7 @@ static inline pmd_t __mk_pmd(pte_t * ptep, unsigned long prot)
 #define pgd_none(pgd)		(0)
 #define pgd_bad(pgd)		(0)
 #define pgd_present(pgd)  	(1)
-#define pgd_clear(pgdp)		do { } while (0)
+#define pgd_clear(pgdp)		((void)0)
 
 #define page_pte_prot(page,prot)     	mk_pte(page, prot)
 #define page_pte(page)		        mk_pte(page, __pgprot(0))
@@ -402,7 +402,7 @@ extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
  * into virtual address `from'
  */
 
-#define pgtable_cache_init()       do { } while (0)
+#define pgtable_cache_init()       ((void)0)
 
 #endif /* !__ASSEMBLY__ */
 

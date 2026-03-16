@@ -29,7 +29,7 @@
 #ifdef DEBUG
 #define  DBG(x...) printk(x)
 #else
-#define  DBG(x...) do { } while (0)
+#define  DBG(x...) ((void)0)
 #endif
 
 /*

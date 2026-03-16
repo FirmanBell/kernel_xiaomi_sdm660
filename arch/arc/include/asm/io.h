@@ -19,8 +19,8 @@
 #define __iormb()		rmb()
 #define __iowmb()		wmb()
 #else
-#define __iormb()		do { } while (0)
-#define __iowmb()		do { } while (0)
+#define __iormb()		((void)0)
+#define __iowmb()		((void)0)
 #endif
 
 extern void __iomem *ioremap(phys_addr_t paddr, unsigned long size);

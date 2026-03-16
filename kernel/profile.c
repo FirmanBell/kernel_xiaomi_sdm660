@@ -387,8 +387,8 @@ static int profile_online_cpu(unsigned int cpu)
 }
 
 #else /* !CONFIG_SMP */
-#define profile_flip_buffers()		do { } while (0)
-#define profile_discard_flip_buffers()	do { } while (0)
+#define profile_flip_buffers()		((void)0)
+#define profile_discard_flip_buffers()	((void)0)
 
 static void do_profile_hits(int type, void *__pc, unsigned int nr_hits)
 {

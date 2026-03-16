@@ -84,7 +84,7 @@ extern void s3c_pm_save_uarts(void);
 extern void s3c_pm_restore_uarts(void);
 #else
 #define S3C_PMDBG(fmt...) pr_debug(fmt)
-#define s3c_pm_debug_init() do { } while (0)
+#define s3c_pm_debug_init() ((void)0)
 
 static inline void s3c_pm_save_uarts(void) { }
 static inline void s3c_pm_restore_uarts(void) { }
@@ -98,10 +98,10 @@ extern void s3c_pm_check_restore(void);
 extern void s3c_pm_check_cleanup(void);
 extern void s3c_pm_check_store(void);
 #else
-#define s3c_pm_check_prepare() do { } while (0)
-#define s3c_pm_check_restore() do { } while (0)
-#define s3c_pm_check_cleanup() do { } while (0)
-#define s3c_pm_check_store()   do { } while (0)
+#define s3c_pm_check_prepare() ((void)0)
+#define s3c_pm_check_restore() ((void)0)
+#define s3c_pm_check_cleanup() ((void)0)
+#define s3c_pm_check_store()   ((void)0)
 #endif
 
 #endif

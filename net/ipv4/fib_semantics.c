@@ -730,7 +730,7 @@ static int fib_get_nhs(struct fib_info *fi, struct rtnexthop *rtnh,
 	return -EINVAL;
 }
 
-#define fib_rebalance(fi) do { } while (0)
+#define fib_rebalance(fi) ((void)0)
 
 #endif /* CONFIG_IP_ROUTE_MULTIPATH */
 

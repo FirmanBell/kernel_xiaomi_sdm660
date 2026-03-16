@@ -74,12 +74,12 @@ static inline bool bc_prefetch_is_enabled(void)
 
 /* Not R4000 / R4400 / R4600 / R5000.  */
 
-#define bc_enable() do { } while (0)
-#define bc_disable() do { } while (0)
-#define bc_wback_inv(page, size) do { } while (0)
-#define bc_inv(page, size) do { } while (0)
-#define bc_prefetch_enable() do { } while (0)
-#define bc_prefetch_disable() do { } while (0)
+#define bc_enable() ((void)0)
+#define bc_disable() ((void)0)
+#define bc_wback_inv(page, size) ((void)0)
+#define bc_inv(page, size) ((void)0)
+#define bc_prefetch_enable() ((void)0)
+#define bc_prefetch_disable() ((void)0)
 #define bc_prefetch_is_enabled() 0
 
 #endif /* !defined(CONFIG_BOARD_SCACHE) */

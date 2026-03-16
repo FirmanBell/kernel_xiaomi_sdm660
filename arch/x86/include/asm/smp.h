@@ -185,7 +185,7 @@ extern int hard_smp_processor_id(void);
 #ifdef CONFIG_DEBUG_NMI_SELFTEST
 extern void nmi_selftest(void);
 #else
-#define nmi_selftest() do { } while (0)
+#define nmi_selftest() ((void)0)
 #endif
 
 #endif /* __ASSEMBLY__ */

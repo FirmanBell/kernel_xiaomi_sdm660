@@ -3781,11 +3781,11 @@ static inline void finish_lock_switch(struct rq *rq)
  */
 
 #ifndef prepare_arch_switch
-# define prepare_arch_switch(next)	do { } while (0)
+# define prepare_arch_switch(next)	((void)0)
 #endif
 
 #ifndef finish_arch_post_lock_switch
-# define finish_arch_post_lock_switch()	do { } while (0)
+# define finish_arch_post_lock_switch()	((void)0)
 #endif
 
 /**

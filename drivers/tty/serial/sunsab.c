@@ -962,7 +962,7 @@ static inline struct console *SUNSAB_CONSOLE(void)
 }
 #else
 #define SUNSAB_CONSOLE()	(NULL)
-#define sunsab_console_init()	do { } while (0)
+#define sunsab_console_init()	((void)0)
 #endif
 
 static int sunsab_init_one(struct uart_sunsab_port *up,

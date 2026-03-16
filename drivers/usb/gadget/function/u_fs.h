@@ -28,9 +28,9 @@
 	print_hex_dump_bytes(pr_fmt(prefix ": "), DUMP_PREFIX_NONE, ptr, len)
 #else
 #ifndef pr_vdebug
-#  define pr_vdebug(...)                 do { } while (0)
+#  define pr_vdebug(...)                 ((void)0)
 #endif /* pr_vdebug */
-#  define ffs_dump_mem(prefix, ptr, len) do { } while (0)
+#  define ffs_dump_mem(prefix, ptr, len) ((void)0)
 #endif /* VERBOSE_DEBUG */
 
 #define ENTER()    pr_vdebug("%s()\n", __func__)

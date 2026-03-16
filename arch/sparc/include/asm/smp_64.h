@@ -73,11 +73,11 @@ void __cpu_die(unsigned int cpu);
 #else
 
 #define hard_smp_processor_id()		0
-#define smp_fill_in_sib_core_maps() do { } while (0)
-#define smp_fetch_global_regs() do { } while (0)
-#define smp_fetch_global_pmu() do { } while (0)
-#define smp_init_cpu_poke() do { } while (0)
-#define scheduler_poke() do { } while (0)
+#define smp_fill_in_sib_core_maps() ((void)0)
+#define smp_fetch_global_regs() ((void)0)
+#define smp_fetch_global_pmu() ((void)0)
+#define smp_init_cpu_poke() ((void)0)
+#define scheduler_poke() ((void)0)
 
 #endif /* !(CONFIG_SMP) */
 

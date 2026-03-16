@@ -43,7 +43,7 @@
  */
 
 #define MLX5_DECLARE_DOORBELL_LOCK(name)
-#define MLX5_INIT_DOORBELL_LOCK(ptr)    do { } while (0)
+#define MLX5_INIT_DOORBELL_LOCK(ptr)    ((void)0)
 #define MLX5_GET_DOORBELL_LOCK(ptr)      (NULL)
 
 static inline void mlx5_write64(__be32 val[2], void __iomem *dest,

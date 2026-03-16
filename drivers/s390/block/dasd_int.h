@@ -837,11 +837,11 @@ static inline int dasd_eer_enabled(struct dasd_device *device)
 }
 #else
 #define dasd_eer_init()		(0)
-#define dasd_eer_exit()		do { } while (0)
+#define dasd_eer_exit()		((void)0)
 #define dasd_eer_enable(d)	(0)
-#define dasd_eer_disable(d)	do { } while (0)
-#define dasd_eer_write(d,c,i)	do { } while (0)
-#define dasd_eer_snss(d)	do { } while (0)
+#define dasd_eer_disable(d)	((void)0)
+#define dasd_eer_write(d,c,i)	((void)0)
+#define dasd_eer_snss(d)	((void)0)
 #define dasd_eer_enabled(d)	(0)
 #endif	/* CONFIG_DASD_ERR */
 

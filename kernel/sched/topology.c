@@ -132,7 +132,7 @@ static void sched_domain_debug(struct sched_domain *sd, int cpu)
 #else /* !CONFIG_SCHED_DEBUG */
 
 # define sched_debug_enabled 0
-# define sched_domain_debug(sd, cpu) do { } while (0)
+# define sched_domain_debug(sd, cpu) ((void)0)
 static inline bool sched_debug(void)
 {
 	return false;

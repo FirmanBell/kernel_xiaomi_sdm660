@@ -209,7 +209,7 @@ struct task_struct;
 struct mm_struct;
 
 /* Free all resources held by a thread. */
-#define release_thread(thread) do { } while(0)
+#define release_thread(thread) ((void)0)
 
 extern unsigned long get_wchan(struct task_struct *p);
 

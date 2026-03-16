@@ -519,8 +519,8 @@ xfs_bmap_validate_ret(
 }
 
 #else
-#define xfs_bmap_check_leaf_extents(cur, ip, whichfork)		do { } while (0)
-#define	xfs_bmap_validate_ret(bno,len,flags,mval,onmap,nmap)	do { } while (0)
+#define xfs_bmap_check_leaf_extents(cur, ip, whichfork)		((void)0)
+#define	xfs_bmap_validate_ret(bno,len,flags,mval,onmap,nmap)	((void)0)
 #endif /* DEBUG */
 
 /*

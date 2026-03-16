@@ -356,7 +356,7 @@ static inline void snd_printd(const char *format, ...) {}
 __printf(2, 3)
 static inline void _snd_printd(int level, const char *format, ...) {}
 
-#define snd_BUG()			do { } while (0)
+#define snd_BUG()			((void)0)
 
 #define snd_BUG_ON(condition) ({ \
 	int __ret_warn_on = !!(condition); \

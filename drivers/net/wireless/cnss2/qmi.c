@@ -43,7 +43,7 @@ void cnss_ignore_qmi_failure(bool ignore)
 	ignore_qmi_failure = ignore;
 }
 #else
-#define CNSS_QMI_ASSERT() do { } while (0)
+#define CNSS_QMI_ASSERT() ((void)0)
 void cnss_ignore_qmi_failure(bool ignore) { }
 #endif
 

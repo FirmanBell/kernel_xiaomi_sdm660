@@ -275,7 +275,7 @@ static unsigned char tw_sense_table[][4] =
 #ifdef TW_DEBUG
 #define dprintk(msg...) printk(msg)
 #else
-#define dprintk(msg...) do { } while(0)
+#define dprintk(msg...) ((void)0)
 #endif
 
 #pragma pack(1)

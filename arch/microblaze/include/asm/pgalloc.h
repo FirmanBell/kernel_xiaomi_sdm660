@@ -182,7 +182,7 @@ static inline void pte_free(struct mm_struct *mm, struct page *ptepage)
  * the pgd will always be present..
  */
 #define pmd_alloc_one(mm, address)	({ BUG(); ((pmd_t *)2); })
-#define pmd_free(mm, x)			do { } while (0)
+#define pmd_free(mm, x)			((void)0)
 #define __pmd_free_tlb(tlb, x, addr)	pmd_free((tlb)->mm, x)
 #define pgd_populate(mm, pmd, pte)	BUG()
 
@@ -190,6 +190,6 @@ extern int do_check_pgt_cache(int, int);
 
 #endif /* CONFIG_MMU */
 
-#define check_pgt_cache()		do { } while (0)
+#define check_pgt_cache()		((void)0)
 
 #endif /* _ASM_MICROBLAZE_PGALLOC_H */

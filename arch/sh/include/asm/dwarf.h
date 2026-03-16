@@ -412,7 +412,7 @@ static inline void dwarf_unwinder_init(void)
 }
 
 #define module_dwarf_finalize(hdr, sechdrs, me)	(0)
-#define module_dwarf_cleanup(mod)		do { } while (0)
+#define module_dwarf_cleanup(mod)		((void)0)
 
 #endif
 

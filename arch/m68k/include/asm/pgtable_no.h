@@ -48,7 +48,7 @@ extern void *empty_zero_page;
 /*
  * No page table caches to initialise.
  */
-#define pgtable_cache_init()	do { } while (0)
+#define pgtable_cache_init()	((void)0)
 
 /*
  * All 32bit addresses are effectively valid for vmalloc...
@@ -60,6 +60,6 @@ extern void *empty_zero_page;
 #define	KMAP_END	0xffffffff
 
 
-#define check_pgt_cache()	do { } while (0)
+#define check_pgt_cache()	((void)0)
 
 #endif /* _M68KNOMMU_PGTABLE_H */

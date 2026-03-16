@@ -1902,7 +1902,7 @@ static DEVICE_ATTR_RO(queues);
 #else
 
 #define device_create_file(a, b)	(0)
-#define device_remove_file(a, b)	do { } while (0)
+#define device_remove_file(a, b)	((void)0)
 
 #endif
 

@@ -994,7 +994,7 @@ static inline unsigned long pte_index(unsigned long address)
 	(((pte_t *) pmd_page_vaddr(*(dir))) + pte_index(addr))
 
 #define pte_offset_map(dir,addr)	pte_offset_kernel((dir), (addr))
-#define pte_unmap(pte)			do { } while(0)
+#define pte_unmap(pte)			((void)0)
 
 /* to find an entry in a kernel page-table-directory */
 /* This now only contains the vmalloc pages */

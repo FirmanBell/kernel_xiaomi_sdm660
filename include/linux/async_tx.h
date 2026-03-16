@@ -119,12 +119,12 @@ __async_tx_find_channel(struct async_submit_ctl *submit,
 #else
 static inline void async_tx_issue_pending_all(void)
 {
-	do { } while (0);
+	((void)0);
 }
 
 static inline void async_tx_issue_pending(struct dma_async_tx_descriptor *tx)
 {
-	do { } while (0);
+	((void)0);
 }
 
 static inline struct dma_chan *

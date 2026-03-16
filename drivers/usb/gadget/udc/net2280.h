@@ -306,9 +306,9 @@ static inline void net2280_led_shutdown(struct net2280 *dev)
 
 #else
 
-#define net2280_led_init(dev)		do { } while (0)
-#define net2280_led_speed(dev, speed)	do { } while (0)
-#define net2280_led_shutdown(dev)	do { } while (0)
+#define net2280_led_init(dev)		((void)0)
+#define net2280_led_speed(dev, speed)	((void)0)
+#define net2280_led_shutdown(dev)	((void)0)
 
 #endif
 

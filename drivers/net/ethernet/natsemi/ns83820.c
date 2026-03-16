@@ -93,7 +93,7 @@
  * Reports of success or failure would be greatly appreciated.
  */
 //#define dprintk		printk
-#define dprintk(x...)		do { } while (0)
+#define dprintk(x...)		((void)0)
 
 #include <linux/module.h>
 #include <linux/moduleparam.h>

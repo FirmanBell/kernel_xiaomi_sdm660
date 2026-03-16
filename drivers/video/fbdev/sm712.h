@@ -106,7 +106,7 @@ struct modeinit {
 #define pal_rgb(r, g, b, val)	val
 #define big_addr		0
 #define mmio_addr		0x00c00000
-#define seqw17()		do { } while (0)
-#define big_pixel_depth(p, d)	do { } while (0)
+#define seqw17()		((void)0)
+#define big_pixel_depth(p, d)	((void)0)
 #define big_swap(p)		p
 #endif

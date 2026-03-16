@@ -33,13 +33,13 @@
 #ifdef DEBUG_MMU
 #define dprintk(X...) printk(KERN_INFO X)
 #else
-#define dprintk(X...) do { } while(0)
+#define dprintk(X...) ((void)0)
 #endif
 
 #ifdef DEBUG_MMU_PTE
 #define dprintk_pte(X...) printk(KERN_INFO X)
 #else
-#define dprintk_pte(X...) do { } while(0)
+#define dprintk_pte(X...) ((void)0)
 #endif
 
 #define PTEG_FLAG_ACCESSED	0x00000100

@@ -50,7 +50,7 @@
 	} while (0)
 #else
 #define resize_hpt_debug(resize, ...)				\
-	do { } while (0)
+	((void)0)
 #endif
 
 static long kvmppc_virtmode_do_h_enter(struct kvm *kvm, unsigned long flags,

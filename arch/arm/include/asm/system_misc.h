@@ -27,7 +27,7 @@ static inline void harden_branch_predictor(void)
 		fn();
 }
 #else
-#define harden_branch_predictor() do { } while (0)
+#define harden_branch_predictor() ((void)0)
 #endif
 
 #define UDBG_UNDEFINED	(1 << 0)

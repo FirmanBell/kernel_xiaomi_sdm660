@@ -770,7 +770,7 @@ struct ibmvfc_host {
 #define ibmvfc_remove_trace_file(kobj, attr) sysfs_remove_bin_file(kobj, attr)
 #else
 #define ibmvfc_create_trace_file(kobj, attr) 0
-#define ibmvfc_remove_trace_file(kobj, attr) do { } while (0)
+#define ibmvfc_remove_trace_file(kobj, attr) ((void)0)
 #endif
 
 #endif

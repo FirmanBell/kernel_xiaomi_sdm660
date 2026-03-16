@@ -50,10 +50,10 @@ do {							\
 } while (0)
 #else
 #define virt_addr_uncached(kaddr)	(0)
-#define uncached_init()			do { } while (0)
+#define uncached_init()			((void)0)
 #define uncached_resize(size)		BUG()
-#define jump_to_uncached()		do { } while (0)
-#define back_to_cached()		do { } while (0)
+#define jump_to_uncached()		((void)0)
+#define back_to_cached()		((void)0)
 #endif
 
 #endif /* __ASM_SH_UNCACHED_H */

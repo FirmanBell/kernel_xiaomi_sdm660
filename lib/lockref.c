@@ -29,7 +29,7 @@
 
 #else
 
-#define CMPXCHG_LOOP(CODE, SUCCESS) do { } while (0)
+#define CMPXCHG_LOOP(CODE, SUCCESS) ((void)0)
 
 #endif
 

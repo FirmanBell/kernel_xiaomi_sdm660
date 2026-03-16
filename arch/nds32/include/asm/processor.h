@@ -77,10 +77,10 @@ struct thread_struct {
 struct task_struct;
 
 /* Free all resources held by a thread. */
-#define release_thread(thread) do { } while(0)
+#define release_thread(thread) ((void)0)
 
 /* Prepare to copy thread state - unlazy all lazy status */
-#define prepare_to_copy(tsk)	do { } while (0)
+#define prepare_to_copy(tsk)	((void)0)
 
 unsigned long get_wchan(struct task_struct *p);
 

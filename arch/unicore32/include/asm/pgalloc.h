@@ -17,7 +17,7 @@
 #include <asm/cacheflush.h>
 #include <asm/tlbflush.h>
 
-#define check_pgt_cache()		do { } while (0)
+#define check_pgt_cache()		((void)0)
 
 #define _PAGE_USER_TABLE	(PMD_TYPE_TABLE | PMD_PRESENT)
 #define _PAGE_KERNEL_TABLE	(PMD_TYPE_TABLE | PMD_PRESENT)

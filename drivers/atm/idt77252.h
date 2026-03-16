@@ -77,17 +77,17 @@
 
 #else
 
-#define CPRINTK(args...)	do { } while(0)
-#define OPRINTK(args...)	do { } while(0)
-#define IPRINTK(args...)	do { } while(0)
-#define INTPRINTK(args...)	do { } while(0)
-#define DIPRINTK(args...)	do { } while(0)
-#define TXPRINTK(args...)	do { } while(0)
-#define RXPRINTK(args...)	do { } while(0)
-#define XPRINTK(args...)	do { } while(0)
-#define DPRINTK(args...)	do { } while(0)
-#define NPRINTK(args...)	do { } while(0)
-#define RPRINTK(args...)	do { } while(0)
+#define CPRINTK(args...)	((void)0)
+#define OPRINTK(args...)	((void)0)
+#define IPRINTK(args...)	((void)0)
+#define INTPRINTK(args...)	((void)0)
+#define DIPRINTK(args...)	((void)0)
+#define TXPRINTK(args...)	((void)0)
+#define RXPRINTK(args...)	((void)0)
+#define XPRINTK(args...)	((void)0)
+#define DPRINTK(args...)	((void)0)
+#define NPRINTK(args...)	((void)0)
+#define RPRINTK(args...)	((void)0)
 
 #endif
 

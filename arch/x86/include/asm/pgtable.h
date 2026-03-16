@@ -36,8 +36,8 @@ void ptdump_walk_user_pgd_level_checkwx(void);
 #define debug_checkwx()		ptdump_walk_pgd_level_checkwx()
 #define debug_checkwx_user()	ptdump_walk_user_pgd_level_checkwx()
 #else
-#define debug_checkwx()		do { } while (0)
-#define debug_checkwx_user()	do { } while (0)
+#define debug_checkwx()		((void)0)
+#define debug_checkwx_user()	((void)0)
 #endif
 
 /*
@@ -111,7 +111,7 @@ extern pmdval_t early_pmd_flags;
 #define pte_val(x)	native_pte_val(x)
 #define __pte(x)	native_make_pte(x)
 
-#define arch_end_context_switch(prev)	do {} while(0)
+#define arch_end_context_switch(prev)	((void)0)
 
 #endif	/* CONFIG_PARAVIRT */
 
@@ -1135,7 +1135,7 @@ static inline void ptep_set_wrprotect(struct mm_struct *mm,
 	clear_bit(_PAGE_BIT_RW, (unsigned long *)&ptep->pte);
 }
 
-#define flush_tlb_fix_spurious_fault(vma, address) do { } while (0)
+#define flush_tlb_fix_spurious_fault(vma, address) ((void)0)
 
 #define mk_pmd(page, pgprot)   pfn_pmd(page_to_pfn(page), (pgprot))
 

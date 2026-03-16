@@ -58,8 +58,8 @@ extern void irq_enter(void);
 extern void irq_exit(void);
 
 #ifndef arch_nmi_enter
-#define arch_nmi_enter()	do { } while (0)
-#define arch_nmi_exit()		do { } while (0)
+#define arch_nmi_enter()	((void)0)
+#define arch_nmi_exit()		((void)0)
 #endif
 
 #ifdef CONFIG_TINY_RCU

@@ -647,7 +647,7 @@ static inline u64 acpi_arch_get_root_pointer(void)
 #define acpi_disabled 1
 
 #define ACPI_COMPANION(dev)		(NULL)
-#define ACPI_COMPANION_SET(dev, adev)	do { } while (0)
+#define ACPI_COMPANION_SET(dev, adev)	((void)0)
 #define ACPI_HANDLE(dev)		(NULL)
 #define ACPI_HANDLE_FWNODE(fwnode)	(NULL)
 #define ACPI_DEVICE_CLASS(_cls, _msk)	.cls = (0), .cls_msk = (0),
@@ -905,7 +905,7 @@ static inline void arch_reserve_mem_area(acpi_physical_address addr,
 }
 #endif /* CONFIG_X86 */
 #else
-#define acpi_os_set_prepare_sleep(func, pm1a_ctrl, pm1b_ctrl) do { } while (0)
+#define acpi_os_set_prepare_sleep(func, pm1a_ctrl, pm1b_ctrl) ((void)0)
 #endif
 
 #if defined(CONFIG_ACPI) && defined(CONFIG_PM)

@@ -232,9 +232,9 @@ dump_state(struct pxa25x_udc *dev)
 
 #else
 
-#define	dump_udccr(x)	do{}while(0)
-#define	dump_udccs0(x)	do{}while(0)
-#define	dump_state(x)	do{}while(0)
+#define	dump_udccr(x)	((void)0)
+#define	dump_udccs0(x)	((void)0)
+#define	dump_state(x)	((void)0)
 
 #define UDC_DEBUG ((unsigned)0)
 

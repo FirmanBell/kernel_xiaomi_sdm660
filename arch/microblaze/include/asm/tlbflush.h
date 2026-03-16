@@ -37,9 +37,9 @@ static inline void local_flush_tlb_range(struct vm_area_struct *vma,
 		unsigned long start, unsigned long end)
 	{ __tlbia(); }
 
-#define flush_tlb_kernel_range(start, end)	do { } while (0)
+#define flush_tlb_kernel_range(start, end)	((void)0)
 
-#define update_mmu_cache(vma, addr, ptep)	do { } while (0)
+#define update_mmu_cache(vma, addr, ptep)	((void)0)
 
 #define flush_tlb_all local_flush_tlb_all
 #define flush_tlb_mm local_flush_tlb_mm

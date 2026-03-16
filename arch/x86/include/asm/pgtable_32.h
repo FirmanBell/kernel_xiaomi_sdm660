@@ -55,7 +55,7 @@ void sync_initial_page_table(void);
 #else
 #define pte_offset_map(dir, address)					\
 	((pte_t *)page_address(pmd_page(*(dir))) + pte_index((address)))
-#define pte_unmap(pte) do { } while (0)
+#define pte_unmap(pte) ((void)0)
 #endif
 
 /* Clear a kernel PTE and flush it from the TLB */

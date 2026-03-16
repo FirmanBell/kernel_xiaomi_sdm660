@@ -218,6 +218,6 @@ void ibmasmfs_add_sp(struct service_processor *sp);
 void ibmasm_register_uart(struct service_processor *sp);
 void ibmasm_unregister_uart(struct service_processor *sp);
 #else
-#define ibmasm_register_uart(sp)	do { } while(0)
-#define ibmasm_unregister_uart(sp)	do { } while(0)
+#define ibmasm_register_uart(sp)	((void)0)
+#define ibmasm_unregister_uart(sp)	((void)0)
 #endif

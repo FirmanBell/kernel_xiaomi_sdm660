@@ -27,7 +27,7 @@ struct arch_specific_insn {
 	kprobe_opcode_t t1_opcode, t2_opcode;
 };
 
-#define flush_insn_slot(p)  do {  } while (0)
+#define flush_insn_slot(p)  ((void)0)
 
 #define kretprobe_blacklist_size    0
 

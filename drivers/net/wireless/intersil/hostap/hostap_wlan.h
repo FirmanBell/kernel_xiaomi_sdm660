@@ -1041,7 +1041,7 @@ enum {
 };
 void prism2_callback(local_info_t *local, int event);
 #else /* PRISM2_CALLBACK */
-#define prism2_callback(d, e) do { } while (0)
+#define prism2_callback(d, e) ((void)0)
 #endif /* PRISM2_CALLBACK */
 
 #endif /* __KERNEL__ */

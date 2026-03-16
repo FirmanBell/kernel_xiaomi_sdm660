@@ -215,7 +215,7 @@ struct floppy_state {
 #ifdef DEBUG
 #define swim3_dbg(fmt, arg...)	dev_dbg(&fs->mdev->ofdev.dev, "[fd%d] " fmt, fs->index, arg)
 #else
-#define swim3_dbg(fmt, arg...)	do { } while(0)
+#define swim3_dbg(fmt, arg...)	((void)0)
 #endif
 
 static struct floppy_state floppy_states[MAX_FLOPPIES];

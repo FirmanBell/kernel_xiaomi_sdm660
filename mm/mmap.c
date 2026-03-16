@@ -426,8 +426,8 @@ static void validate_mm(struct mm_struct *mm)
 	VM_BUG_ON_MM(bug, mm);
 }
 #else
-#define validate_mm_rb(root, ignore) do { } while (0)
-#define validate_mm(mm) do { } while (0)
+#define validate_mm_rb(root, ignore) ((void)0)
+#define validate_mm(mm) ((void)0)
 #endif
 
 RB_DECLARE_CALLBACKS_MAX(static, vma_gap_callbacks,

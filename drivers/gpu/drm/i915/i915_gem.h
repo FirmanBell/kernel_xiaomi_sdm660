@@ -56,7 +56,7 @@ struct drm_i915_private;
 #define GEM_WARN_ON(expr) (BUILD_BUG_ON_INVALID(expr), 0)
 
 #define GEM_DEBUG_DECL(var)
-#define GEM_DEBUG_EXEC(expr) do { } while (0)
+#define GEM_DEBUG_EXEC(expr) ((void)0)
 #define GEM_DEBUG_BUG_ON(expr)
 #endif
 
@@ -66,8 +66,8 @@ struct drm_i915_private;
 #define GEM_TRACE_DUMP_ON(expr) \
 	do { if (expr) ftrace_dump(DUMP_ALL); } while (0)
 #else
-#define GEM_TRACE(...) do { } while (0)
-#define GEM_TRACE_DUMP() do { } while (0)
+#define GEM_TRACE(...) ((void)0)
+#define GEM_TRACE_DUMP() ((void)0)
 #define GEM_TRACE_DUMP_ON(expr) BUILD_BUG_ON_INVALID(expr)
 #endif
 

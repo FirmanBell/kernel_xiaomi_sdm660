@@ -71,7 +71,7 @@ void __rcu_read_unlock(void);
 #else /* #ifdef CONFIG_PREEMPT_RCU */
 
 #ifdef CONFIG_TINY_RCU
-#define rcu_read_unlock_strict() do { } while (0)
+#define rcu_read_unlock_strict() ((void)0)
 #else
 void rcu_read_unlock_strict(void);
 #endif
@@ -178,7 +178,7 @@ static inline void rcu_nocb_flush_deferred_wakeup(void) { }
 void call_rcu_tasks(struct rcu_head *head, rcu_callback_t func);
 void synchronize_rcu_tasks(void);
 # else
-# define rcu_tasks_classic_qs(t, preempt) do { } while (0)
+# define rcu_tasks_classic_qs(t, preempt) ((void)0)
 # define call_rcu_tasks call_rcu
 # define synchronize_rcu_tasks synchronize_rcu
 # endif
@@ -193,7 +193,7 @@ void synchronize_rcu_tasks(void);
 		}							\
 	} while (0)
 # else
-# define rcu_tasks_trace_qs(t) do { } while (0)
+# define rcu_tasks_trace_qs(t) ((void)0)
 # endif
 
 #define rcu_tasks_qs(t, preempt)					\
@@ -340,8 +340,8 @@ int rcu_read_lock_any_held(void);
 
 #else /* #ifdef CONFIG_DEBUG_LOCK_ALLOC */
 
-# define rcu_lock_acquire(a)		do { } while (0)
-# define rcu_lock_release(a)		do { } while (0)
+# define rcu_lock_acquire(a)		((void)0)
+# define rcu_lock_release(a)		((void)0)
 
 static inline int rcu_read_lock_held(void)
 {
@@ -409,8 +409,8 @@ static inline void rcu_preempt_sleep_check(void) { }
 
 #else /* #ifdef CONFIG_PROVE_RCU */
 
-#define RCU_LOCKDEP_WARN(c, s) do { } while (0)
-#define rcu_sleep_check() do { } while (0)
+#define RCU_LOCKDEP_WARN(c, s) ((void)0)
+#define rcu_sleep_check() ((void)0)
 
 #endif /* #else #ifdef CONFIG_PROVE_RCU */
 
@@ -992,7 +992,7 @@ do {									\
 #ifdef CONFIG_ARCH_WEAK_RELEASE_ACQUIRE
 #define smp_mb__after_unlock_lock()	smp_mb()  /* Full ordering for lock. */
 #else /* #ifdef CONFIG_ARCH_WEAK_RELEASE_ACQUIRE */
-#define smp_mb__after_unlock_lock()	do { } while (0)
+#define smp_mb__after_unlock_lock()	((void)0)
 #endif /* #else #ifdef CONFIG_ARCH_WEAK_RELEASE_ACQUIRE */
 
 

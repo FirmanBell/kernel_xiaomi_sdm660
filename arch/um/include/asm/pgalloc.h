@@ -55,7 +55,7 @@ static inline void pmd_free(struct mm_struct *mm, pmd_t *pmd)
 #define __pmd_free_tlb(tlb,x, address)   tlb_remove_page((tlb),virt_to_page(x))
 #endif
 
-#define check_pgt_cache()	do { } while (0)
+#define check_pgt_cache()	((void)0)
 
 #endif
 

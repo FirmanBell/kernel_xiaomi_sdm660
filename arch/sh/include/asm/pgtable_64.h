@@ -84,7 +84,7 @@ static __inline__ void set_pte(pte_t *pteptr, pte_t pteval)
 		((pte_t *) ((pmd_val(*(dir))) & PAGE_MASK) + pte_index((addr)))
 
 #define pte_offset_map(dir,addr)	pte_offset_kernel(dir, addr)
-#define pte_unmap(pte)		do { } while (0)
+#define pte_unmap(pte)		((void)0)
 
 #ifndef __ASSEMBLY__
 /*

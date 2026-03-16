@@ -40,7 +40,7 @@
 		if (!(expr)) EPDBG(ep, "CHECK:" fmt);		\
 	} while(0)
 #else
-#define CHECK(ep, expr, fmt...)	do { } while(0)
+#define CHECK(ep, expr, fmt...)	((void)0)
 #endif
 
 static void ast_vhub_epn_kick(struct ast_vhub_ep *ep, struct ast_vhub_req *req)

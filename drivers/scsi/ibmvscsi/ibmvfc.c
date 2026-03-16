@@ -224,8 +224,8 @@ static void ibmvfc_trc_end(struct ibmvfc_event *evt)
 }
 
 #else
-#define ibmvfc_trc_start(evt) do { } while (0)
-#define ibmvfc_trc_end(evt) do { } while (0)
+#define ibmvfc_trc_start(evt) ((void)0)
+#define ibmvfc_trc_end(evt) ((void)0)
 #endif
 
 /**

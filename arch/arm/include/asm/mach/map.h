@@ -60,8 +60,8 @@ extern const struct mem_type *get_mem_type(unsigned int type);
 extern int ioremap_page(unsigned long virt, unsigned long phys,
 			const struct mem_type *mtype);
 #else
-#define iotable_init(map,num)	do { } while (0)
-#define vm_reserve_area_early(a,s,c)	do { } while (0)
+#define iotable_init(map,num)	((void)0)
+#define vm_reserve_area_early(a,s,c)	((void)0)
 #endif
 
 #endif

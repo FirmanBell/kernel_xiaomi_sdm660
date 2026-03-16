@@ -66,7 +66,7 @@ static void free_workspaces(void)
 }
 #else
 #define alloc_workspaces() (0)
-#define free_workspaces() do { } while(0)
+#define free_workspaces() ((void)0)
 #endif /* __KERNEL__ */
 
 static int jffs2_zlib_compress(unsigned char *data_in,

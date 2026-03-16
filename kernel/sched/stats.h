@@ -45,12 +45,12 @@ static inline void rq_sched_info_arrive  (struct rq *rq, unsigned long long delt
 static inline void rq_sched_info_dequeued(struct rq *rq, unsigned long long delta) { }
 static inline void rq_sched_info_depart  (struct rq *rq, unsigned long long delta) { }
 # define   schedstat_enabled()		0
-# define __schedstat_inc(var)		do { } while (0)
-# define   schedstat_inc(var)		do { } while (0)
-# define __schedstat_add(var, amt)	do { } while (0)
-# define   schedstat_add(var, amt)	do { } while (0)
-# define __schedstat_set(var, val)	do { } while (0)
-# define   schedstat_set(var, val)	do { } while (0)
+# define __schedstat_inc(var)		((void)0)
+# define   schedstat_inc(var)		((void)0)
+# define __schedstat_add(var, amt)	((void)0)
+# define   schedstat_add(var, amt)	((void)0)
+# define __schedstat_set(var, val)	((void)0)
+# define   schedstat_set(var, val)	((void)0)
 # define   schedstat_val(var)		0
 # define   schedstat_val_or_zero(var)	0
 #endif /* CONFIG_SCHEDSTATS */
@@ -244,10 +244,10 @@ sched_info_switch(struct rq *rq, struct task_struct *prev, struct task_struct *n
 }
 
 #else /* !CONFIG_SCHED_INFO: */
-# define sched_info_queued(rq, t)	do { } while (0)
-# define sched_info_reset_dequeued(t)	do { } while (0)
-# define sched_info_dequeued(rq, t)	do { } while (0)
-# define sched_info_depart(rq, t)	do { } while (0)
-# define sched_info_arrive(rq, next)	do { } while (0)
-# define sched_info_switch(rq, t, next)	do { } while (0)
+# define sched_info_queued(rq, t)	((void)0)
+# define sched_info_reset_dequeued(t)	((void)0)
+# define sched_info_dequeued(rq, t)	((void)0)
+# define sched_info_depart(rq, t)	((void)0)
+# define sched_info_arrive(rq, next)	((void)0)
+# define sched_info_switch(rq, t, next)	((void)0)
 #endif /* CONFIG_SCHED_INFO */

@@ -159,7 +159,7 @@ int test_mode_pin(int pin);
 #ifdef CONFIG_VSYSCALL
 int vsyscall_init(void);
 #else
-#define vsyscall_init() do { } while (0)
+#define vsyscall_init() ((void)0)
 #endif
 
 /*

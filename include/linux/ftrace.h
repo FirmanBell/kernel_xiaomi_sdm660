@@ -685,12 +685,12 @@ static inline unsigned long ftrace_location(unsigned long ip)
  * functions may still be called. Use a macro instead of inline.
  */
 #define ftrace_regex_open(ops, flag, inod, file) ({ -ENODEV; })
-#define ftrace_set_early_filter(ops, buf, enable) do { } while (0)
+#define ftrace_set_early_filter(ops, buf, enable) ((void)0)
 #define ftrace_set_filter_ip(ops, ip, remove, reset) ({ -ENODEV; })
 #define ftrace_set_filter(ops, buf, len, reset) ({ -ENODEV; })
 #define ftrace_set_notrace(ops, buf, len, reset) ({ -ENODEV; })
-#define ftrace_free_filter(ops) do { } while (0)
-#define ftrace_ops_set_global_filter(ops) do { } while (0)
+#define ftrace_free_filter(ops) ((void)0)
+#define ftrace_ops_set_global_filter(ops) ((void)0)
 
 static inline ssize_t ftrace_filter_write(struct file *file, const char __user *ubuf,
 			    size_t cnt, loff_t *ppos) { return -ENODEV; }
@@ -780,8 +780,8 @@ static __always_inline unsigned long get_lock_parent_ip(void)
  * Use defines instead of static inlines because some arches will make code out
  * of the CALLER_ADDR, when we really want these to be a real nop.
  */
-# define trace_preempt_on(a0, a1) do { } while (0)
-# define trace_preempt_off(a0, a1) do { } while (0)
+# define trace_preempt_on(a0, a1) ((void)0)
+# define trace_preempt_off(a0, a1) ((void)0)
 #endif
 
 #ifdef CONFIG_FTRACE_MCOUNT_RECORD

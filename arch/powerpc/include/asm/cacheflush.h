@@ -16,13 +16,13 @@
  * No cache flushing is required when address mappings are changed,
  * because the caches on PowerPCs are physically addressed.
  */
-#define flush_cache_all()			do { } while (0)
-#define flush_cache_mm(mm)			do { } while (0)
-#define flush_cache_dup_mm(mm)			do { } while (0)
-#define flush_cache_range(vma, start, end)	do { } while (0)
-#define flush_cache_page(vma, vmaddr, pfn)	do { } while (0)
-#define flush_icache_page(vma, page)		do { } while (0)
-#define flush_cache_vunmap(start, end)		do { } while (0)
+#define flush_cache_all()			((void)0)
+#define flush_cache_mm(mm)			((void)0)
+#define flush_cache_dup_mm(mm)			((void)0)
+#define flush_cache_range(vma, start, end)	((void)0)
+#define flush_cache_page(vma, vmaddr, pfn)	((void)0)
+#define flush_icache_page(vma, page)		((void)0)
+#define flush_cache_vunmap(start, end)		((void)0)
 
 #ifdef CONFIG_PPC_BOOK3S_64
 /*
@@ -42,8 +42,8 @@ static inline void flush_cache_vmap(unsigned long start, unsigned long end) { }
 
 #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
 extern void flush_dcache_page(struct page *page);
-#define flush_dcache_mmap_lock(mapping)		do { } while (0)
-#define flush_dcache_mmap_unlock(mapping)	do { } while (0)
+#define flush_dcache_mmap_lock(mapping)		((void)0)
+#define flush_dcache_mmap_unlock(mapping)	((void)0)
 
 extern void flush_icache_range(unsigned long, unsigned long);
 extern void flush_icache_user_range(struct vm_area_struct *vma,
