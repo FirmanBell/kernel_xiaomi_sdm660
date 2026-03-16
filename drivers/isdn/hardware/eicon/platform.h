@@ -109,15 +109,15 @@
 #define DIVA_OS_MEM_ATTACH_CONFIG(a)	((a)->Config)
 #define DIVA_OS_MEM_ATTACH_CONTROL(a)	((a)->Control)
 
-#define DIVA_OS_MEM_DETACH_RAM(a, x)	do { } while (0)
-#define DIVA_OS_MEM_DETACH_PORT(a, x)	do { } while (0)
-#define DIVA_OS_MEM_DETACH_PROM(a, x)	do { } while (0)
-#define DIVA_OS_MEM_DETACH_CTLREG(a, x)	do { } while (0)
-#define DIVA_OS_MEM_DETACH_RESET(a, x)	do { } while (0)
-#define DIVA_OS_MEM_DETACH_CFG(a, x)	do { } while (0)
-#define DIVA_OS_MEM_DETACH_ADDRESS(a, x)	do { } while (0)
-#define DIVA_OS_MEM_DETACH_CONFIG(a, x)	do { } while (0)
-#define DIVA_OS_MEM_DETACH_CONTROL(a, x)	do { } while (0)
+#define DIVA_OS_MEM_DETACH_RAM(a, x)	((void)0)
+#define DIVA_OS_MEM_DETACH_PORT(a, x)	((void)0)
+#define DIVA_OS_MEM_DETACH_PROM(a, x)	((void)0)
+#define DIVA_OS_MEM_DETACH_CTLREG(a, x)	((void)0)
+#define DIVA_OS_MEM_DETACH_RESET(a, x)	((void)0)
+#define DIVA_OS_MEM_DETACH_CFG(a, x)	((void)0)
+#define DIVA_OS_MEM_DETACH_ADDRESS(a, x)	((void)0)
+#define DIVA_OS_MEM_DETACH_CONFIG(a, x)	((void)0)
+#define DIVA_OS_MEM_DETACH_CONTROL(a, x)	((void)0)
 
 #define DIVA_INVALID_FILE_HANDLE  ((dword)(-1))
 
@@ -242,7 +242,7 @@ static __inline__ void diva_os_leave_spin_lock(diva_os_spin_lock_t *a, \
 					       diva_os_spin_lock_magic_t *old_irql, \
 					       void *dbg) { spin_unlock_bh(a); }
 
-#define diva_os_destroy_spin_lock(a, b) do { } while (0)
+#define diva_os_destroy_spin_lock(a, b) ((void)0)
 
 /*
 **  Deffered processing framework
@@ -359,7 +359,7 @@ static inline void PUT_DWORD(void *addr, __u32 v)
 */
 #define diva_os_dump_file_t char
 #define diva_os_board_trace_t char
-#define diva_os_dump_file(__x__) do { } while (0)
+#define diva_os_dump_file(__x__) ((void)0)
 
 /*
 ** size of internal arrays

@@ -13,7 +13,7 @@ extern int xfs_qm_init(void);
 extern void xfs_qm_exit(void);
 #else
 # define xfs_qm_init()	(0)
-# define xfs_qm_exit()	do { } while (0)
+# define xfs_qm_exit()	((void)0)
 #endif
 
 #ifdef CONFIG_XFS_POSIX_ACL
@@ -21,7 +21,7 @@ extern void xfs_qm_exit(void);
 # define set_posix_acl_flag(sb)	((sb)->s_flags |= SB_POSIXACL)
 #else
 # define XFS_ACL_STRING
-# define set_posix_acl_flag(sb)	do { } while (0)
+# define set_posix_acl_flag(sb)	((void)0)
 #endif
 
 #define XFS_SECURITY_STRING	"security attributes, "

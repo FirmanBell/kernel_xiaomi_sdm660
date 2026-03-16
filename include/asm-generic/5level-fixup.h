@@ -22,7 +22,7 @@
 #define p4d_none(p4d)			0
 #define p4d_bad(p4d)			0
 #define p4d_present(p4d)		1
-#define p4d_ERROR(p4d)			do { } while (0)
+#define p4d_ERROR(p4d)			((void)0)
 #define p4d_clear(p4d)			pgd_clear(p4d)
 #define p4d_val(p4d)			pgd_val(p4d)
 #define p4d_populate(mm, p4d, pud)	pgd_populate(mm, p4d, pud)
@@ -33,9 +33,9 @@
 #define set_p4d(p4dp, p4d)		set_pgd(p4dp, p4d)
 
 #undef p4d_free_tlb
-#define p4d_free_tlb(tlb, x, addr)	do { } while (0)
-#define p4d_free(mm, x)			do { } while (0)
-#define __p4d_free_tlb(tlb, x, addr)	do { } while (0)
+#define p4d_free_tlb(tlb, x, addr)	((void)0)
+#define p4d_free(mm, x)			((void)0)
+#define __p4d_free_tlb(tlb, x, addr)	((void)0)
 
 #undef  p4d_addr_end
 #define p4d_addr_end(addr, end)		(end)

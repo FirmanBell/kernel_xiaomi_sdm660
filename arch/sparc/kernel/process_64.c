@@ -132,7 +132,7 @@ static void show_regwindow32(struct pt_regs *regs)
 	       r_w.ins[4], r_w.ins[5], r_w.ins[6], r_w.ins[7]);
 }
 #else
-#define show_regwindow32(regs)	do { } while (0)
+#define show_regwindow32(regs)	((void)0)
 #endif
 
 static void show_regwindow(struct pt_regs *regs)

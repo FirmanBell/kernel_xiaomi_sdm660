@@ -30,7 +30,7 @@
 #ifdef DEBUG
 #define DBG(args...)	printk(args)
 #else
-#define DBG(args...)	do { } while(0)
+#define DBG(args...)	((void)0)
 #endif
 
 static int smu_supports_new_fans_ops = 1;

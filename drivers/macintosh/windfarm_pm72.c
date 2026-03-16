@@ -27,13 +27,13 @@
 #ifdef DEBUG
 #define DBG(args...)	printk(args)
 #else
-#define DBG(args...)	do { } while(0)
+#define DBG(args...)	((void)0)
 #endif
 
 #ifdef LOTSA_DEBUG
 #define DBG_LOTS(args...)	printk(args)
 #else
-#define DBG_LOTS(args...)	do { } while(0)
+#define DBG_LOTS(args...)	((void)0)
 #endif
 
 /* define this to force CPU overtemp to 60 degree, useful for testing

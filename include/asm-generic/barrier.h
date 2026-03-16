@@ -51,7 +51,7 @@
 #endif
 
 #ifndef read_barrier_depends
-#define read_barrier_depends()		do { } while (0)
+#define read_barrier_depends()		((void)0)
 #endif
 
 #ifndef __smp_mb
@@ -103,7 +103,7 @@
 #endif
 
 #ifndef smp_read_barrier_depends
-#define smp_read_barrier_depends()	do { } while (0)
+#define smp_read_barrier_depends()	((void)0)
 #endif
 
 #endif	/* CONFIG_SMP */

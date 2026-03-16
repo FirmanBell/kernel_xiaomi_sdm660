@@ -16,7 +16,7 @@ init_new_context(struct task_struct *tsk, struct mm_struct *mm)
 	return 0;
 }
 
-#define destroy_context(mm)	do { } while(0)
+#define destroy_context(mm)	((void)0)
 
 #define CID_BITS	9
 extern spinlock_t cid_lock;
@@ -62,7 +62,7 @@ static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next,
 	}
 }
 
-#define deactivate_mm(tsk,mm)	do { } while (0)
+#define deactivate_mm(tsk,mm)	((void)0)
 #define activate_mm(prev,next)	switch_mm(prev, next, NULL)
 
 #endif

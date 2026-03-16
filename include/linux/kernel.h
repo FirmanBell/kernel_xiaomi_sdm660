@@ -214,7 +214,7 @@ struct user;
 extern int _cond_resched(void);
 # define might_resched() _cond_resched()
 #else
-# define might_resched() do { } while (0)
+# define might_resched() ((void)0)
 #endif
 
 #ifdef CONFIG_DEBUG_ATOMIC_SLEEP
@@ -248,8 +248,8 @@ extern void __cant_sleep(const char *file, int line, int preempt_offset);
   static inline void __might_sleep(const char *file, int line,
 				   int preempt_offset) { }
 # define might_sleep() do { might_resched(); } while (0)
-# define cant_sleep() do { } while (0)
-# define sched_annotate_sleep() do { } while (0)
+# define cant_sleep() ((void)0)
+# define sched_annotate_sleep() ((void)0)
 #endif
 
 #define might_sleep_if(cond) do { if (cond) might_sleep(); } while (0)
@@ -258,7 +258,7 @@ extern void __cant_sleep(const char *file, int line, int preempt_offset);
 # define cant_migrate()		cant_sleep()
 #else
   /* Placeholder for now */
-# define cant_migrate()		do { } while (0)
+# define cant_migrate()		((void)0)
 #endif
 
 /**

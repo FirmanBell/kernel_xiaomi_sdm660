@@ -85,7 +85,7 @@
 
 #else /* ! HERMES_DEBUG */
 
-#define DEBUG(lvl, stuff...) do { } while (0)
+#define DEBUG(lvl, stuff...) ((void)0)
 
 #endif /* ! HERMES_DEBUG */
 

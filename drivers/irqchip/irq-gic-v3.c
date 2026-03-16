@@ -914,7 +914,7 @@ static int gic_set_affinity(struct irq_data *d, const struct cpumask *mask_val,
 }
 #else
 #define gic_set_affinity	NULL
-#define gic_smp_init()		do { } while(0)
+#define gic_smp_init()		((void)0)
 #endif
 
 #ifdef CONFIG_CPU_PM

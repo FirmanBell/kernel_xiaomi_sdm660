@@ -187,7 +187,7 @@ do { \
 } while (0)
 
 /* Free all resources held by a thread. */
-#define release_thread(tsk)		do { } while (0)
+#define release_thread(tsk)		((void)0)
 
 unsigned long get_wchan(struct task_struct *task);
 

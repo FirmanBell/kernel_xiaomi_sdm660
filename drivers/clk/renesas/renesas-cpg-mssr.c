@@ -38,7 +38,7 @@
 #ifdef DEBUG
 #define WARN_DEBUG(x)	WARN_ON(x)
 #else
-#define WARN_DEBUG(x)	do { } while (0)
+#define WARN_DEBUG(x)	((void)0)
 #endif
 
 

@@ -72,10 +72,10 @@ extern void unmap_cpu_from_node(int cpu, int nid);
 extern void numa_clear_node(int cpu);
 
 #else /* !CONFIG_NUMA */
-#define map_cpu_to_node(cpu, nid)	do{}while(0)
-#define unmap_cpu_from_node(cpu, nid)	do{}while(0)
+#define map_cpu_to_node(cpu, nid)	((void)0)
+#define unmap_cpu_from_node(cpu, nid)	((void)0)
 #define paddr_to_nid(addr)	0
-#define numa_clear_node(cpu)	do { } while (0)
+#define numa_clear_node(cpu)	((void)0)
 #endif /* CONFIG_NUMA */
 
 #endif /* _ASM_IA64_NUMA_H */

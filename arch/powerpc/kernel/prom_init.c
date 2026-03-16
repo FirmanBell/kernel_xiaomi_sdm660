@@ -102,7 +102,7 @@ int of_workarounds;
 #ifdef DEBUG_PROM
 #define prom_debug(x...)	prom_printf(x)
 #else
-#define prom_debug(x...)	do { } while (0)
+#define prom_debug(x...)	((void)0)
 #endif
 
 

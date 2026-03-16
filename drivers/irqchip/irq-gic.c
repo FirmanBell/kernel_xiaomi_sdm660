@@ -60,7 +60,7 @@ static void gic_check_cpu_features(void)
 			"GICv3 system registers enabled, broken firmware!\n");
 }
 #else
-#define gic_check_cpu_features()	do { } while(0)
+#define gic_check_cpu_features()	((void)0)
 #endif
 
 union gic_base {
@@ -108,8 +108,8 @@ static DEFINE_RAW_SPINLOCK(cpu_map_lock);
 #define gic_lock_irqsave(f)		do { (void)(f); } while(0)
 #define gic_unlock_irqrestore(f)	do { (void)(f); } while(0)
 
-#define gic_lock()			do { } while(0)
-#define gic_unlock()			do { } while(0)
+#define gic_lock()			((void)0)
+#define gic_unlock()			((void)0)
 
 #endif
 
@@ -957,7 +957,7 @@ static void __init gic_init_physaddr(struct device_node *node)
 }
 
 #else
-#define gic_init_physaddr(node)  do { } while (0)
+#define gic_init_physaddr(node)  ((void)0)
 #endif
 
 static int gic_irq_domain_map(struct irq_domain *d, unsigned int irq,

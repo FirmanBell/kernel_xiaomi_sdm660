@@ -281,7 +281,7 @@ struct parport_ip32_private {
 #if DEBUG_PARPORT_IP32 >= 1
 #	define pr_debug1(...)	printk(KERN_DEBUG __VA_ARGS__)
 #else /* DEBUG_PARPORT_IP32 < 1 */
-#	define pr_debug1(...)	do { } while (0)
+#	define pr_debug1(...)	((void)0)
 #endif
 
 /*
@@ -436,7 +436,7 @@ static void parport_ip32_dump_state(struct parport *p, char *str,
 #undef sep
 }
 #else /* DEBUG_PARPORT_IP32 < 2 */
-#define parport_ip32_dump_state(...)	do { } while (0)
+#define parport_ip32_dump_state(...)	((void)0)
 #endif
 
 /*
@@ -459,7 +459,7 @@ static void parport_ip32_dump_state(struct parport *p, char *str,
 				  (p)->name, __func__, #b, __b, __m);	\
 	} while (0)
 #else /* DEBUG_PARPORT_IP32 < 1 */
-#define CHECK_EXTRA_BITS(...)	do { } while (0)
+#define CHECK_EXTRA_BITS(...)	((void)0)
 #endif
 
 /*--- IP32 parallel port DMA operations --------------------------------*/

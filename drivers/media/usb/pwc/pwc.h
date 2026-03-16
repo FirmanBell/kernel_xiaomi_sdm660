@@ -95,8 +95,8 @@
 #define PWC_ERROR(fmt, args...) printk(KERN_ERR PFX fmt, ##args)
 #define PWC_WARNING(fmt, args...) printk(KERN_WARNING PFX fmt, ##args)
 #define PWC_INFO(fmt, args...) printk(KERN_INFO PFX fmt, ##args)
-#define PWC_TRACE(fmt, args...) do { } while(0)
-#define PWC_DEBUG(level, fmt, args...) do { } while(0)
+#define PWC_TRACE(fmt, args...) ((void)0)
+#define PWC_DEBUG(level, fmt, args...) ((void)0)
 
 #define pwc_trace 0
 

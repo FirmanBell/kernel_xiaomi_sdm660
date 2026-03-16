@@ -1033,7 +1033,7 @@ struct sym_hcb {
 
 #if SYM_CONF_DMA_ADDRESSING_MODE == 0
 #define use_dac(np)	0
-#define set_dac(np)	do { } while (0)
+#define set_dac(np)	((void)0)
 #else
 #define use_dac(np)	(np)->use_dac
 #define set_dac(np)	(np)->use_dac = 1

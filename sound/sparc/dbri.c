@@ -111,7 +111,7 @@ static char *cmds[] = {
 #define dprintk(a, x...) if (dbri_debug & a) printk(KERN_DEBUG x)
 
 #else
-#define dprintk(a, x...) do { } while (0)
+#define dprintk(a, x...) ((void)0)
 
 #endif				/* DBRI_DEBUG */
 

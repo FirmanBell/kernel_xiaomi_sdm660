@@ -2001,8 +2001,8 @@ static void orinoco_unregister_pm_notifier(struct orinoco_private *priv)
 	unregister_pm_notifier(&priv->pm_notifier);
 }
 #else /* !PM_SLEEP || HERMES_CACHE_FW_ON_INIT */
-#define orinoco_register_pm_notifier(priv) do { } while (0)
-#define orinoco_unregister_pm_notifier(priv) do { } while (0)
+#define orinoco_register_pm_notifier(priv) ((void)0)
+#define orinoco_unregister_pm_notifier(priv) ((void)0)
 #endif
 
 /********************************************************************/

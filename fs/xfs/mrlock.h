@@ -24,7 +24,7 @@ typedef struct {
 #endif
 
 #define mrlock_init(mrp, t,n,s)	mrinit(mrp, n)
-#define mrfree(mrp)		do { } while (0)
+#define mrfree(mrp)		((void)0)
 
 static inline void mraccess_nested(mrlock_t *mrp, int subclass)
 {

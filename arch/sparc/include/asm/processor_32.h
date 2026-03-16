@@ -97,7 +97,7 @@ static inline void start_thread(struct pt_regs * regs, unsigned long pc,
 }
 
 /* Free all resources held by a thread. */
-#define release_thread(tsk)		do { } while(0)
+#define release_thread(tsk)		((void)0)
 
 unsigned long get_wchan(struct task_struct *);
 

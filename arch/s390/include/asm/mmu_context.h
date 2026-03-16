@@ -66,7 +66,7 @@ static inline int init_new_context(struct task_struct *tsk,
 	return 0;
 }
 
-#define destroy_context(mm)             do { } while (0)
+#define destroy_context(mm)             ((void)0)
 
 static inline void set_user_asce(struct mm_struct *mm)
 {
@@ -122,8 +122,8 @@ static inline void finish_arch_post_lock_switch(void)
 	set_fs(current->thread.mm_segment);
 }
 
-#define enter_lazy_tlb(mm,tsk)	do { } while (0)
-#define deactivate_mm(tsk,mm)	do { } while (0)
+#define enter_lazy_tlb(mm,tsk)	((void)0)
+#define deactivate_mm(tsk,mm)	((void)0)
 
 static inline void activate_mm(struct mm_struct *prev,
                                struct mm_struct *next)

@@ -32,13 +32,13 @@ void omap2xxx_clkt_vps_late_init(void);
 #ifdef CONFIG_SOC_OMAP2420
 int omap2420_clk_init(void);
 #else
-#define omap2420_clk_init()	do { } while(0)
+#define omap2420_clk_init()	((void)0)
 #endif
 
 #ifdef CONFIG_SOC_OMAP2430
 int omap2430_clk_init(void);
 #else
-#define omap2430_clk_init()	do { } while(0)
+#define omap2430_clk_init()	((void)0)
 #endif
 
 extern struct clk_hw *dclk_hw;

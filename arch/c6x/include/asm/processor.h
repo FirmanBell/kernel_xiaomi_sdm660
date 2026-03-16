@@ -112,7 +112,7 @@ extern unsigned long get_wchan(struct task_struct *p);
 #define KSTK_EIP(task)	(task_pt_regs(task)->pc)
 #define KSTK_ESP(task)	(task_pt_regs(task)->sp)
 
-#define cpu_relax()		do { } while (0)
+#define cpu_relax()		((void)0)
 
 extern const struct seq_operations cpuinfo_op;
 

@@ -129,19 +129,19 @@ void local_flush_cache_page(struct vm_area_struct *vma,
 
 #else
 
-#define flush_cache_all()				do { } while (0)
-#define flush_cache_mm(mm)				do { } while (0)
-#define flush_cache_dup_mm(mm)				do { } while (0)
+#define flush_cache_all()				((void)0)
+#define flush_cache_mm(mm)				((void)0)
+#define flush_cache_dup_mm(mm)				((void)0)
 
-#define flush_cache_vmap(start,end)			do { } while (0)
-#define flush_cache_vunmap(start,end)			do { } while (0)
+#define flush_cache_vmap(start,end)			((void)0)
+#define flush_cache_vunmap(start,end)			((void)0)
 
 #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 0
-#define flush_dcache_page(page)				do { } while (0)
+#define flush_dcache_page(page)				((void)0)
 
 #define flush_icache_range local_flush_icache_range
-#define flush_cache_page(vma, addr, pfn)		do { } while (0)
-#define flush_cache_range(vma, start, end)		do { } while (0)
+#define flush_cache_page(vma, addr, pfn)		((void)0)
+#define flush_cache_range(vma, start, end)		((void)0)
 
 #endif
 
@@ -153,10 +153,10 @@ void local_flush_cache_page(struct vm_area_struct *vma,
 	} while (0)
 
 /* This is not required, see Documentation/core-api/cachetlb.rst */
-#define	flush_icache_page(vma,page)			do { } while (0)
+#define	flush_icache_page(vma,page)			((void)0)
 
-#define flush_dcache_mmap_lock(mapping)			do { } while (0)
-#define flush_dcache_mmap_unlock(mapping)		do { } while (0)
+#define flush_dcache_mmap_lock(mapping)			((void)0)
+#define flush_dcache_mmap_unlock(mapping)		((void)0)
 
 #if defined(CONFIG_MMU) && (DCACHE_WAY_SIZE > PAGE_SIZE)
 

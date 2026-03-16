@@ -1368,13 +1368,13 @@ static inline void xgbe_debugfs_rename(struct xgbe_prv_data *pdata) {}
 #ifdef YDEBUG
 #define DBGPR(x...) pr_alert(x)
 #else
-#define DBGPR(x...) do { } while (0)
+#define DBGPR(x...) ((void)0)
 #endif
 
 #ifdef YDEBUG_MDIO
 #define DBGPR_MDIO(x...) pr_alert(x)
 #else
-#define DBGPR_MDIO(x...) do { } while (0)
+#define DBGPR_MDIO(x...) ((void)0)
 #endif
 
 #endif

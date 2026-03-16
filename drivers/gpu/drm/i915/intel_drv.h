@@ -82,7 +82,7 @@
 #if defined(CONFIG_DRM_I915_DEBUG) && defined(CONFIG_PREEMPT_COUNT)
 # define _WAIT_FOR_ATOMIC_CHECK(ATOMIC) WARN_ON_ONCE((ATOMIC) && !in_atomic())
 #else
-# define _WAIT_FOR_ATOMIC_CHECK(ATOMIC) do { } while (0)
+# define _WAIT_FOR_ATOMIC_CHECK(ATOMIC) ((void)0)
 #endif
 
 #define _wait_for_atomic(COND, US, ATOMIC) \

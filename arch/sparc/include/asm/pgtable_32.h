@@ -332,7 +332,7 @@ pte_t *pte_offset_kernel(pmd_t * dir, unsigned long address);
  * This shortcut works on sun4m (and sun4d) because the nocache area is static.
  */
 #define pte_offset_map(d, a)		pte_offset_kernel(d,a)
-#define pte_unmap(pte)		do{}while(0)
+#define pte_unmap(pte)		((void)0)
 
 struct seq_file;
 void mmu_info(struct seq_file *m);
@@ -342,7 +342,7 @@ void mmu_info(struct seq_file *m);
 #define FAULT_CODE_WRITE    0x2
 #define FAULT_CODE_USER     0x4
 
-#define update_mmu_cache(vma, address, ptep) do { } while (0)
+#define update_mmu_cache(vma, address, ptep) ((void)0)
 
 void srmmu_mapiorange(unsigned int bus, unsigned long xpa,
                       unsigned long xva, unsigned int len);
@@ -447,6 +447,6 @@ static inline int io_remap_pfn_range(struct vm_area_struct *vma,
 /*
  * No page table caches to initialise
  */
-#define pgtable_cache_init()	do { } while (0)
+#define pgtable_cache_init()	((void)0)
 
 #endif /* !(_SPARC_PGTABLE_H) */

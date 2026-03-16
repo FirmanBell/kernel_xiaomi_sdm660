@@ -24,12 +24,12 @@ extern void restore_fpu(struct task_struct *__tsk);
 extern void fpu_state_restore(struct pt_regs *regs);
 extern void __fpu_state_restore(void);
 #else
-#define save_fpu(tsk)			do { } while (0)
-#define restore_fpu(tsk)		do { } while (0)
-#define release_fpu(regs)		do { } while (0)
-#define grab_fpu(regs)			do { } while (0)
-#define fpu_state_restore(regs)		do { } while (0)
-#define __fpu_state_restore(regs)	do { } while (0)
+#define save_fpu(tsk)			((void)0)
+#define restore_fpu(tsk)		((void)0)
+#define release_fpu(regs)		((void)0)
+#define grab_fpu(regs)			((void)0)
+#define fpu_state_restore(regs)		((void)0)
+#define __fpu_state_restore(regs)	((void)0)
 #endif
 
 struct user_regset;

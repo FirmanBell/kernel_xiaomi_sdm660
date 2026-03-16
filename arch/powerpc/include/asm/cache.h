@@ -79,8 +79,8 @@ extern void _set_L3CR(unsigned long);
 #else
 #define _get_L2CR()	0L
 #define _get_L3CR()	0L
-#define _set_L2CR(val)	do { } while(0)
-#define _set_L3CR(val)	do { } while(0)
+#define _set_L2CR(val)	((void)0)
+#define _set_L3CR(val)	((void)0)
 #endif
 
 static inline void dcbz(void *addr)

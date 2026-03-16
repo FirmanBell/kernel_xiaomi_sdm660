@@ -895,7 +895,7 @@ void __print_context(void *__print_xsave_buffer, int line)
 #ifdef DEBUG
 #define dprint_context(x) print_context(x)
 #else
-#define dprint_context(x) do{}while(0)
+#define dprint_context(x) ((void)0)
 #endif
 
 void init()

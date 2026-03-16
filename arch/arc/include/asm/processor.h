@@ -61,7 +61,7 @@ struct task_struct;
 	((struct pt_regs *)(THREAD_SIZE + (void *)task_stack_page(p)) - 1)
 
 /* Free all resources held by a thread */
-#define release_thread(thread) do { } while (0)
+#define release_thread(thread) ((void)0)
 
 /*
  * A lot of busy-wait loops in SMP are based off of non-volatile data otherwise

@@ -27,7 +27,7 @@
 #include "book3s_xics.h"
 
 #if 1
-#define XICS_DBG(fmt...) do { } while (0)
+#define XICS_DBG(fmt...) ((void)0)
 #else
 #define XICS_DBG(fmt...) trace_printk(fmt)
 #endif

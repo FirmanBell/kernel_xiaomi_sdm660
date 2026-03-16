@@ -619,7 +619,7 @@ static void ipr_trc_hook(struct ipr_cmnd *ipr_cmd,
 	wmb();
 }
 #else
-#define ipr_trc_hook(ipr_cmd, type, add_data) do { } while (0)
+#define ipr_trc_hook(ipr_cmd, type, add_data) ((void)0)
 #endif
 
 /**
@@ -3305,7 +3305,7 @@ static void ipr_get_ioa_dump(struct ipr_ioa_cfg *ioa_cfg, struct ipr_dump *dump)
 }
 
 #else
-#define ipr_get_ioa_dump(ioa_cfg, dump) do { } while (0)
+#define ipr_get_ioa_dump(ioa_cfg, dump) ((void)0)
 #endif
 
 /**

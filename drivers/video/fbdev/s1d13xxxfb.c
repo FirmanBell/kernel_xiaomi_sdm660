@@ -45,7 +45,7 @@
 #if 0
 #define dbg(fmt, args...) do { printk(KERN_INFO fmt, ## args); } while(0)
 #else
-#define dbg(fmt, args...) do { } while (0)
+#define dbg(fmt, args...) ((void)0)
 #endif
 
 /*
@@ -54,7 +54,7 @@
 #if 0
 #define dbg_blit(fmt, args...) do { printk(KERN_INFO BLIT fmt, ## args); } while (0)
 #else
-#define dbg_blit(fmt, args...) do { } while (0)
+#define dbg_blit(fmt, args...) ((void)0)
 #endif
 
 /*

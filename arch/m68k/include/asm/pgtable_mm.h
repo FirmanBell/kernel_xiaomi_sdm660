@@ -175,8 +175,8 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
 /*
  * No page table caches to initialise
  */
-#define pgtable_cache_init()	do { } while (0)
+#define pgtable_cache_init()	((void)0)
 
-#define check_pgt_cache()	do { } while (0)
+#define check_pgt_cache()	((void)0)
 
 #endif /* _M68K_PGTABLE_H */

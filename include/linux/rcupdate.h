@@ -175,7 +175,7 @@ void synchronize_rcu_tasks(void);
 void exit_tasks_rcu_start(void);
 void exit_tasks_rcu_finish(void);
 #else /* #ifdef CONFIG_TASKS_RCU */
-#define rcu_tasks_qs(t)	do { } while (0)
+#define rcu_tasks_qs(t)	((void)0)
 #define rcu_note_voluntary_context_switch(t)		rcu_all_qs()
 #define call_rcu_tasks call_rcu_sched
 #define synchronize_rcu_tasks synchronize_sched
@@ -290,8 +290,8 @@ int rcu_read_lock_any_held(void);
 
 #else /* #ifdef CONFIG_DEBUG_LOCK_ALLOC */
 
-# define rcu_lock_acquire(a)		do { } while (0)
-# define rcu_lock_release(a)		do { } while (0)
+# define rcu_lock_acquire(a)		((void)0)
+# define rcu_lock_release(a)		((void)0)
 
 static inline int rcu_read_lock_held(void)
 {
@@ -352,8 +352,8 @@ static inline void rcu_preempt_sleep_check(void) { }
 
 #else /* #ifdef CONFIG_PROVE_RCU */
 
-#define RCU_LOCKDEP_WARN(c, s) do { } while (0)
-#define rcu_sleep_check() do { } while (0)
+#define RCU_LOCKDEP_WARN(c, s) ((void)0)
+#define rcu_sleep_check() ((void)0)
 
 #endif /* #else #ifdef CONFIG_PROVE_RCU */
 
@@ -935,7 +935,7 @@ static inline notrace void rcu_read_unlock_sched_notrace(void)
 #ifdef CONFIG_ARCH_WEAK_RELEASE_ACQUIRE
 #define smp_mb__after_unlock_lock()	smp_mb()  /* Full ordering for lock. */
 #else /* #ifdef CONFIG_ARCH_WEAK_RELEASE_ACQUIRE */
-#define smp_mb__after_unlock_lock()	do { } while (0)
+#define smp_mb__after_unlock_lock()	((void)0)
 #endif /* #else #ifdef CONFIG_ARCH_WEAK_RELEASE_ACQUIRE */
 
 

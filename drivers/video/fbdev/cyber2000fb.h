@@ -32,7 +32,7 @@ static void debug_printf(char *fmt, ...)
 	printascii(buffer);
 }
 #else
-#define debug_printf(x...) do { } while (0)
+#define debug_printf(x...) ((void)0)
 #endif
 
 #define RAMDAC_RAMPWRDN		0x01

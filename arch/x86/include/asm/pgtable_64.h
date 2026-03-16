@@ -241,8 +241,8 @@ extern void cleanup_highmap(void);
 #define HAVE_ARCH_UNMAPPED_AREA
 #define HAVE_ARCH_UNMAPPED_AREA_TOPDOWN
 
-#define pgtable_cache_init()   do { } while (0)
-#define check_pgt_cache()      do { } while (0)
+#define pgtable_cache_init()   ((void)0)
+#define check_pgt_cache()      ((void)0)
 
 #define PAGE_AGP    PAGE_KERNEL_NOCACHE
 #define HAVE_PAGE_AGP 1

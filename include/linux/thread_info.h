@@ -41,7 +41,7 @@ enum {
 #ifdef __KERNEL__
 
 #ifndef arch_set_restart_data
-#define arch_set_restart_data(restart) do { } while (0)
+#define arch_set_restart_data(restart) ((void)0)
 #endif
 
 static inline long set_restart_fn(struct restart_block *restart,

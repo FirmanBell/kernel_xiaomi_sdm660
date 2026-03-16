@@ -26,12 +26,12 @@
 
 #define stage2_pgd_none(pgd)			(0)
 #define stage2_pgd_present(pgd)			(1)
-#define stage2_pgd_clear(pgd)			do { } while (0)
-#define stage2_pgd_populate(pgd, pud)	do { } while (0)
+#define stage2_pgd_clear(pgd)			((void)0)
+#define stage2_pgd_populate(pgd, pud)	((void)0)
 
 #define stage2_pud_offset(pgd, address)		((pud_t *)(pgd))
 
-#define stage2_pud_free(x)			do { } while (0)
+#define stage2_pud_free(x)			((void)0)
 
 #define stage2_pud_addr_end(addr, end)		(end)
 #define stage2_pud_table_empty(pmdp)		(0)

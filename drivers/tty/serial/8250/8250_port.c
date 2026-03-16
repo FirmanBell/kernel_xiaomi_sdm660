@@ -58,7 +58,7 @@
 #if 0
 #define DEBUG_AUTOCONF(fmt...)	printk(fmt)
 #else
-#define DEBUG_AUTOCONF(fmt...)	do { } while (0)
+#define DEBUG_AUTOCONF(fmt...)	((void)0)
 #endif
 
 #define BOTH_EMPTY	(UART_LSR_TEMT | UART_LSR_THRE)

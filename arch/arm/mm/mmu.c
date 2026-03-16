@@ -1096,7 +1096,7 @@ static void __init fill_pmd_gaps(void)
 }
 
 #else
-#define fill_pmd_gaps() do { } while (0)
+#define fill_pmd_gaps() ((void)0)
 #endif
 
 #if defined(CONFIG_PCI) && !defined(CONFIG_NEED_MACH_IO_H)
@@ -1111,7 +1111,7 @@ static void __init pci_reserve_io(void)
 	vm_reserve_area_early(PCI_IO_VIRT_BASE, SZ_2M, pci_reserve_io);
 }
 #else
-#define pci_reserve_io() do { } while (0)
+#define pci_reserve_io() ((void)0)
 #endif
 
 #ifdef CONFIG_DEBUG_LL

@@ -60,7 +60,7 @@ void swarm_setup(void);
 #ifdef LEDS_PHYS
 extern void setleds(char *str);
 #else
-#define setleds(s) do { } while (0)
+#define setleds(s) ((void)0)
 #endif /* LEDS_PHYS */
 
 #endif /* __ASSEMBLY__ */

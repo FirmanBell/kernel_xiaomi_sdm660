@@ -16,8 +16,8 @@
 #define prn(num) printk(#num "=%d\n", num)
 #define prx(num) printk(#num "=%x\n", num)
 #else
-#define prn(num) do { } while (0)
-#define prx(num)  do { } while (0)
+#define prn(num) ((void)0)
+#define prx(num)  ((void)0)
 #endif
 
 #include <linux/err.h>

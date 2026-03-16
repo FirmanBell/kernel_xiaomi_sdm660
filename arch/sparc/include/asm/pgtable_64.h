@@ -937,7 +937,7 @@ static inline unsigned long pud_pfn(pud_t pud)
 	 ((address >> PAGE_SHIFT) & (PTRS_PER_PTE - 1)))
 #define pte_offset_kernel		pte_index
 #define pte_offset_map			pte_index
-#define pte_unmap(pte)			do { } while (0)
+#define pte_unmap(pte)			((void)0)
 
 /* We cannot include <linux/mm_types.h> at this point yet: */
 extern struct mm_struct init_mm;

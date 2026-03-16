@@ -48,7 +48,7 @@ void ptdump_check_wx(void);
 #ifdef CONFIG_DEBUG_WX
 #define debug_checkwx()	ptdump_check_wx()
 #else
-#define debug_checkwx()	do { } while (0)
+#define debug_checkwx()	((void)0)
 #endif
 
 #endif /* __ASM_PTDUMP_H */

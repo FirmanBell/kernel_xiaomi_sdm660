@@ -197,7 +197,7 @@ static inline pte_t *pmd_page_vaddr(pmd_t pmd)
 
 #ifndef CONFIG_HIGHPTE
 #define __pte_map(pmd)		pmd_page_vaddr(*(pmd))
-#define __pte_unmap(pte)	do { } while (0)
+#define __pte_unmap(pte)	((void)0)
 #else
 #define __pte_map(pmd)		(pte_t *)kmap_atomic(pmd_page(*(pmd)))
 #define __pte_unmap(pte)	kunmap_atomic(pte)
@@ -369,7 +369,7 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
 #define HAVE_ARCH_UNMAPPED_AREA
 #define HAVE_ARCH_UNMAPPED_AREA_TOPDOWN
 
-#define pgtable_cache_init() do { } while (0)
+#define pgtable_cache_init() ((void)0)
 
 #endif /* !__ASSEMBLY__ */
 

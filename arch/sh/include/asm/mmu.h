@@ -86,7 +86,7 @@ static inline int pmb_unmap(void __iomem *addr)
 	return -EINVAL;
 }
 
-#define pmb_init(addr)		do { } while (0)
+#define pmb_init(addr)		((void)0)
 
 #ifdef CONFIG_29BIT
 #define __in_29bit_mode()	(1)

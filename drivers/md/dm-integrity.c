@@ -316,8 +316,8 @@ static void __DEBUG_bytes(__u8 *bytes, size_t len, const char *msg, ...)
 }
 #define DEBUG_bytes(bytes, len, msg, ...)	__DEBUG_bytes(bytes, len, KERN_DEBUG msg, ##__VA_ARGS__)
 #else
-#define DEBUG_print(x, ...)			do { } while (0)
-#define DEBUG_bytes(bytes, len, msg, ...)	do { } while (0)
+#define DEBUG_print(x, ...)			((void)0)
+#define DEBUG_bytes(bytes, len, msg, ...)	((void)0)
 #endif
 
 /*

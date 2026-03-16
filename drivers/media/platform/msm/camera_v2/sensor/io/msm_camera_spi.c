@@ -19,8 +19,8 @@
 #define SPIDBG(fmt, args...) pr_debug(fmt, ##args)
 #define S_I2C_DBG(fmt, args...) pr_debug(fmt, ##args)
 #else
-#define SPIDBG(fmt, args...) do { } while (0)
-#define S_I2C_DBG(fmt, args...) do { } while (0)
+#define SPIDBG(fmt, args...) ((void)0)
+#define S_I2C_DBG(fmt, args...) ((void)0)
 #endif
 
 static int msm_camera_spi_txfr(struct spi_device *spi, char *txbuf,

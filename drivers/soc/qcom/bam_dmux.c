@@ -152,16 +152,16 @@ static atomic_t bam_dmux_a2_pwr_cntl_in_cnt = ATOMIC_INIT(0);
 #define DBG_INC_ACK_IN_CNT() \
 	atomic_inc(&bam_dmux_ack_in_cnt)
 #else
-#define DBG(x...) do { } while (0)
-#define DBG_INC_READ_CNT(x...) do { } while (0)
-#define DBG_INC_WRITE_CNT(x...) do { } while (0)
-#define DBG_INC_WRITE_CPY(x...) do { } while (0)
-#define DBG_INC_TX_SPS_FAILURE_CNT() do { } while (0)
-#define DBG_INC_TX_STALL_CNT() do { } while (0)
-#define DBG_INC_ACK_OUT_CNT() do { } while (0)
+#define DBG(x...) ((void)0)
+#define DBG_INC_READ_CNT(x...) ((void)0)
+#define DBG_INC_WRITE_CNT(x...) ((void)0)
+#define DBG_INC_WRITE_CPY(x...) ((void)0)
+#define DBG_INC_TX_SPS_FAILURE_CNT() ((void)0)
+#define DBG_INC_TX_STALL_CNT() ((void)0)
+#define DBG_INC_ACK_OUT_CNT() ((void)0)
 #define DBG_INC_A2_POWER_CONTROL_IN_CNT() \
-	do { } while (0)
-#define DBG_INC_ACK_IN_CNT() do { } while (0)
+	((void)0)
+#define DBG_INC_ACK_IN_CNT() ((void)0)
 #endif
 
 struct bam_ch_info {

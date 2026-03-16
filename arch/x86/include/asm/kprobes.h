@@ -49,7 +49,7 @@ typedef u8 kprobe_opcode_t;
 	(MAX_STACK_SIZE < CUR_STACK_SIZE(ADDR) ?	\
 	 MAX_STACK_SIZE : CUR_STACK_SIZE(ADDR))
 
-#define flush_insn_slot(p)	do { } while (0)
+#define flush_insn_slot(p)	((void)0)
 
 /* optinsn template addresses */
 extern __visible kprobe_opcode_t optprobe_template_entry[];

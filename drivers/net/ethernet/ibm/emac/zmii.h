@@ -65,12 +65,12 @@ void *zmii_dump_regs(struct platform_device *ofdev, void *buf);
 
 #else
 # define zmii_init()		0
-# define zmii_exit()		do { } while(0)
+# define zmii_exit()		((void)0)
 # define zmii_attach(x,y,z)	(-ENXIO)
-# define zmii_detach(x,y)	do { } while(0)
-# define zmii_get_mdio(x,y)	do { } while(0)
-# define zmii_put_mdio(x,y)	do { } while(0)
-# define zmii_set_speed(x,y,z)	do { } while(0)
+# define zmii_detach(x,y)	((void)0)
+# define zmii_get_mdio(x,y)	((void)0)
+# define zmii_put_mdio(x,y)	((void)0)
+# define zmii_set_speed(x,y,z)	((void)0)
 # define zmii_get_regs_len(x)	0
 # define zmii_dump_regs(x,buf)	(buf)
 #endif				/* !CONFIG_IBM_EMAC_ZMII */

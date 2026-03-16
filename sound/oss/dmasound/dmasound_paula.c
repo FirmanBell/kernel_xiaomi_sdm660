@@ -109,8 +109,8 @@ static inline void enable_heartbeat(void)
 	    mach_heartbeat = saved_heartbeat;
 }
 #else /* !CONFIG_HEARTBEAT */
-#define disable_heartbeat()	do { } while (0)
-#define enable_heartbeat()	do { } while (0)
+#define disable_heartbeat()	((void)0)
+#define enable_heartbeat()	((void)0)
 #endif /* !CONFIG_HEARTBEAT */
 
 

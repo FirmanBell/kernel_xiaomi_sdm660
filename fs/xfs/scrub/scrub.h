@@ -135,7 +135,7 @@ void xchk_xref_is_not_shared(struct xfs_scrub *sc, xfs_agblock_t bno,
 void xchk_xref_is_used_rt_space(struct xfs_scrub *sc, xfs_rtblock_t rtbno,
 		xfs_extlen_t len);
 #else
-# define xchk_xref_is_used_rt_space(sc, rtbno, len) do { } while (0)
+# define xchk_xref_is_used_rt_space(sc, rtbno, len) ((void)0)
 #endif
 
 #endif	/* __XFS_SCRUB_SCRUB_H__ */

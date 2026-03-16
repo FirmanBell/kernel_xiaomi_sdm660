@@ -48,7 +48,7 @@ static inline struct task_struct *rt_mutex_get_top_task(struct task_struct *task
 {
 	return NULL;
 }
-# define rt_mutex_adjust_pi(p)		do { } while (0)
+# define rt_mutex_adjust_pi(p)		((void)0)
 static inline bool tsk_is_pi_blocked(struct task_struct *tsk)
 {
 	return false;

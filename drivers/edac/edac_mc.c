@@ -37,7 +37,7 @@
 #ifdef CONFIG_EDAC_ATOMIC_SCRUB
 #include <asm/edac.h>
 #else
-#define edac_atomic_scrub(va, size) do { } while (0)
+#define edac_atomic_scrub(va, size) ((void)0)
 #endif
 
 int edac_op_state = EDAC_OPSTATE_INVAL;

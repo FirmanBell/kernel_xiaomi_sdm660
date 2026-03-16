@@ -25,9 +25,9 @@ static const char sni_82596_string[] = "snirm_82596";
 
 #define LIB82596_DMA_ATTR	0
 
-#define DMA_WBACK(priv, addr, len)     do { } while (0)
-#define DMA_INV(priv, addr, len)       do { } while (0)
-#define DMA_WBACK_INV(priv, addr, len) do { } while (0)
+#define DMA_WBACK(priv, addr, len)     ((void)0)
+#define DMA_INV(priv, addr, len)       ((void)0)
+#define DMA_WBACK_INV(priv, addr, len) ((void)0)
 
 #define SYSBUS      0x00004400
 

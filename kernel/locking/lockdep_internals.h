@@ -180,8 +180,8 @@ DECLARE_PER_CPU(struct lockdep_stats, lockdep_stats);
 	__total;							\
 })
 #else
-# define __debug_atomic_inc(ptr)	do { } while (0)
-# define debug_atomic_inc(ptr)		do { } while (0)
-# define debug_atomic_dec(ptr)		do { } while (0)
+# define __debug_atomic_inc(ptr)	((void)0)
+# define debug_atomic_inc(ptr)		((void)0)
+# define debug_atomic_dec(ptr)		((void)0)
 # define debug_atomic_read(ptr)		0
 #endif

@@ -69,12 +69,12 @@ void *rgmii_dump_regs(struct platform_device *ofdev, void *buf);
 #else
 
 # define rgmii_init()		0
-# define rgmii_exit()		do { } while(0)
+# define rgmii_exit()		((void)0)
 # define rgmii_attach(x,y,z)	(-ENXIO)
-# define rgmii_detach(x,y)	do { } while(0)
-# define rgmii_get_mdio(o,i)	do { } while (0)
-# define rgmii_put_mdio(o,i)	do { } while (0)
-# define rgmii_set_speed(x,y,z)	do { } while(0)
+# define rgmii_detach(x,y)	((void)0)
+# define rgmii_get_mdio(o,i)	((void)0)
+# define rgmii_put_mdio(o,i)	((void)0)
+# define rgmii_set_speed(x,y,z)	((void)0)
 # define rgmii_get_regs_len(x)	0
 # define rgmii_dump_regs(x,buf)	(buf)
 #endif				/* !CONFIG_IBM_EMAC_RGMII */

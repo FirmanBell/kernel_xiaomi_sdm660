@@ -211,7 +211,7 @@ static inline void enable_fpu(void)
 /* Initialise the FP state of a task */
 void fpinit(struct sh_fpu_hard_struct *fpregs);
 #else
-#define fpinit(fpregs)	do { } while (0)
+#define fpinit(fpregs)	((void)0)
 #endif
 
 extern struct task_struct *last_task_used_math;

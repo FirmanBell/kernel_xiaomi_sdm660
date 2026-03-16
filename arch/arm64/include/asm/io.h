@@ -157,7 +157,7 @@ static inline u64 __raw_readq_no_log(const volatile void __iomem *addr)
 
 #define __iowmb()		wmb()
 
-#define mmiowb()		do { } while (0)
+#define mmiowb()		((void)0)
 
 /*
  * Relaxed I/O memory access primitives. These follow the Device memory

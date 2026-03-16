@@ -42,7 +42,7 @@ unsigned long qmi_timeout = 3000;
 bool ignore_fw_timeout;
 #define ICNSS_QMI_ASSERT() ICNSS_ASSERT(ignore_fw_timeout)
 #else
-#define ICNSS_QMI_ASSERT() do { } while (0)
+#define ICNSS_QMI_ASSERT() ((void)0)
 #endif
 
 #ifdef CONFIG_ICNSS_DEBUG

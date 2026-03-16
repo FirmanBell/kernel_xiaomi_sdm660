@@ -20,7 +20,7 @@
 #define pud_none(pud)			0
 #define pud_bad(pud)			0
 #define pud_present(pud)		1
-#define pud_ERROR(pud)			do { } while (0)
+#define pud_ERROR(pud)			((void)0)
 #define pud_clear(pud)			pgd_clear(pud)
 #define pud_val(pud)			pgd_val(pud)
 #define pud_populate(mm, pud, pmd)	pgd_populate(mm, pud, pmd)
@@ -28,9 +28,9 @@
 #define pud_page_vaddr(pud)		pgd_page_vaddr(pud)
 
 #undef pud_free_tlb
-#define pud_free_tlb(tlb, x, addr)	do { } while (0)
-#define pud_free(mm, x)			do { } while (0)
-#define __pud_free_tlb(tlb, x, addr)	do { } while (0)
+#define pud_free_tlb(tlb, x, addr)	((void)0)
+#define pud_free(mm, x)			((void)0)
+#define __pud_free_tlb(tlb, x, addr)	((void)0)
 
 #undef  pud_addr_end
 #define pud_addr_end(addr, end)		(end)

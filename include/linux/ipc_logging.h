@@ -252,7 +252,7 @@ static inline int ipc_log_string(void *ilctxt, const char *fmt, ...)
 static inline int ipc_log_extract(void *ilctxt, char *buff, int size)
 { return -EINVAL; }
 
-#define IPC_SPRINTF_DECODE(dctxt, args...) do { } while (0)
+#define IPC_SPRINTF_DECODE(dctxt, args...) ((void)0)
 
 static inline void tsv_timestamp_read(struct encode_context *ectxt,
 			struct decode_context *dctxt, const char *format) { }

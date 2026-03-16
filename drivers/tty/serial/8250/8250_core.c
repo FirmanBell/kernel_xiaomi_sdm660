@@ -487,7 +487,7 @@ static void univ8250_rsa_support(struct uart_ops *ops)
 }
 
 #else
-#define univ8250_rsa_support(x)		do { } while (0)
+#define univ8250_rsa_support(x)		((void)0)
 #endif /* CONFIG_SERIAL_8250_RSA */
 
 static inline void serial8250_apply_quirks(struct uart_8250_port *up)

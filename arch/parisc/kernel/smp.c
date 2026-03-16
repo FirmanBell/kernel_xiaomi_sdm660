@@ -57,7 +57,7 @@ static int smp_debug_lvl = 0;
 		if (lvl >= smp_debug_lvl)	\
 			printk(printargs);
 #else
-#define smp_debug(lvl, ...)	do { } while(0)
+#define smp_debug(lvl, ...)	((void)0)
 #endif /* DEBUG_SMP */
 
 volatile struct task_struct *smp_init_current_idle_task;

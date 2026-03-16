@@ -12,7 +12,7 @@
 #define wfe()	__asm__ __volatile__ ("wfe" : : : "memory")
 #define wfi()	__asm__ __volatile__ ("wfi" : : : "memory")
 #else
-#define wfe()	do { } while (0)
+#define wfe()	((void)0)
 #endif
 
 #if __LINUX_ARM_ARCH__ >= 7

@@ -283,7 +283,7 @@ static void __init mainstone_backlight_register(void)
 	}
 }
 #else
-#define mainstone_backlight_register()	do { } while (0)
+#define mainstone_backlight_register()	((void)0)
 #endif
 
 static struct pxafb_mode_info toshiba_ltm04c380k_mode = {

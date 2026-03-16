@@ -422,8 +422,8 @@ static inline int pte_exec(pte_t pte)
 /*
  * May need to invoke the virtual machine as well...
  */
-#define pte_unmap(pte)		do { } while (0)
-#define pte_unmap_nested(pte)	do { } while (0)
+#define pte_unmap(pte)		((void)0)
+#define pte_unmap_nested(pte)	((void)0)
 
 /*
  * pte_offset_map - returns the linear address of the page table entry
@@ -445,7 +445,7 @@ static inline int pte_exec(pte_t pte)
 #define __pte_offset(address) (((address) >> PAGE_SHIFT) & (PTRS_PER_PTE - 1))
 
 /*  I think this is in case we have page table caches; needed by init/main.c  */
-#define pgtable_cache_init()    do { } while (0)
+#define pgtable_cache_init()    ((void)0)
 
 /*
  * Swap/file PTE definitions.  If _PAGE_PRESENT is zero, the rest of the PTE is

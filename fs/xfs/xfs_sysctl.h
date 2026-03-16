@@ -93,7 +93,7 @@ extern int xfs_sysctl_register(void);
 extern void xfs_sysctl_unregister(void);
 #else
 # define xfs_sysctl_register()		(0)
-# define xfs_sysctl_unregister()	do { } while (0)
+# define xfs_sysctl_unregister()	((void)0)
 #endif /* CONFIG_SYSCTL */
 
 #endif /* __XFS_SYSCTL_H__ */

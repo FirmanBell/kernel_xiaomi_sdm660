@@ -369,7 +369,7 @@ do {									\
 	} while (0)
 #else
 #define __SET_PERSONALITY32_N32()					\
-	do { } while (0)
+	((void)0)
 #endif
 
 #ifdef CONFIG_MIPS32_O32
@@ -386,7 +386,7 @@ do {									\
 	} while (0)
 #else
 #define __SET_PERSONALITY32_O32(ex, state)				\
-	do { } while (0)
+	((void)0)
 #endif
 
 #ifdef CONFIG_MIPS32_COMPAT
@@ -399,7 +399,7 @@ do {									\
 		__SET_PERSONALITY32_O32(ex, state);			\
 } while (0)
 #else
-#define __SET_PERSONALITY32(ex, state) do { } while (0)
+#define __SET_PERSONALITY32(ex, state) ((void)0)
 #endif
 
 #define SET_PERSONALITY2(ex, state)					\

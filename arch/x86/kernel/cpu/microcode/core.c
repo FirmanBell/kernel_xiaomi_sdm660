@@ -489,7 +489,7 @@ static void __exit microcode_dev_exit(void)
 }
 #else
 #define microcode_dev_init()	0
-#define microcode_dev_exit()	do { } while (0)
+#define microcode_dev_exit()	((void)0)
 #endif
 
 /* fake device for request_firmware */

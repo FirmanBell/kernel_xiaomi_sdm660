@@ -180,8 +180,8 @@ static int __initdata stifb_bpp_pref[MAX_STI_ROMS];
 #define ENABLE	1	/* for enabling/disabling screen */	
 #define DISABLE 0
 
-#define NGLE_LOCK(fb_info)	do { } while (0) 
-#define NGLE_UNLOCK(fb_info)	do { } while (0)
+#define NGLE_LOCK(fb_info)	((void)0) 
+#define NGLE_UNLOCK(fb_info)	((void)0)
 
 static void
 SETUP_HW(struct stifb_info *fb)

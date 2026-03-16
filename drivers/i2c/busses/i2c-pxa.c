@@ -325,10 +325,10 @@ static void i2c_pxa_scream_blue_murder(struct pxa_i2c *i2c, const char *why)
 
 #define i2c_debug	0
 
-#define show_state(i2c) do { } while (0)
-#define decode_ISR(val) do { } while (0)
-#define decode_ICR(val) do { } while (0)
-#define i2c_pxa_scream_blue_murder(i2c, why) do { } while (0)
+#define show_state(i2c) ((void)0)
+#define decode_ISR(val) ((void)0)
+#define decode_ICR(val) ((void)0)
+#define i2c_pxa_scream_blue_murder(i2c, why) ((void)0)
 
 #endif /* ifdef DEBUG / else */
 
@@ -501,7 +501,7 @@ static void i2c_pxa_set_slave(struct pxa_i2c *i2c, int errcode)
 	}
 }
 #else
-#define i2c_pxa_set_slave(i2c, err)	do { } while (0)
+#define i2c_pxa_set_slave(i2c, err)	((void)0)
 #endif
 
 static void i2c_pxa_reset(struct pxa_i2c *i2c)

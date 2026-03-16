@@ -48,7 +48,7 @@
 #define DO_NUMA(x)	do { (x); } while (0)
 #else
 #define NUMA(x)		(0)
-#define DO_NUMA(x)	do { } while (0)
+#define DO_NUMA(x)	((void)0)
 #endif
 
 /**

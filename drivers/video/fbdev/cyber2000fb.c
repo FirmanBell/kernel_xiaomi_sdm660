@@ -1329,7 +1329,7 @@ static void cyber2000fb_i2c_unregister(struct cfb_info *cfb)
 }
 #else
 #define cyber2000fb_i2c_register(cfb)	(0)
-#define cyber2000fb_i2c_unregister(cfb)	do { } while (0)
+#define cyber2000fb_i2c_unregister(cfb)	((void)0)
 #endif
 
 /*

@@ -190,7 +190,7 @@ static inline u32 ath10k_debug_get_fw_dbglog_level(struct ath10k *ar)
 	return 0;
 }
 
-#define ATH10K_DFS_STAT_INC(ar, c) do { } while (0)
+#define ATH10K_DFS_STAT_INC(ar, c) ((void)0)
 
 #define ath10k_debug_get_et_strings NULL
 #define ath10k_debug_get_et_sset_count NULL

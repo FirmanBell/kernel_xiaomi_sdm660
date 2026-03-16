@@ -90,7 +90,7 @@ static inline void activate_mm(struct mm_struct *active_mm,
 	set_context(mm->context, mm->pgd);
 }
 
-#define deactivate_mm(tsk, mm) do { } while (0)
+#define deactivate_mm(tsk, mm) ((void)0)
 
 #define prepare_arch_switch(next) load_ksp_mmu(next)
 
@@ -200,7 +200,7 @@ static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next,
 	activate_context(tsk->mm);
 }
 
-#define deactivate_mm(tsk, mm)	do { } while (0)
+#define deactivate_mm(tsk, mm)	((void)0)
 
 static inline void activate_mm(struct mm_struct *prev_mm,
 			       struct mm_struct *next_mm)
@@ -221,7 +221,7 @@ static inline int init_new_context(struct task_struct *tsk,
 	return 0;
 }
 
-#define destroy_context(mm)		do { } while(0)
+#define destroy_context(mm)		((void)0)
 
 static inline void switch_mm_0230(struct mm_struct *mm)
 {
@@ -290,7 +290,7 @@ static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next, str
 	}
 }
 
-#define deactivate_mm(tsk,mm)	do { } while (0)
+#define deactivate_mm(tsk,mm)	((void)0)
 
 static inline void activate_mm(struct mm_struct *prev_mm,
 			       struct mm_struct *next_mm)
@@ -317,8 +317,8 @@ static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next, str
 {
 }
 
-#define destroy_context(mm)	do { } while (0)
-#define deactivate_mm(tsk,mm)	do { } while (0)
+#define destroy_context(mm)	((void)0)
+#define deactivate_mm(tsk,mm)	((void)0)
 
 static inline void activate_mm(struct mm_struct *prev_mm, struct mm_struct *next_mm)
 {

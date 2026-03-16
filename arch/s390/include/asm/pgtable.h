@@ -45,8 +45,8 @@ void arch_report_meminfo(struct seq_file *m);
  * The S390 doesn't have any external MMU info: the kernel page
  * tables contain all the necessary information.
  */
-#define update_mmu_cache(vma, address, ptep)     do { } while (0)
-#define update_mmu_cache_pmd(vma, address, ptep) do { } while (0)
+#define update_mmu_cache(vma, address, ptep)     ((void)0)
+#define update_mmu_cache_pmd(vma, address, ptep) ((void)0)
 
 /*
  * ZERO_PAGE is a global shared page that is always zero; used
@@ -1234,7 +1234,7 @@ static inline pmd_t *pmd_offset(pud_t *pud, unsigned long address)
 #define pte_offset(pmd, addr) ((pte_t *) pmd_deref(*(pmd)) + pte_index(addr))
 #define pte_offset_kernel(pmd, address) pte_offset(pmd,address)
 #define pte_offset_map(pmd, address) pte_offset_kernel(pmd, address)
-#define pte_unmap(pte) do { } while (0)
+#define pte_unmap(pte) ((void)0)
 
 static inline pmd_t pmd_wrprotect(pmd_t pmd)
 {

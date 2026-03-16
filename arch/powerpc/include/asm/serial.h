@@ -18,7 +18,7 @@
 #ifdef CONFIG_PPC_UDBG_16550
 extern void find_legacy_serial_ports(void);
 #else
-#define find_legacy_serial_ports()	do { } while (0)
+#define find_legacy_serial_ports()	((void)0)
 #endif
 
 #endif /* _PPC64_SERIAL_H */

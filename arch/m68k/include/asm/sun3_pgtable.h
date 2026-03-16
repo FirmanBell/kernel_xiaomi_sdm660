@@ -108,7 +108,7 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
 	return pte;
 }
 
-#define pmd_set(pmdp,ptep) do {} while (0)
+#define pmd_set(pmdp,ptep) ((void)0)
 
 static inline void pgd_set(pgd_t *pgdp, pmd_t *pmdp)
 {
@@ -204,7 +204,7 @@ static inline pmd_t *pmd_offset (pgd_t *pgd, unsigned long address)
 #define pte_index(address) ((address >> PAGE_SHIFT) & (PTRS_PER_PTE-1))
 #define pte_offset_kernel(pmd, address) ((pte_t *) __pmd_page(*pmd) + pte_index(address))
 #define pte_offset_map(pmd, address) ((pte_t *)page_address(pmd_page(*pmd)) + pte_index(address))
-#define pte_unmap(pte) do { } while (0)
+#define pte_unmap(pte) ((void)0)
 
 /* Macros to (de)construct the fake PTEs representing swap pages. */
 #define __swp_type(x)		((x).val & 0x7F)

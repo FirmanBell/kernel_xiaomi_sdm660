@@ -732,7 +732,7 @@ struct ieee80211_if_mesh {
 	do { (msh)->mshstats.name++; } while (0)
 #else
 #define IEEE80211_IFSTA_MESH_CTR_INC(msh, name) \
-	do { } while (0)
+	((void)0)
 #endif
 
 /**
@@ -1335,7 +1335,7 @@ struct ieee80211_local {
 	unsigned int tx_status_drop;
 #define I802_DEBUG_INC(c) (c)++
 #else /* CONFIG_MAC80211_DEBUG_COUNTERS */
-#define I802_DEBUG_INC(c) do { } while (0)
+#define I802_DEBUG_INC(c) ((void)0)
 #endif /* CONFIG_MAC80211_DEBUG_COUNTERS */
 
 

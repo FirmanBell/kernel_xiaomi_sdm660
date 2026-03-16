@@ -48,7 +48,7 @@
 #ifdef CONFIG_MSMB_CAMERA_DEBUG
 #define CDBG(fmt, args...) pr_debug(fmt, ##args)
 #else
-#define CDBG(fmt, args...) do { } while (0)
+#define CDBG(fmt, args...) ((void)0)
 #endif
 
 static void msm_ispif_io_dump_reg(struct ispif_device *ispif)

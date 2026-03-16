@@ -505,7 +505,7 @@ extern int nfs_register_sysctl(void);
 extern void nfs_unregister_sysctl(void);
 #else
 #define nfs_register_sysctl() 0
-#define nfs_unregister_sysctl() do { } while(0)
+#define nfs_unregister_sysctl() ((void)0)
 #endif
 
 /*

@@ -50,16 +50,16 @@ struct hid_debug_list {
 
 #else
 
-#define hid_dump_input(a,b,c)		do { } while (0)
-#define hid_dump_report(a,b,c,d)	do { } while (0)
-#define hid_dump_device(a,b)		do { } while (0)
-#define hid_dump_field(a,b,c)		do { } while (0)
-#define hid_resolv_usage(a,b)		do { } while (0)
-#define hid_debug_register(a, b)	do { } while (0)
-#define hid_debug_unregister(a)		do { } while (0)
-#define hid_debug_init()		do { } while (0)
-#define hid_debug_exit()		do { } while (0)
-#define hid_debug_event(a,b)		do { } while (0)
+#define hid_dump_input(a,b,c)		((void)0)
+#define hid_dump_report(a,b,c,d)	((void)0)
+#define hid_dump_device(a,b)		((void)0)
+#define hid_dump_field(a,b,c)		((void)0)
+#define hid_resolv_usage(a,b)		((void)0)
+#define hid_debug_register(a, b)	((void)0)
+#define hid_debug_unregister(a)		((void)0)
+#define hid_debug_init()		((void)0)
+#define hid_debug_exit()		((void)0)
+#define hid_debug_event(a,b)		((void)0)
 
 #endif
 

@@ -67,7 +67,7 @@ extern unsigned long SCR_value;
 #ifdef CONFIG_SA1100_ASSABET
 extern void ASSABET_BCR_frob(unsigned int mask, unsigned int set);
 #else
-#define ASSABET_BCR_frob(x,y)	do { } while (0)
+#define ASSABET_BCR_frob(x,y)	((void)0)
 #endif
 
 extern void assabet_uda1341_reset(int set);

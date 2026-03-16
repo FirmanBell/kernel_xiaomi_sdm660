@@ -491,7 +491,7 @@ static inline void pte_unmap(pte_t *pte) { }
 
 #define pte_offset_map(dir,addr)	pte_offset_kernel((dir), (addr))
 #define pte_offset_map_nested(dir,addr)	pte_offset_kernel((dir), (addr))
-#define pte_unmap_nested(pte)		do { } while (0)
+#define pte_unmap_nested(pte)		((void)0)
 
 #define pte_set_fixmap(addr)		((pte_t *)set_fixmap_offset(FIX_PTE, addr))
 #define pte_set_fixmap_offset(pmd, addr)	pte_set_fixmap(pte_offset_phys(pmd, addr))
@@ -837,7 +837,7 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
 	 */
 }
 
-#define update_mmu_cache_pmd(vma, address, pmd) do { } while (0)
+#define update_mmu_cache_pmd(vma, address, pmd) ((void)0)
 
 #define kc_vaddr_to_offset(v)	((v) & ~VA_START)
 #define kc_offset_to_vaddr(o)	((o) | VA_START)

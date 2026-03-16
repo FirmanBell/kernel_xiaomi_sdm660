@@ -171,7 +171,7 @@ static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next,
  * there is a good chance that task gets sched-out/in, making it's ASID valid
  * again (this teased me for a whole day).
  */
-#define deactivate_mm(tsk, mm)   do { } while (0)
+#define deactivate_mm(tsk, mm)   ((void)0)
 
 #define enter_lazy_tlb(mm, tsk)
 

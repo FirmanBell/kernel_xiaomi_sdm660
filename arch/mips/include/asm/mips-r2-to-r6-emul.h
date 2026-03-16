@@ -67,8 +67,8 @@ do {								\
 
 #else
 
-#define MIPS_R2_STATS(M)          do { } while (0)
-#define MIPS_R2BR_STATS(M)        do { } while (0)
+#define MIPS_R2_STATS(M)          ((void)0)
+#define MIPS_R2BR_STATS(M)        ((void)0)
 
 #endif /* CONFIG_DEBUG_FS */
 

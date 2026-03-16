@@ -188,7 +188,7 @@ static void arcnet_dump_packet(struct net_device *dev, int bufnum,
 
 #else
 
-#define arcnet_dump_packet(dev, bufnum, desc, take_arcnet_lock) do { } while (0)
+#define arcnet_dump_packet(dev, bufnum, desc, take_arcnet_lock) ((void)0)
 
 #endif
 

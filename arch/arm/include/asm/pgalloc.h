@@ -18,7 +18,7 @@
 #include <asm/cacheflush.h>
 #include <asm/tlbflush.h>
 
-#define check_pgt_cache()		do { } while (0)
+#define check_pgt_cache()		((void)0)
 
 #ifdef CONFIG_MMU
 
@@ -49,7 +49,7 @@ static inline void pud_populate(struct mm_struct *mm, pud_t *pud, pmd_t *pmd)
  * Since we have only two-level page tables, these are trivial
  */
 #define pmd_alloc_one(mm,addr)		({ BUG(); ((pmd_t *)2); })
-#define pmd_free(mm, pmd)		do { } while (0)
+#define pmd_free(mm, pmd)		((void)0)
 #define pud_populate(mm,pmd,pte)	BUG()
 
 #endif	/* CONFIG_ARM_LPAE */

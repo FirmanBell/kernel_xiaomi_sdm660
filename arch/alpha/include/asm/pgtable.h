@@ -318,7 +318,7 @@ extern inline pte_t * pte_offset_kernel(pmd_t * dir, unsigned long address)
 }
 
 #define pte_offset_map(dir,addr)	pte_offset_kernel((dir),(addr))
-#define pte_unmap(pte)			do { } while (0)
+#define pte_unmap(pte)			((void)0)
 
 extern pgd_t swapper_pg_dir[1024];
 
@@ -361,7 +361,7 @@ extern void paging_init(void);
 /*
  * No page table caches to initialise
  */
-#define pgtable_cache_init()	do { } while (0)
+#define pgtable_cache_init()	((void)0)
 
 /* We have our own get_unmapped_area to cope with ADDR_LIMIT_32BIT.  */
 #define HAVE_ARCH_UNMAPPED_AREA

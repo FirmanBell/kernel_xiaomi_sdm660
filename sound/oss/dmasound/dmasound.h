@@ -91,7 +91,7 @@ extern int dmasound_init(void);
 #ifdef MODULE
 extern void dmasound_deinit(void);
 #else
-#define dmasound_deinit()	do { } while (0)
+#define dmasound_deinit()	((void)0)
 #endif
 
 /* description of the set-up applies to either hard or soft settings */

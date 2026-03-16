@@ -238,9 +238,9 @@ static const char ep0name [] = "ep0";
 
 /* IXP doesn't yet support <linux/clk.h> */
 #define clk_get(dev,name)	NULL
-#define clk_enable(clk)		do { } while (0)
-#define clk_disable(clk)	do { } while (0)
-#define clk_put(clk)		do { } while (0)
+#define clk_enable(clk)		((void)0)
+#define clk_disable(clk)	((void)0)
+#define clk_put(clk)		((void)0)
 
 #endif
 
@@ -1345,8 +1345,8 @@ DEFINE_SHOW_ATTRIBUTE(udc_debug);
 
 #else	/* !CONFIG_USB_GADGET_DEBUG_FILES */
 
-#define create_debug_files(dev) do {} while (0)
-#define remove_debug_files(dev) do {} while (0)
+#define create_debug_files(dev) ((void)0)
+#define remove_debug_files(dev) ((void)0)
 
 #endif	/* CONFIG_USB_GADGET_DEBUG_FILES */
 

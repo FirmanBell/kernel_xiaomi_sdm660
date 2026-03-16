@@ -62,7 +62,7 @@ static void plist_check_head(struct plist_head *head)
 }
 
 #else
-# define plist_check_head(h)	do { } while (0)
+# define plist_check_head(h)	((void)0)
 #endif
 
 /**

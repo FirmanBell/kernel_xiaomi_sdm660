@@ -137,7 +137,7 @@ static void butterfly_chipselect(struct spi_device *spi, int value)
 
 /* we only needed to implement one mode here, and choose SPI_MODE_0 */
 
-#define spidelay(X)	do { } while (0)
+#define spidelay(X)	((void)0)
 /* #define spidelay	ndelay */
 
 #include "spi-bitbang-txrx.h"

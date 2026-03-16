@@ -17,7 +17,7 @@
 #include <linux/sched.h>
 #include <linux/cred.h>
 
-#define dprintk(fmt, args...) do{}while(0)
+#define dprintk(fmt, args...) ((void)0)
 
 
 static int get_name(const struct path *path, char *name, struct dentry *child);

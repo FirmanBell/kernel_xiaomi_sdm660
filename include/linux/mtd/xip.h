@@ -79,7 +79,7 @@
 #endif
 
 #ifndef xip_iprefetch
-#define xip_iprefetch()		do { } while (0)
+#define xip_iprefetch()		((void)0)
 #endif
 
 /*
@@ -89,7 +89,7 @@
  * This should not rely upon standard kernel code.
  */
 #ifndef xip_cpu_idle
-#define xip_cpu_idle()  do { } while (0)
+#define xip_cpu_idle()  ((void)0)
 #endif
 
 #endif /* CONFIG_MTD_XIP */

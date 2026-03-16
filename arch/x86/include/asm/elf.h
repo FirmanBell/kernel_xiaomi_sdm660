@@ -151,7 +151,7 @@ do {						\
 } while (0);
 
 #define ELF_PLATFORM	(utsname()->machine)
-#define set_personality_64bit()	do { } while (0)
+#define set_personality_64bit()	((void)0)
 
 #else /* CONFIG_X86_32 */
 

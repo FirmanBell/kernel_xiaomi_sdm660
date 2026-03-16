@@ -27,8 +27,8 @@ void schedtune_dequeue_task(struct task_struct *p, int cpu);
 
 #define schedtune_prefer_idle(tsk) 0
 
-#define schedtune_enqueue_task(task, cpu) do { } while (0)
-#define schedtune_dequeue_task(task, cpu) do { } while (0)
+#define schedtune_enqueue_task(task, cpu) ((void)0)
+#define schedtune_dequeue_task(task, cpu) ((void)0)
 
 #define stune_util(cpu, other_util, walt_load) cpu_util_cfs(cpu_rq(cpu))
 #endif /* CONFIG_SCHED_TUNE */

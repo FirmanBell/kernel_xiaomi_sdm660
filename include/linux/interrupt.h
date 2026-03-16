@@ -203,7 +203,7 @@ extern void devm_free_irq(struct device *dev, unsigned int irq, void *dev_id);
  * irqs-off latencies.
  */
 #ifdef CONFIG_LOCKDEP
-# define local_irq_enable_in_hardirq()	do { } while (0)
+# define local_irq_enable_in_hardirq()	((void)0)
 #else
 # define local_irq_enable_in_hardirq()	local_irq_enable()
 #endif
@@ -451,7 +451,7 @@ extern bool force_irqthreads;
  * implement the following hook.
  */
 #ifndef hard_irq_disable
-#define hard_irq_disable()	do { } while(0)
+#define hard_irq_disable()	((void)0)
 #endif
 
 /* PLEASE, avoid to allocate new softirqs, if you need not _really_ high
@@ -586,8 +586,8 @@ static inline void tasklet_unlock_wait(struct tasklet_struct *t)
 }
 #else
 #define tasklet_trylock(t) 1
-#define tasklet_unlock_wait(t) do { } while (0)
-#define tasklet_unlock(t) do { } while (0)
+#define tasklet_unlock_wait(t) ((void)0)
+#define tasklet_unlock(t) ((void)0)
 #endif
 
 extern void __tasklet_schedule(struct tasklet_struct *t);

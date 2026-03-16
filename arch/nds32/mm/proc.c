@@ -431,7 +431,7 @@ static inline void cpu_l2cache_op(unsigned long start, unsigned long end, unsign
 	}
 }
 #else
-#define cpu_l2cache_op(start,end,op) do { } while (0)
+#define cpu_l2cache_op(start,end,op) ((void)0)
 #endif
 /*
  * DMA

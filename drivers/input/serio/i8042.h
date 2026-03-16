@@ -85,14 +85,14 @@ static unsigned long i8042_start_time;
 			dbg("** " format, ##args);		\
 	} while (0)
 #else
-#define dbg_init() do { } while (0)
+#define dbg_init() ((void)0)
 #define dbg(format, arg...)							\
 	do {									\
 		if (0)								\
 			printk(KERN_DEBUG pr_fmt(format), ##arg);		\
 	} while (0)
 
-#define filter_dbg(filter, data, format, args...) do { } while (0)
+#define filter_dbg(filter, data, format, args...) ((void)0)
 #endif
 
 #endif /* _I8042_H */

@@ -33,7 +33,7 @@ struct btrfs_pending_bios {
 #define btrfs_device_data_ordered_init(device)	\
 	seqcount_init(&device->data_seqcount)
 #else
-#define btrfs_device_data_ordered_init(device) do { } while (0)
+#define btrfs_device_data_ordered_init(device) ((void)0)
 #endif
 
 #define BTRFS_DEV_STATE_WRITEABLE	(0)

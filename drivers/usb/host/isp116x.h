@@ -331,7 +331,7 @@ struct isp116x_ep {
 #ifdef VERBOSE
 #    define VDBG		DBG
 #else
-#    define VDBG(stuff...)	do{}while(0)
+#    define VDBG(stuff...)	((void)0)
 #endif
 
 #define ERR(stuff...)		printk(KERN_ERR "116x: " stuff)
@@ -351,7 +351,7 @@ struct isp116x_ep {
 #define	isp116x_delay(h,d)	ndelay(d)
 #define isp116x_check_platform_delay(h)	0
 #else
-#define	isp116x_delay(h,d)	do{}while(0)
+#define	isp116x_delay(h,d)	((void)0)
 #define isp116x_check_platform_delay(h)	0
 #endif
 
@@ -534,7 +534,7 @@ static void urb_dbg(struct urb *urb, char *msg)
 
 #else
 
-#define  urb_dbg(urb,msg)   do{}while(0)
+#define  urb_dbg(urb,msg)   ((void)0)
 
 #endif				/* ! defined(URB_TRACE) */
 
@@ -589,8 +589,8 @@ static inline void dump_ptd_in_data(struct ptd *ptd, u8 * buf)
 
 #else
 
-#define dump_ptd(ptd)               do{}while(0)
-#define dump_ptd_in_data(ptd,buf)   do{}while(0)
-#define dump_ptd_out_data(ptd,buf)  do{}while(0)
+#define dump_ptd(ptd)               ((void)0)
+#define dump_ptd_in_data(ptd,buf)   ((void)0)
+#define dump_ptd_out_data(ptd,buf)  ((void)0)
 
 #endif				/* ! defined(PTD_TRACE) */

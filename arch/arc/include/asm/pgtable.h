@@ -254,8 +254,8 @@
 extern char empty_zero_page[PAGE_SIZE];
 #define ZERO_PAGE(vaddr)	(virt_to_page(empty_zero_page))
 
-#define pte_unmap(pte)		do { } while (0)
-#define pte_unmap_nested(pte)		do { } while (0)
+#define pte_unmap(pte)		((void)0)
+#define pte_unmap_nested(pte)		((void)0)
 
 #define set_pte(pteptr, pteval)	((*(pteptr)) = (pteval))
 #define set_pmd(pmdptr, pmdval)	(*(pmdptr) = pmdval)
@@ -402,7 +402,7 @@ void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
 /*
  * No page table caches to initialise
  */
-#define pgtable_cache_init()   do { } while (0)
+#define pgtable_cache_init()   ((void)0)
 
 #endif /* __ASSEMBLY__ */
 

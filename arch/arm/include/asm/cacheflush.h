@@ -365,7 +365,7 @@ extern void flush_kernel_dcache_page(struct page *);
  * We don't appear to need to do anything here.  In fact, if we did, we'd
  * duplicate cache flushing elsewhere performed by flush_dcache_page().
  */
-#define flush_icache_page(vma,page)	do { } while (0)
+#define flush_icache_page(vma,page)	((void)0)
 
 /*
  * flush_cache_vmap() is used when creating mappings (eg, via vmap,

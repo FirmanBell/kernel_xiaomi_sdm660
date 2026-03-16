@@ -60,12 +60,12 @@ void sh64_setup_tlb_slot(unsigned long long config_addr, unsigned long eaddr,
 			 unsigned long asid, unsigned long paddr);
 void sh64_teardown_tlb_slot(unsigned long long config_addr);
 #else
-#define sh64_tlb_init()					do { } while (0)
+#define sh64_tlb_init()					((void)0)
 #define sh64_next_free_dtlb_entry()			(0)
 #define sh64_get_wired_dtlb_entry()			(0)
-#define sh64_put_wired_dtlb_entry(entry)		do { } while (0)
-#define sh64_setup_tlb_slot(conf, virt, asid, phys)	do { } while (0)
-#define sh64_teardown_tlb_slot(addr)			do { } while (0)
+#define sh64_put_wired_dtlb_entry(entry)		((void)0)
+#define sh64_setup_tlb_slot(conf, virt, asid, phys)	((void)0)
+#define sh64_teardown_tlb_slot(addr)			((void)0)
 #endif /* CONFIG_MMU */
 #endif /* __ASSEMBLY__ */
 #endif /* __ASM_SH_TLB_64_H */

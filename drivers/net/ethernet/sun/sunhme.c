@@ -152,9 +152,9 @@ static __inline__ void tx_dump_ring(struct happy_meal *hp)
 	}
 }
 #else
-#define tx_add_log(hp, a, s)		do { } while(0)
-#define tx_dump_log()			do { } while(0)
-#define tx_dump_ring(hp)		do { } while(0)
+#define tx_add_log(hp, a, s)		((void)0)
+#define tx_dump_log()			((void)0)
+#define tx_dump_ring(hp)		((void)0)
 #endif
 
 #ifdef HMEDEBUG

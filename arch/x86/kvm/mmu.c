@@ -102,9 +102,9 @@ module_param(dbg, bool, 0644);
 #define rmap_printk(x...) do { if (dbg) printk(x); } while (0)
 #define MMU_WARN_ON(x) WARN_ON(x)
 #else
-#define pgprintk(x...) do { } while (0)
-#define rmap_printk(x...) do { } while (0)
-#define MMU_WARN_ON(x) do { } while (0)
+#define pgprintk(x...) ((void)0)
+#define rmap_printk(x...) ((void)0)
+#define MMU_WARN_ON(x) ((void)0)
 #endif
 
 #define PTE_PREFETCH_NUM		8

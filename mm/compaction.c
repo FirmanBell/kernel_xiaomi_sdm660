@@ -36,8 +36,8 @@ static inline void count_compact_events(enum vm_event_item item, long delta)
 	count_vm_events(item, delta);
 }
 #else
-#define count_compact_event(item) do { } while (0)
-#define count_compact_events(item, delta) do { } while (0)
+#define count_compact_event(item) ((void)0)
+#define count_compact_events(item, delta) ((void)0)
 #endif
 
 #if defined CONFIG_COMPACTION || defined CONFIG_CMA

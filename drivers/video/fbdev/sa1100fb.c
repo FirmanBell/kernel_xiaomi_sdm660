@@ -1046,7 +1046,7 @@ sa1100fb_freq_policy(struct notifier_block *nb, unsigned long val,
 		/* todo: fill in min/max values */
 		break;
 	case CPUFREQ_NOTIFY:
-		do {} while(0);
+		((void)0);
 		/* todo: panic if min/max values aren't fulfilled 
 		 * [can't really happen unless there's a bug in the
 		 * CPU policy verififcation process *

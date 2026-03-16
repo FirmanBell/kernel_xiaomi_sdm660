@@ -6850,8 +6850,8 @@ static inline void ftrace_startup_all(int command) { }
 		___ret;							\
 	})
 
-# define ftrace_startup_sysctl()	do { } while (0)
-# define ftrace_shutdown_sysctl()	do { } while (0)
+# define ftrace_startup_sysctl()	((void)0)
+# define ftrace_shutdown_sysctl()	((void)0)
 
 static inline int
 ftrace_ops_test(struct ftrace_ops *ops, unsigned long ip, void *regs)

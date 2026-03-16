@@ -465,7 +465,7 @@ void do_trace_rcu_torture_read(const char *rcutorturename, struct rcu_head *rhp,
 EXPORT_SYMBOL_GPL(do_trace_rcu_torture_read);
 #else
 #define do_trace_rcu_torture_read(rcutorturename, rhp, secs, c_old, c) \
-	do { } while (0)
+	((void)0)
 #endif
 
 #ifdef CONFIG_RCU_STALL_COMMON

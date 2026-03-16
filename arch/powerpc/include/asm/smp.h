@@ -73,7 +73,7 @@ void generic_set_cpu_up(unsigned int cpu);
 int generic_check_cpu_restart(unsigned int cpu);
 int is_cpu_dead(unsigned int cpu);
 #else
-#define generic_set_cpu_up(i)	do { } while (0)
+#define generic_set_cpu_up(i)	((void)0)
 #endif
 
 #ifdef CONFIG_PPC64

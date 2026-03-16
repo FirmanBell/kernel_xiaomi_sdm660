@@ -1481,7 +1481,7 @@ static void dump_arp_table(struct lec_priv *priv)
 
 }
 #else
-#define dump_arp_table(priv) do { } while (0)
+#define dump_arp_table(priv) ((void)0)
 #endif
 
 /*

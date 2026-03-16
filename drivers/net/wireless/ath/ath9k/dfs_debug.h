@@ -62,7 +62,7 @@ extern struct ath_dfs_pool_stats global_dfs_pool_stats;
 
 #else
 
-#define DFS_STAT_INC(sc, c) do { } while (0)
+#define DFS_STAT_INC(sc, c) ((void)0)
 static inline void ath9k_dfs_init_debug(struct ath_softc *sc) { }
 
 #endif /* CONFIG_ATH9K_DFS_DEBUGFS */

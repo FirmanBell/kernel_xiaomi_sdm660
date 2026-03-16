@@ -241,7 +241,7 @@ static inline void pte_clear(struct mm_struct *mm,
  */
 #define mk_pte(page, prot)	(pfn_pte(page_to_pfn(page), prot))
 
-#define pte_unmap(pte)	do { } while (0)
+#define pte_unmap(pte)	((void)0)
 
 /*
  * Conversion functions: convert a page and protection to a page entry,
@@ -291,7 +291,7 @@ static inline void pte_clear(struct mm_struct *mm,
 #define kern_addr_valid(addr)		(1)
 
 
-#define pgtable_cache_init()		do { } while (0)
+#define pgtable_cache_init()		((void)0)
 
 extern void __init paging_init(void);
 extern void __init mmu_init(void);

@@ -149,7 +149,7 @@ set_smp_redirect (int flag)
 #endif
 }
 #else
-#define set_smp_redirect(flag)	do { } while (0)
+#define set_smp_redirect(flag)	((void)0)
 #endif
 
 static void __init

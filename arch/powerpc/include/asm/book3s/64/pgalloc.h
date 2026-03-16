@@ -228,7 +228,7 @@ static inline void __pte_free_tlb(struct mmu_gather *tlb, pgtable_t table,
 	pgtable_free_tlb(tlb, table, PTE_INDEX);
 }
 
-#define check_pgt_cache()	do { } while (0)
+#define check_pgt_cache()	((void)0)
 
 extern atomic_long_t direct_pages_count[MMU_PAGE_COUNT];
 static inline void update_page_count(int psize, long count)

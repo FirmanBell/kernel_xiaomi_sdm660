@@ -136,7 +136,7 @@ typedef int (qdf_abstract_print)(void *priv, const char *fmt, ...);
 #define MTRACE(p) p
 
 #else
-#define MTRACE(p) do { } while (0)
+#define MTRACE(p) ((void)0)
 
 #endif
 #define NO_SESSION 0xFF

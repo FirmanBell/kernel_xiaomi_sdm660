@@ -429,8 +429,8 @@ static void __init sprockets_memconfig(void)
 
 #else   /* !CONFIG_64BIT */
 
-#define pat_inventory() do { } while (0)
-#define pat_memconfig() do { } while (0)
+#define pat_inventory() ((void)0)
+#define pat_memconfig() ((void)0)
 #define sprockets_memconfig() pagezero_memconfig()
 
 #endif	/* !CONFIG_64BIT */
@@ -493,7 +493,7 @@ static void __init snake_inventory(void)
 }
 
 #else /* CONFIG_PA20 */
-#define snake_inventory() do { } while (0)
+#define snake_inventory() ((void)0)
 #endif  /* CONFIG_PA20 */
 
 /* Common 32/64 bit based code goes here */

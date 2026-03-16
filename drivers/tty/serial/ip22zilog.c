@@ -52,7 +52,7 @@
  */
 #define ZSDELAY()		udelay(5)
 #define ZSDELAY_LONG()		udelay(20)
-#define ZS_WSYNC(channel)	do { } while (0)
+#define ZS_WSYNC(channel)	((void)0)
 
 #define NUM_IP22ZILOG		1
 #define NUM_CHANNELS		(NUM_IP22ZILOG * 2)

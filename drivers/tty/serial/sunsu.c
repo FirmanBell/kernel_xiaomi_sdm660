@@ -1388,7 +1388,7 @@ static inline struct console *SUNSU_CONSOLE(void)
 }
 #else
 #define SUNSU_CONSOLE()			(NULL)
-#define sunsu_serial_console_init()	do { } while (0)
+#define sunsu_serial_console_init()	((void)0)
 #endif
 
 static enum su_type su_get_type(struct device_node *dp)

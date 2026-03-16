@@ -60,8 +60,8 @@ static inline void arch_local_irq_disable(void)
 #define local_abt_enable()  __asm__("cpsie a	@ __sta" : : : "memory", "cc")
 #define local_abt_disable() __asm__("cpsid a	@ __cla" : : : "memory", "cc")
 #else
-#define local_abt_enable()	do { } while (0)
-#define local_abt_disable()	do { } while (0)
+#define local_abt_enable()	((void)0)
+#define local_abt_disable()	((void)0)
 #endif
 #else
 
@@ -145,8 +145,8 @@ static inline void arch_local_irq_disable(void)
 	: "memory", "cc");					\
 	})
 
-#define local_abt_enable()	do { } while (0)
-#define local_abt_disable()	do { } while (0)
+#define local_abt_enable()	((void)0)
+#define local_abt_disable()	((void)0)
 #endif
 
 /*

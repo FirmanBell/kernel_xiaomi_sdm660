@@ -166,7 +166,7 @@ static inline void destroy_context(struct mm_struct *mm)
 	dsemul_mm_cleanup(mm);
 }
 
-#define deactivate_mm(tsk, mm)	do { } while (0)
+#define deactivate_mm(tsk, mm)	((void)0)
 
 /*
  * After we have set current->mm to a new value, this activates

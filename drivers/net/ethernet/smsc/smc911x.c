@@ -114,7 +114,7 @@ MODULE_ALIAS("platform:smc911x");
 
 #define PRINTK(dev, args...)   netdev_info(dev, args)
 #else
-#define DBG(n, dev, args...)   do { } while (0)
+#define DBG(n, dev, args...)   ((void)0)
 #define PRINTK(dev, args...)   netdev_dbg(dev, args)
 #endif
 
@@ -149,7 +149,7 @@ static void PRINT_PKT(u_char *buf, int length)
 	pr_cont("\n");
 }
 #else
-#define PRINT_PKT(x...)  do { } while (0)
+#define PRINT_PKT(x...)  ((void)0)
 #endif
 
 

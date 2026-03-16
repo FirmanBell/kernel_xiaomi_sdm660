@@ -25,7 +25,7 @@ extern void wbflush_setup(void);
 
 #else /* !CONFIG_CPU_HAS_WB */
 
-#define wbflush_setup() do { } while (0)
+#define wbflush_setup() ((void)0)
 
 #define wbflush() fast_iob()
 

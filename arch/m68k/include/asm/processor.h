@@ -108,7 +108,7 @@ struct thread_struct {
 #ifdef CONFIG_COLDFIRE
 #define setframeformat(_regs)	do { (_regs)->format = 0x4; } while(0)
 #else
-#define setframeformat(_regs)	do { } while (0)
+#define setframeformat(_regs)	((void)0)
 #endif
 
 /*

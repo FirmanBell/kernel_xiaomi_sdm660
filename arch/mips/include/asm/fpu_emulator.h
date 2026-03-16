@@ -173,7 +173,7 @@ do {									\
 } while (0)
 
 #else
-#define MIPS_FPU_EMU_INC_STATS(M) do { } while (0)
+#define MIPS_FPU_EMU_INC_STATS(M) ((void)0)
 #endif /* CONFIG_DEBUG_FS */
 
 extern int fpu_emulator_cop1Handler(struct pt_regs *xcp,

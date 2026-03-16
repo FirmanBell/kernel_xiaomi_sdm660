@@ -210,7 +210,7 @@ static void arch_timer_check_858921_workaround(void)
 	}
 }
 #else
-#define arch_timer_check_858921_workaround()	do { } while (0)
+#define arch_timer_check_858921_workaround()	((void)0)
 #endif
 
 #ifdef CONFIG_FSL_ERRATUM_A008585
@@ -661,7 +661,7 @@ static bool arch_timer_this_cpu_has_cntvct_wa(void)
 	return wa && wa->read_cntvct_el0;
 }
 #else
-#define arch_timer_check_ool_workaround(t,a)		do { } while(0)
+#define arch_timer_check_ool_workaround(t,a)		((void)0)
 #define erratum_set_next_event_tval_virt(...)		({BUG(); 0;})
 #define erratum_set_next_event_tval_phys(...)		({BUG(); 0;})
 #define erratum_handler(fn, r, ...)			({false;})

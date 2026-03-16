@@ -196,7 +196,7 @@ static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next,
 #define switch_mm_irqs_off switch_mm_irqs_off
 
 
-#define deactivate_mm(tsk,mm)	do { } while (0)
+#define deactivate_mm(tsk,mm)	((void)0)
 
 /*
  * After we have set current->mm to a new value, this activates

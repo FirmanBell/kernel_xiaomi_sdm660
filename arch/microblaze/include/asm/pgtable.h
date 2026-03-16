@@ -46,9 +46,9 @@ extern int mem_init_done;
 
 #define swapper_pg_dir ((pgd_t *) NULL)
 
-#define pgtable_cache_init()	do {} while (0)
+#define pgtable_cache_init()	((void)0)
 
-#define arch_enter_lazy_cpu_mode()	do {} while (0)
+#define arch_enter_lazy_cpu_mode()	((void)0)
 
 #define pgprot_noncached_wc(prot)	prot
 
@@ -323,7 +323,7 @@ extern unsigned long empty_zero_page[1024];
 static inline int pgd_none(pgd_t pgd)		{ return 0; }
 static inline int pgd_bad(pgd_t pgd)		{ return 0; }
 static inline int pgd_present(pgd_t pgd)	{ return 1; }
-#define pgd_clear(xp)				do { } while (0)
+#define pgd_clear(xp)				((void)0)
 #define pgd_page(pgd) \
 	((unsigned long) __va(pgd_val(pgd) & PAGE_MASK))
 
@@ -529,7 +529,7 @@ extern unsigned long iopa(unsigned long addr);
 /*
  * No page table caches to initialise
  */
-#define pgtable_cache_init()	do { } while (0)
+#define pgtable_cache_init()	((void)0)
 
 void do_page_fault(struct pt_regs *regs, unsigned long address,
 		   unsigned long error_code);

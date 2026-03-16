@@ -117,7 +117,7 @@ extern int pfault_init(void);
 extern void pfault_fini(void);
 #else /* CONFIG_PFAULT */
 #define pfault_init()		({-1;})
-#define pfault_fini()		do { } while (0)
+#define pfault_fini()		((void)0)
 #endif /* CONFIG_PFAULT */
 
 #ifdef CONFIG_VMCP

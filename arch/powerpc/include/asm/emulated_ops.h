@@ -75,7 +75,7 @@ extern void ppc_warn_emulated_print(const char *type);
 
 #else /* !CONFIG_PPC_EMULATED_STATS */
 
-#define __PPC_WARN_EMULATED(type)	do { } while (0)
+#define __PPC_WARN_EMULATED(type)	((void)0)
 
 #endif /* !CONFIG_PPC_EMULATED_STATS */
 

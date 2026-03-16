@@ -71,7 +71,7 @@ void pte_free(struct mm_struct *mm, pgtable_t ptepage);
 #define pmd_populate(MM, PMD, PTE)		pmd_set(MM, PMD, PTE)
 #define pmd_pgtable(PMD)			((pte_t *)__pmd_page(PMD))
 
-#define check_pgt_cache()	do { } while (0)
+#define check_pgt_cache()	((void)0)
 
 void pgtable_free(void *table, bool is_page);
 

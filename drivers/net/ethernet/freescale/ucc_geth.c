@@ -60,7 +60,7 @@
 #ifdef UGETH_VERBOSE_DEBUG
 #define ugeth_vdbg ugeth_dbg
 #else
-#define ugeth_vdbg(fmt, args...) do { } while (0)
+#define ugeth_vdbg(fmt, args...) ((void)0)
 #endif				/* UGETH_VERBOSE_DEBUG */
 #define UGETH_MSG_DEFAULT	(NETIF_MSG_IFUP << 1 ) - 1
 

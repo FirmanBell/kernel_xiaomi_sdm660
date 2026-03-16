@@ -174,7 +174,7 @@ extern int orinoco_debug;
 		printk(KERN_DEBUG args); \
 } while (0)
 #else
-#define DEBUG(n, args...) do { } while (0)
+#define DEBUG(n, args...) ((void)0)
 #endif	/* ORINOCO_DEBUG */
 
 /********************************************************************/

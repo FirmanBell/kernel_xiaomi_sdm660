@@ -26,9 +26,9 @@ extern void acct_collect(long exitcode, int group_dead);
 extern void acct_process(void);
 extern void acct_exit_ns(struct pid_namespace *);
 #else
-#define acct_collect(x,y)	do { } while (0)
-#define acct_process()		do { } while (0)
-#define acct_exit_ns(ns)	do { } while (0)
+#define acct_collect(x,y)	((void)0)
+#define acct_process()		((void)0)
+#define acct_exit_ns(ns)	((void)0)
 #endif
 
 /*

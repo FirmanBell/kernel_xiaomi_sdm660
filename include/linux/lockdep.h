@@ -402,12 +402,12 @@ static inline void lockdep_on(void)
 {
 }
 
-# define lock_acquire(l, s, t, r, c, n, i)	do { } while (0)
-# define lock_release(l, i)			do { } while (0)
-# define lock_downgrade(l, i)			do { } while (0)
-# define lock_set_class(l, n, k, s, i)		do { } while (0)
-# define lock_set_subclass(l, s, i)		do { } while (0)
-# define lockdep_init()				do { } while (0)
+# define lock_acquire(l, s, t, r, c, n, i)	((void)0)
+# define lock_release(l, i)			((void)0)
+# define lock_downgrade(l, i)			((void)0)
+# define lock_set_class(l, n, k, s, i)		((void)0)
+# define lock_set_subclass(l, s, i)		((void)0)
+# define lockdep_init()				((void)0)
 # define lockdep_init_map(lock, name, key, sub) \
 		do { (void)(name); (void)(key); } while (0)
 # define lockdep_set_class(lock, key)		do { (void)(key); } while (0)
@@ -415,9 +415,9 @@ static inline void lockdep_on(void)
 		do { (void)(key); (void)(name); } while (0)
 #define lockdep_set_class_and_subclass(lock, key, sub) \
 		do { (void)(key); } while (0)
-#define lockdep_set_subclass(lock, sub)		do { } while (0)
+#define lockdep_set_subclass(lock, sub)		((void)0)
 
-#define lockdep_set_novalidate_class(lock) do { } while (0)
+#define lockdep_set_novalidate_class(lock) ((void)0)
 
 /*
  * We don't define lockdep_match_class() and lockdep_match_key() for !LOCKDEP
@@ -426,8 +426,8 @@ static inline void lockdep_on(void)
  */
 
 # define lockdep_reset()		do { debug_locks = 1; } while (0)
-# define lockdep_free_key_range(start, size)	do { } while (0)
-# define lockdep_sys_exit() 			do { } while (0)
+# define lockdep_free_key_range(start, size)	((void)0)
+# define lockdep_sys_exit() 			((void)0)
 /*
  * The class key takes no space if lockdep is disabled:
  */
@@ -465,7 +465,7 @@ enum xhlock_context_t {
 	XHLOCK_CTX_NR,
 };
 
-#define lockdep_init_map_crosslock(m, n, k, s) do {} while (0)
+#define lockdep_init_map_crosslock(m, n, k, s) ((void)0)
 /*
  * To initialize a lockdep_map statically use this macro.
  * Note that _name must not be NULL.
@@ -505,8 +505,8 @@ do {								\
 
 #else /* CONFIG_LOCK_STAT */
 
-#define lock_contended(lockdep_map, ip) do {} while (0)
-#define lock_acquired(lockdep_map, ip) do {} while (0)
+#define lock_contended(lockdep_map, ip) ((void)0)
+#define lock_acquired(lockdep_map, ip) ((void)0)
 
 #define LOCK_CONTENDED(_lock, try, lock) \
 	lock(_lock)
@@ -610,10 +610,10 @@ do {									\
 	} while (0)
 
 #else
-# define might_lock(lock) do { } while (0)
-# define might_lock_read(lock) do { } while (0)
-# define lockdep_assert_irqs_enabled() do { } while (0)
-# define lockdep_assert_irqs_disabled() do { } while (0)
+# define might_lock(lock) ((void)0)
+# define might_lock_read(lock) ((void)0)
+# define lockdep_assert_irqs_enabled() ((void)0)
+# define lockdep_assert_irqs_disabled() ((void)0)
 #endif
 
 #ifdef CONFIG_LOCKDEP

@@ -173,7 +173,7 @@ extern void soc_pcmcia_debug(struct soc_pcmcia_socket *skt, const char *func,
 	soc_pcmcia_debug(skt, __func__, lvl, fmt , ## arg)
 
 #else
-#define debug(skt, lvl, fmt, arg...) do { } while (0)
+#define debug(skt, lvl, fmt, arg...) ((void)0)
 #endif
 
 

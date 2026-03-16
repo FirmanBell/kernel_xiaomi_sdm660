@@ -1269,7 +1269,7 @@ static void print_id(struct usb_device *udev)
 	dev_dbg_f(&udev->dev, "%s\n", buffer);
 }
 #else
-#define print_id(udev) do { } while (0)
+#define print_id(udev) ((void)0)
 #endif
 
 static int eject_installer(struct usb_interface *intf)

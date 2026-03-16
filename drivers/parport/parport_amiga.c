@@ -30,7 +30,7 @@
 #ifdef DEBUG
 #define DPRINTK printk
 #else
-#define DPRINTK(x...)	do { } while (0)
+#define DPRINTK(x...)	((void)0)
 #endif
 
 

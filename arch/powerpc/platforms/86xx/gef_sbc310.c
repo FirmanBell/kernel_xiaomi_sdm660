@@ -45,7 +45,7 @@
 #ifdef DEBUG
 #define DBG (fmt...) do { printk(KERN_ERR "SBC310: " fmt); } while (0)
 #else
-#define DBG (fmt...) do { } while (0)
+#define DBG (fmt...) ((void)0)
 #endif
 
 void __iomem *sbc310_regs;

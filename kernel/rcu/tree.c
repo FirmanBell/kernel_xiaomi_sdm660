@@ -269,7 +269,7 @@ void rcu_softirq_qs(void)
 #define RCU_DYNTICK_CTRL_MASK 0x1
 #define RCU_DYNTICK_CTRL_CTR  (RCU_DYNTICK_CTRL_MASK + 1)
 #ifndef rcu_eqs_special_exit
-#define rcu_eqs_special_exit() do { } while (0)
+#define rcu_eqs_special_exit() ((void)0)
 #endif
 
 static DEFINE_PER_CPU(struct rcu_dynticks, rcu_dynticks) = {

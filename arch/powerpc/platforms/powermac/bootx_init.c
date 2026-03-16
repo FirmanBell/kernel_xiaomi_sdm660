@@ -27,7 +27,7 @@
 #ifdef DEBUG
 #define DBG(fmt...) do { bootx_printf(fmt); } while(0)
 #else
-#define DBG(fmt...) do { } while(0)
+#define DBG(fmt...) ((void)0)
 #endif
 
 extern void __start(unsigned long r3, unsigned long r4, unsigned long r5);

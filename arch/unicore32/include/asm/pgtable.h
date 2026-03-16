@@ -162,7 +162,7 @@ extern struct page *empty_zero_page;
 
 #define pte_offset_map(dir, addr)	(pmd_page_vaddr(*(dir)) \
 						+ __pte_index(addr))
-#define pte_unmap(pte)			do { } while (0)
+#define pte_unmap(pte)			((void)0)
 
 #define set_pte(ptep, pte)	cpu_set_pte(ptep, pte)
 
@@ -289,7 +289,7 @@ extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
 #define kern_addr_valid(addr)	(1)
 
 
-#define pgtable_cache_init() do { } while (0)
+#define pgtable_cache_init() ((void)0)
 
 #endif /* !__ASSEMBLY__ */
 

@@ -104,12 +104,12 @@ extern int __init iosapic_register_platform_intr (u32 int_type,
 extern void map_iosapic_to_node (unsigned int, int);
 #endif
 #else
-#define iosapic_system_init(pcat_compat)			do { } while (0)
+#define iosapic_system_init(pcat_compat)			((void)0)
 #define iosapic_init(address,gsi_base)				(-EINVAL)
 #define iosapic_remove(gsi_base)				(-ENODEV)
 #define iosapic_register_intr(gsi,polarity,trigger)		(gsi)
-#define iosapic_unregister_intr(irq)				do { } while (0)
-#define iosapic_override_isa_irq(isa_irq,gsi,polarity,trigger)	do { } while (0)
+#define iosapic_unregister_intr(irq)				((void)0)
+#define iosapic_override_isa_irq(isa_irq,gsi,polarity,trigger)	((void)0)
 #define iosapic_register_platform_intr(type,gsi,pmi,eid,id, \
 	polarity,trigger)					(gsi)
 #endif

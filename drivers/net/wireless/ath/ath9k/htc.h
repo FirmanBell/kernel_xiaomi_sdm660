@@ -376,10 +376,10 @@ void ath9k_htc_get_et_stats(struct ieee80211_hw *hw,
 			    struct ethtool_stats *stats, u64 *data);
 #else
 
-#define TX_STAT_INC(hif_dev, c)		do { } while (0)
-#define TX_STAT_ADD(hif_dev, c, a)	do { } while (0)
-#define RX_STAT_INC(hif_dev, c)		do { } while (0)
-#define RX_STAT_ADD(hif_dev, c, a)	do { } while (0)
+#define TX_STAT_INC(hif_dev, c)		((void)0)
+#define TX_STAT_ADD(hif_dev, c, a)	((void)0)
+#define RX_STAT_INC(hif_dev, c)		((void)0)
+#define RX_STAT_ADD(hif_dev, c, a)	((void)0)
 
 #define CAB_STAT_INC(priv)
 #define TX_QSTAT_INC(priv, c)

@@ -179,7 +179,7 @@ do {									\
 
 #define __back_to_back_c0_hazard
 
-#define instruction_hazard() do { } while (0)
+#define instruction_hazard() ((void)0)
 
 #elif defined(CONFIG_CPU_SB1)
 
@@ -205,7 +205,7 @@ do {									\
 
 #define __back_to_back_c0_hazard
 
-#define instruction_hazard() do { } while (0)
+#define instruction_hazard() ((void)0)
 
 #else
 
@@ -256,7 +256,7 @@ do {									\
 	___ssnop;							\
 	___ssnop
 
-#define instruction_hazard() do { } while (0)
+#define instruction_hazard() ((void)0)
 
 #endif
 

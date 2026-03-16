@@ -44,7 +44,7 @@
 #define DBG_VERBOSE(fmt, ...)	pr_devel("cpu %d - " fmt, \
 					 smp_processor_id(), ## __VA_ARGS__)
 #else
-#define DBG_VERBOSE(fmt...)	do { } while(0)
+#define DBG_VERBOSE(fmt...)	((void)0)
 #endif
 
 bool __xive_enabled;

@@ -32,7 +32,7 @@
 #ifdef DEBUG_MMU
 #define dprintk(X...) printk(KERN_INFO X)
 #else
-#define dprintk(X...) do { } while(0)
+#define dprintk(X...) ((void)0)
 #endif
 
 static void kvmppc_mmu_book3s_64_reset_msr(struct kvm_vcpu *vcpu)

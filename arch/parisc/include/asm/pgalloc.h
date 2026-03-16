@@ -95,7 +95,7 @@ static inline void pmd_free(struct mm_struct *mm, pmd_t *pmd)
  */
 
 #define pmd_alloc_one(mm, addr)		({ BUG(); ((pmd_t *)2); })
-#define pmd_free(mm, x)			do { } while (0)
+#define pmd_free(mm, x)			((void)0)
 #define pgd_populate(mm, pmd, pte)	BUG()
 
 #endif
@@ -152,6 +152,6 @@ static inline void pte_free(struct mm_struct *mm, struct page *pte)
 	pte_free_kernel(mm, page_address(pte));
 }
 
-#define check_pgt_cache()	do { } while (0)
+#define check_pgt_cache()	((void)0)
 
 #endif
