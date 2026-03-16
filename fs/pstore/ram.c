@@ -749,10 +749,10 @@ static int ramoops_probe(struct platform_device *pdev)
 
 	/* ASUS X00TD Optimization: Dynamic Adaptation */
 	/* Calculate total RAM in MB. Note: totalram_pages is a var in 4.19 */
-	total_ram_mb = totalram_pages >> (20 - PAGE_SHIFT);
+	total_ram_mb = totalram_pages() >> (20 - PAGE_SHIFT);
 	pr_info("ASUS X00TD/X01BD detected RAM: %lu MB. Optimizing ramoops...\n", total_ram_mb);
 
-	/* 
+	/*
 	 * Optimization Strategy:
 	 * 6GB variants (> 5500MB): Can afford larger logs.
 	 * 3GB/4GB variants: Need efficient space usage.
