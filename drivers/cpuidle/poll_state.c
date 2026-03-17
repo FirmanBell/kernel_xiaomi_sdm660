@@ -1,6 +1,7 @@
-// SPDX-License-Identifier: GPL-2.0-only
 /*
  * poll_state.c - Polling idle state
+ *
+ * This file is released under the GPLv2.
  */
 
 #include <linux/cpuidle.h>
