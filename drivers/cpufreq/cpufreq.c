@@ -709,7 +709,6 @@ static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
 	return ret;
 }
 
-bool task_is_libperfmgr(struct task_struct *p);
 static int cpufreq_set_policy(struct cpufreq_policy *policy,
 				struct cpufreq_policy *new_policy);
 
@@ -2258,11 +2257,8 @@ static int cpufreq_set_policy(struct cpufreq_policy *policy,
 	* This check works well when we store new min/max freq attributes,
 	* because new_policy is a copy of policy with one field updated.
 	*/
-	if (new_policy->min > new_policy->max) {
-		if (!task_is_libperfmgr(current))
-			return -EINVAL;
+	if (new_policy->min > new_policy->max)
 		new_policy->min = new_policy->max;
-	}
 
 	/* verify the cpu speed can be set within this limit */
 	ret = cpufreq_driver->verify(new_policy);
