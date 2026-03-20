@@ -181,35 +181,6 @@ int freeze_kernel_threads(void)
 	return error;
 }
 
-void thaw_fingerprintd(void)
-{
-	struct task_struct *p;
-	bool fp_hidl_thawed = false;
-
-	pm_freezing = false;
-	pm_nosig_freezing = false;
-
-	read_lock(&tasklist_lock);
-	for_each_process(p) {
-		if (fp_hidl_thawed)
-			break;
-		if (!fp_hidl_thawed) {
-			if (!memcmp(p->comm, "android.hardware.biometrics.fingerprint@2.1-service", 52) ||
-			    !memcmp(p->comm, "android.hardware.biometrics.fingerprint@2.1-service-asus", 57) ||
-			    !memcmp(p->comm, "android.hardware.biometrics.fingerprint@2.1-service-X01BD", 58) ||
-			    !memcmp(p->comm, "android.hardware.biometrics.fingerprint@2.1-service-X00TD", 58)) {
-				__thaw_task(p);
-				fp_hidl_thawed = true;
-				continue;
-			}
-		}
-	}
-	read_unlock(&tasklist_lock);
-
-	pm_freezing = true;
-	pm_nosig_freezing = true;
-}
-
 void thaw_processes(void)
 {
 	struct task_struct *g, *p;
