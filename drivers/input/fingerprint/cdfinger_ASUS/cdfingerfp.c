@@ -31,6 +31,7 @@
 #include <linux/mutex.h>
 #include <linux/slab.h>
 #include <linux/wait.h>
+#include <linux/kconfig.h>
 #include <linux/input.h>
 #include <linux/signal.h>
 #include <linux/gpio.h>
@@ -106,12 +107,12 @@ struct cdfinger_key_map {
 
 static int isInKeyMode = 0; // key mode
 static int screen_status = 1; // screen on
-static u8 cdfinger_debug = 0x01;
+static bool cdfinger_debug = IS_ENABLED(CONFIG_CDFINGER_FP_DEBUG);
 static int isInit = 0;
 
 #define CDFINGER_DBG(fmt, args...)                                             \
 	do {                                                                   \
-		if (cdfinger_debug & 0x01)                                     \
+		if (unlikely(cdfinger_debug))                                  \
 			pr_info("[DBG][cdfinger]:%5d: <%s> " fmt, __LINE__,    \
 				__func__, ##args);                             \
 	} while (0)
