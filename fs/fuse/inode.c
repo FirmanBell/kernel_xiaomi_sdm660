@@ -728,7 +728,7 @@ static int fuse_parse_param(struct fs_context *fsc, struct fs_parameter *param)
 		break;
 
 	case OPT_GROUP_ID:
-		kgid = make_kgid(fsc->user_ns, result.uint_32);
+		kgid = make_kgid(fsc->user_ns, result.uint_32);;
 		if (!gid_valid(kgid))
 			return invalf(fsc, "Invalid group_id");
 		/*
@@ -1289,8 +1289,6 @@ static void process_init_reply(struct fuse_mount *fm, struct fuse_args *args,
 		fc->conn_error = 1;
 	}
 
-	pr_debug("<%s> dev = %u:%u  fuse Initialized",
-			__func__, MAJOR(fc->dev), MINOR(fc->dev));
 	fuse_set_initialized(fc);
 	wake_up_all(&fc->blocked_waitq);
 }
@@ -1336,9 +1334,6 @@ void fuse_send_init(struct fuse_mount *fm)
 	ia->args.force = true;
 	ia->args.nocreds = true;
 	ia->args.end = process_init_reply;
-
-	pr_debug("<%s> dev = %u:%u  fuse send Initrequest",
-			__func__, MAJOR(fm->fc->dev), MINOR(fm->fc->dev));
 
 	if (unlikely(fm->fc->no_daemon) || fuse_simple_background(fm, &ia->args, GFP_KERNEL) != 0)
 		process_init_reply(fm, &ia->args, -ENOTCONN);
