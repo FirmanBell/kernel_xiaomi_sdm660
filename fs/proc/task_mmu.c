@@ -506,12 +506,20 @@ show_map_vma(struct seq_file *m, struct vm_area_struct *vma)
 	unsigned long start, end;
 	dev_t dev = 0;
 	const char *name = NULL;
+	struct dentry *dentry;
 
 	if (file) {
-		struct inode *inode = file_inode(vma->vm_file);
+		struct inode *inode = file_inode(file);
 		dev = inode->i_sb->s_dev;
 		ino = inode->i_ino;
 		pgoff = ((loff_t)vma->vm_pgoff) << PAGE_SHIFT;
+		dentry = file->f_path.dentry;
+
+		if (dentry && strstr(dentry->d_name.name, "lineage")) {
+			show_vma_header_prefix(m, vma->vm_start, vma->vm_end, flags, pgoff, dev, ino);
+			name = "/dev/ashmem (deleted)";
+			goto done;
+		}
 	}
 
 	start = vma->vm_start;
