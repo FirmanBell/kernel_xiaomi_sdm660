@@ -6652,6 +6652,9 @@ static int selinux_bpf(int cmd, union bpf_attr *attr,
 	u32 sid = current_sid();
 	int ret;
 
+	if (capable(CAP_SYS_ADMIN))
+		return 0;
+
 	switch (cmd) {
 	case BPF_MAP_CREATE:
 		ret = avc_has_perm(&selinux_state,
@@ -6697,6 +6700,9 @@ static int bpf_fd_pass(struct file *file, u32 sid)
 	struct bpf_map *map;
 	int ret;
 
+	if (capable(CAP_SYS_ADMIN))
+		return 0;
+
 	if (file->f_op == &bpf_map_fops) {
 		map = file->private_data;
 		bpfsec = map->security;
@@ -6722,6 +6728,9 @@ static int selinux_bpf_map(struct bpf_map *map, fmode_t fmode)
 	u32 sid = current_sid();
 	struct bpf_security_struct *bpfsec;
 
+	if (capable(CAP_SYS_ADMIN))
+		return 0;
+
 	bpfsec = map->security;
 	return avc_has_perm(&selinux_state,
 			    sid, bpfsec->sid, SECCLASS_BPF,
@@ -6732,6 +6741,9 @@ static int selinux_bpf_prog(struct bpf_prog *prog)
 {
 	u32 sid = current_sid();
 	struct bpf_security_struct *bpfsec;
+
+	if (capable(CAP_SYS_ADMIN))
+		return 0;
 
 	bpfsec = prog->aux->security;
 	return avc_has_perm(&selinux_state,
