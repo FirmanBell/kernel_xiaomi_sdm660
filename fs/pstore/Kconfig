@@ -30,6 +30,7 @@ config PSTORE_LZO_COMPRESS
 
 config PSTORE_LZ4_COMPRESS
 	tristate "LZ4 compression"
+	default y
 	depends on PSTORE
 	select CRYPTO_LZ4
 	help
@@ -51,7 +52,6 @@ config PSTORE_842_COMPRESS
 
 config PSTORE_ZSTD_COMPRESS
 	bool "zstd compression"
-	default y
 	depends on PSTORE
 	select CRYPTO_ZSTD
 	help
