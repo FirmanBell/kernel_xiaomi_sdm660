@@ -301,26 +301,6 @@ static ssize_t __sbi_show_value(struct f2fs_attr *a,
 	}
 }
 
-static ssize_t __sbi_show_value(struct f2fs_attr *a,
-		struct f2fs_sb_info *sbi, char *buf,
-		unsigned char *value)
-{
-	switch (a->size) {
-	case 1:
-		return sysfs_emit(buf, "%u\n", *(u8 *)value);
-	case 2:
-		return sysfs_emit(buf, "%u\n", *(u16 *)value);
-	case 4:
-		return sysfs_emit(buf, "%u\n", *(u32 *)value);
-	case 8:
-		return sysfs_emit(buf, "%llu\n", *(u64 *)value);
-	default:
-		f2fs_bug_on(sbi, 1);
-		return sysfs_emit(buf,
-				"show sysfs node value with wrong type\n");
-	}
-}
-
 static ssize_t f2fs_sbi_show(struct f2fs_attr *a,
 			struct f2fs_sb_info *sbi, char *buf)
 {
