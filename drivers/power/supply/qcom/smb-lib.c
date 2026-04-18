@@ -4891,16 +4891,34 @@ static void smblib_uusb_otg_work(struct work_struct *work)
 		goto out;
 	}
 
-	otg = !!(stat & (U_USB_GND_NOVBUS_BIT | U_USB_GND_BIT));
+	/*
+	 * OTG detection for Micro USB boards:
+	 *
+	 * X01BD:
+	 *   U_USB_GND_NOVBUS_BIT / U_USB_GND_BIT
+	 *
+	 * X00TD:
+	 *   U_USB_FLOAT_NOVBUS_BIT
+	 *
+	 * Keep unified detection for both boards in shared kernel.
+	 */
+	otg = !!(stat & (U_USB_GND_NOVBUS_BIT |
+			 U_USB_FLOAT_NOVBUS_BIT |
+			 U_USB_GND_BIT));
+
+	if (otg)
+		extcon_set_state_sync(chg->extcon, EXTCON_USB, false);
+
 	extcon_set_state_sync(chg->extcon, EXTCON_USB_HOST, otg);
+
 	smblib_dbg(chg, PR_REGISTER, "TYPE_C_STATUS_3 = 0x%02x OTG=%d\n",
 			stat, otg);
+
 	power_supply_changed(chg->usb_psy);
 
 out:
 	vote(chg->awake_votable, OTG_DELAY_VOTER, false, 0);
 }
-
 
 static void smblib_hvdcp_detect_work(struct work_struct *work)
 {
