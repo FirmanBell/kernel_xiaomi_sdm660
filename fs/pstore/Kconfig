@@ -38,6 +38,7 @@ config PSTORE_LZO_COMPRESS
 
 config PSTORE_LZ4_COMPRESS
 	tristate "LZ4 compression"
+	default y
 	depends on PSTORE && !PSTORE_NO_COMPRESS
 	select CRYPTO_LZ4
 	help
