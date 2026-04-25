@@ -3322,7 +3322,7 @@ enum tfa_error tfa_dev_start(struct tfa_device *tfa, int next_profile,
 #endif /* __KERNEL__ */
 	} else {
 		/* Check if we need coldstart or ACS is set */
-		err = tfaRunSpeakerBoost(tfa, 1, next_profile);
+		err = tfaRunSpeakerBoost(tfa, 0, next_profile);
 		if (err != Tfa98xx_Error_Ok)
 			goto error_exit;
 
