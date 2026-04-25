@@ -80,12 +80,14 @@ static char *backend;
 module_param(backend, charp, 0444);
 MODULE_PARM_DESC(backend, "specific backend to use");
 
-static char *compress =
-#ifdef CONFIG_PSTORE_COMPRESS_DEFAULT
-		CONFIG_PSTORE_COMPRESS_DEFAULT;
+#ifdef CONFIG_PSTORE_NO_COMPRESS
+static char *compress = NULL;
 #else
-		NULL;
+#ifdef CONFIG_PSTORE_COMPRESS_DEFAULT
+static char *compress = CONFIG_PSTORE_COMPRESS_DEFAULT;
 #endif
+#endif
+
 module_param(compress, charp, 0444);
 MODULE_PARM_DESC(compress, "compression to use");
 

@@ -14,10 +14,16 @@ config PSTORE
 	   If you don't have a platform persistent store driver,
 	   say N.
 
-config PSTORE_DEFLATE_COMPRESS
-	tristate "DEFLATE (ZLIB) compression"
+config PSTORE_NO_COMPRESS
+	bool "pstore no compression"
 	default y
 	depends on PSTORE
+	help
+	  This option disable pstore compression.
+
+config PSTORE_DEFLATE_COMPRESS
+	tristate "DEFLATE (ZLIB) compression"
+	depends on PSTORE && !PSTORE_NO_COMPRESS
 	select CRYPTO_DEFLATE
 	help
 	  This option enables DEFLATE (also known as ZLIB) compression
@@ -25,42 +31,42 @@ config PSTORE_DEFLATE_COMPRESS
 
 config PSTORE_LZO_COMPRESS
 	tristate "LZO compression"
-	depends on PSTORE
+	depends on PSTORE && !PSTORE_NO_COMPRESS
 	select CRYPTO_LZO
 	help
 	  This option enables LZO compression algorithm support.
 
 config PSTORE_LZ4_COMPRESS
 	tristate "LZ4 compression"
-	depends on PSTORE
+	depends on PSTORE && !PSTORE_NO_COMPRESS
 	select CRYPTO_LZ4
 	help
 	  This option enables LZ4 compression algorithm support.
 
 config PSTORE_LZ4HC_COMPRESS
 	tristate "LZ4HC compression"
-	depends on PSTORE
+	depends on PSTORE && !PSTORE_NO_COMPRESS
 	select CRYPTO_LZ4HC
 	help
 	  This option enables LZ4HC (high compression) mode algorithm.
 
 config PSTORE_842_COMPRESS
 	bool "842 compression"
-	depends on PSTORE
+	depends on PSTORE && !PSTORE_NO_COMPRESS
 	select CRYPTO_842
 	help
 	  This option enables 842 compression algorithm support.
 
 config PSTORE_ZSTD_COMPRESS
 	bool "zstd compression"
-	depends on PSTORE
+	depends on PSTORE && !PSTORE_NO_COMPRESS
 	select CRYPTO_ZSTD
 	help
 	  This option enables zstd compression algorithm support.
 
 config PSTORE_COMPRESS
 	def_bool y
-	depends on PSTORE
+	depends on PSTORE && !PSTORE_NO_COMPRESS
 	depends on PSTORE_DEFLATE_COMPRESS || PSTORE_LZO_COMPRESS ||	\
 		   PSTORE_LZ4_COMPRESS || PSTORE_LZ4HC_COMPRESS ||	\
 		   PSTORE_842_COMPRESS || PSTORE_ZSTD_COMPRESS
