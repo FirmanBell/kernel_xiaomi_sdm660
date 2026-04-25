@@ -41,7 +41,11 @@ static DEFINE_IDR(zram_index_idr);
 static DEFINE_MUTEX(zram_index_mutex);
 
 static int zram_major;
+#ifdef CONFIG_CRYPTO_ZSTD
+static const char *default_compressor = "zstd";
+#else
 static const char *default_compressor = CONFIG_ZRAM_DEF_COMP;
+#endif
 
 /* Module params (documentation at end) */
 static unsigned int num_devices = 1;
@@ -1026,6 +1030,8 @@ static ssize_t comp_algorithm_store(struct device *dev,
 	struct zram *zram = dev_to_zram(dev);
 	char compressor[ARRAY_SIZE(zram->compressor)];
 	size_t sz;
+
+	return -EPERM;
 
 	strlcpy(compressor, buf, sizeof(compressor));
 	/* ignore trailing newline */
