@@ -141,7 +141,7 @@ static void fuse_evict_inode(struct inode *inode)
 			fi->forget = NULL;
 		}
 	}
-	if (S_ISREG(inode->i_mode) && !fuse_is_bad(inode)) {
+	if (S_ISREG(inode->i_mode) && !is_bad_inode(inode)) {
 		WARN_ON(!list_empty(&fi->write_files));
 		WARN_ON(!list_empty(&fi->queued_writes));
 	}
@@ -728,7 +728,7 @@ static int fuse_parse_param(struct fs_context *fsc, struct fs_parameter *param)
 		break;
 
 	case OPT_GROUP_ID:
-		kgid = make_kgid(fsc->user_ns, result.uint_32);
+		kgid = make_kgid(fsc->user_ns, result.uint_32);;
 		if (!gid_valid(kgid))
 			return invalf(fsc, "Invalid group_id");
 		/*
@@ -859,8 +859,8 @@ void fuse_conn_init(struct fuse_conn *fc, struct fuse_mount *fm,
 {
 	memset(fc, 0, sizeof(*fc));
 	spin_lock_init(&fc->lock);
-	spin_lock_init(&fc->bg_lock);
 	spin_lock_init(&fc->passthrough_req_lock);
+	spin_lock_init(&fc->bg_lock);
 	init_rwsem(&fc->killsb);
 	refcount_set(&fc->count, 1);
 	atomic_set(&fc->dev_count, 1);
@@ -1289,8 +1289,6 @@ static void process_init_reply(struct fuse_mount *fm, struct fuse_args *args,
 		fc->conn_error = 1;
 	}
 
-	pr_debug("<%s> dev = %u:%u  fuse Initialized",
-			__func__, MAJOR(fc->dev), MINOR(fc->dev));
 	fuse_set_initialized(fc);
 	wake_up_all(&fc->blocked_waitq);
 }
@@ -1337,9 +1335,6 @@ void fuse_send_init(struct fuse_mount *fm)
 	ia->args.nocreds = true;
 	ia->args.end = process_init_reply;
 
-	pr_debug("<%s> dev = %u:%u  fuse send Initrequest",
-			__func__, MAJOR(fm->fc->dev), MINOR(fm->fc->dev));
-
 	if (unlikely(fm->fc->no_daemon) || fuse_simple_background(fm, &ia->args, GFP_KERNEL) != 0)
 		process_init_reply(fm, &ia->args, -ENOTCONN);
 }
@@ -1384,8 +1379,7 @@ static int fuse_bdi_init(struct fuse_conn *fc, struct super_block *sb)
 		return err;
 
 	/* fuse does it's own writeback accounting */
-	sb->s_bdi->capabilities &= ~BDI_CAP_NO_ACCT_WB;
-	sb->s_bdi->capabilities |= BDI_CAP_STRICTLIMIT;
+	sb->s_bdi->capabilities = BDI_CAP_NO_ACCT_WB | BDI_CAP_STRICTLIMIT;
 
 	/*
 	 * For a single fuse filesystem use max 1% of dirty +

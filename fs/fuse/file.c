@@ -19,7 +19,6 @@
 #include <linux/swap.h>
 #include <linux/falloc.h>
 #include <linux/uio.h>
-#include <linux/sched/mm.h>
 #include <linux/fs.h>
 
 static struct page **fuse_pages_alloc(unsigned int npages, gfp_t flags,
@@ -483,7 +482,7 @@ static void fuse_wait_on_page_writeback(struct inode *inode, pgoff_t index)
 {
 	struct fuse_inode *fi = get_fuse_inode(inode);
 
-	fuse_wait_event(fi->page_waitq, !fuse_page_is_writeback(inode, index));
+	wait_event(fi->page_waitq, !fuse_page_is_writeback(inode, index));
 }
 
 /*
@@ -1115,6 +1114,10 @@ static ssize_t fuse_cache_read_iter(struct kiocb *iocb, struct iov_iter *to)
 {
 	struct inode *inode = iocb->ki_filp->f_mapping->host;
 	struct fuse_conn *fc = get_fuse_conn(inode);
+	struct fuse_file *ff = iocb->ki_filp->private_data;
+
+	if (fuse_is_bad(inode))
+		return -EIO;
 
 	/*
 	 * In auto invalidate mode, always update attributes on read.
@@ -1129,6 +1132,8 @@ static ssize_t fuse_cache_read_iter(struct kiocb *iocb, struct iov_iter *to)
 			return err;
 	}
 
+	if (ff->passthrough.filp)
+		return fuse_passthrough_read_iter(iocb, to);
 	return generic_file_read_iter(iocb, to);
 }
 
@@ -1407,6 +1412,13 @@ static ssize_t fuse_cache_write_iter(struct kiocb *iocb, struct iov_iter *from)
 	struct inode *inode = mapping->host;
 	ssize_t err;
 	loff_t endbyte = 0;
+	struct fuse_file *ff = file->private_data;
+
+	if (ff->passthrough.filp)
+		return fuse_passthrough_write_iter(iocb, from);
+
+	if (fuse_is_bad(inode))
+		return -EIO;
 
 	if (get_fuse_conn(inode)->writeback_cache) {
 		/* Update size (EOF optimization) and mode (SUID clearing) */
@@ -1702,7 +1714,7 @@ static ssize_t fuse_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
 	struct fuse_file *ff = file->private_data;
 	struct inode *inode = file_inode(file);
 
-	if (fuse_is_bad(inode))
+	if (is_bad_inode(inode))
 		return -EIO;
 
 	if (FUSE_IS_DAX(inode))
@@ -1736,7 +1748,7 @@ static ssize_t fuse_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
 	struct fuse_file *ff = file->private_data;
 	struct inode *inode = file_inode(file);
 
-	if (fuse_is_bad(inode))
+	if (is_bad_inode(inode))
 		return -EIO;
 
 	if (FUSE_IS_DAX(inode))
@@ -2023,6 +2035,7 @@ int fuse_write_inode(struct inode *inode, struct writeback_control *wbc)
 	 */
 	if (!S_ISREG(inode->i_mode))
 		return 0;
+
 	/*
 	 * Inode is always written before the last reference is dropped and
 	 * hence this should not be reached from reclaim.
@@ -3692,8 +3705,6 @@ out:
 
 	inode_unlock(inode_out);
 	file_accessed(file_in);
-
-	fuse_flush_time_update(inode_out);
 
 	return err;
 }
