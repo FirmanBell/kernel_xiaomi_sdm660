@@ -81,7 +81,7 @@
 #define MDP_TIME_PERIOD_CALC_FPS_US	1000000
 
 #ifdef CONFIG_MACH_ASUS_SDM660
-#ifdef CONFIG_FOCALTECH_FP
+#ifdef CONFIG_FOCALTECH_FINGERPRINT
 extern int focal_detect_flag;
 #endif
 
@@ -1732,7 +1732,7 @@ static int mdss_fb_pm_suspend(struct device *dev)
 		return -ENODEV;
 
 	if (
-#ifdef CONFIG_FOCALTECH_FP
+#ifdef CONFIG_FOCALTECH_FINGERPRINT
 	focal_detect_flag == 0 &&
 #endif
 	mfd->index == 0) {
@@ -1802,7 +1802,7 @@ static int mdss_fb_pm_resume(struct device *dev)
 	}
 #endif
 
-#ifdef CONFIG_FOCALTECH_FP
+#ifdef CONFIG_FOCALTECH_FINGERPRINT
 	if (focal_detect_flag == 0) {
 		if (g_resume_from_fp && mfd->index == 0) {
 			if (!mfd->early_unblank_work_queued) {
