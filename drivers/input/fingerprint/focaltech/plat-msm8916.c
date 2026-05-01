@@ -54,9 +54,7 @@ int ff_ctl_init_pins(int *irq_num)
 		FF_LOGE("gpio_request(%d) = %d.", g_config->gpio_rst_pin, err);
 		return err;
 	}
-    /* Huaqin modify for ZQL1820-761 by zhaojunhai1 at 2018/09/28 start */
-	err = gpio_direction_output(g_config->gpio_rst_pin, 0);
-    /* Huaqin modify for ZQL1820-761 by zhaojunhai1 at 2018/09/28 end */
+	err = gpio_direction_output(g_config->gpio_rst_pin, 1);
 	if (err) {
 		FF_LOGE("gpio_direction_output(%d, 1) = %d.", g_config->gpio_rst_pin, err);
 		return err;
@@ -151,14 +149,6 @@ int ff_ctl_free_pins(void)
 	int err = 0;
 	FF_LOGV("'%s' enter.", __func__);
 
-    /* Huaqin modify for ZQL1820-761 by zhaojunhai1 at 2018/09/28 start */
-    err = gpio_direction_output(g_config->gpio_rst_pin, 0);
-    if (err) {
-        FF_LOGE("gpio_direction_output(%d, 1) = %d.", g_config->gpio_rst_pin, err);
-        //return err;
-    }
-    /* Huaqin modify for ZQL1820-761 by zhaojunhai1 at 2018/09/28 end */
-
 	/* Release GPIO resources. */
 	gpio_free(g_config->gpio_rst_pin);
 	gpio_free(g_config->gpio_int_pin);
@@ -246,4 +236,3 @@ const char *ff_ctl_arch_str(void)
 {
 	return "msm8916";
 }
-
