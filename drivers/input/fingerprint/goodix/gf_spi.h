@@ -20,15 +20,13 @@ enum FP_MODE{
 #define SUPPORT_NAV_EVENT
 
 #if defined(SUPPORT_NAV_EVENT)
-/* Huaqin add define for fingerprint nav-keycode by leiyu at 2018/04/12 start */
-#define GF_NAV_INPUT_UP			FP_KEY_UP
-#define GF_NAV_INPUT_DOWN		FP_KEY_DOWN
-#define GF_NAV_INPUT_LEFT		FP_KEY_LEFT
-#define GF_NAV_INPUT_RIGHT		FP_KEY_RIGHT
-#define GF_NAV_INPUT_CLICK		FP_KEY_CLICK
-#define GF_NAV_INPUT_DOUBLE_CLICK	FP_KEY_DOUBLE_CLICK
-#define GF_NAV_INPUT_LONG_PRESS		FP_KEY_LONG_PRESS
-/* Huaqin add define for fingerprint nav-keycode by leiyu at 2018/04/12 end */
+#define GF_NAV_INPUT_UP			KEY_UP
+#define GF_NAV_INPUT_DOWN		KEY_DOWN
+#define GF_NAV_INPUT_LEFT		KEY_LEFT
+#define GF_NAV_INPUT_RIGHT		KEY_RIGHT
+#define GF_NAV_INPUT_CLICK		KEY_VOLUMEDOWN
+#define GF_NAV_INPUT_DOUBLE_CLICK	KEY_VOLUMEUP
+#define GF_NAV_INPUT_LONG_PRESS		KEY_SEARCH
 #define GF_NAV_INPUT_HEAVY		KEY_CHAT
 #endif
 
@@ -129,7 +127,7 @@ struct gf_dev {
 	unsigned users;
 	signed irq_gpio;
 	signed reset_gpio;
-	signed vdd_gpio;
+	signed pwr_gpio;
 	int irq;
 	int irq_enabled;
 	int clk_enabled;
@@ -139,9 +137,13 @@ struct gf_dev {
 	struct notifier_block notifier;
 	char device_available;
 	char fb_black;
+	char wait_finger_down;
+	struct work_struct work;
+	struct wakeup_source *fp_wakelock;
+	bool proximity_state; /* 0:far 1:near */
 };
 
-int gf_parse_dts(struct gf_dev *gf_dev);
+int gf_parse_dts(struct gf_dev* gf_dev);
 void gf_cleanup(struct gf_dev *gf_dev);
 
 int gf_power_on(struct gf_dev *gf_dev);

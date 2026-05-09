@@ -1,5 +1,4 @@
 config GOODIX_FINGERPRINT
-	depends on MACH_ASUS_X00TD
 	tristate "generic goodix fingerprint driver"
 	default y
 	help

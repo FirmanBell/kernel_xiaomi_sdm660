@@ -26,19 +26,7 @@ int gf_parse_dts(struct gf_dev *gf_dev)
 	struct device *dev = &gf_dev->spi->dev;
 	struct device_node *np = dev->of_node;
 
-	gf_dev->vdd_gpio = of_get_named_gpio(np, "goodix,gpio_vdd", 0);
-	if (gf_dev->vdd_gpio < 0) {
-		pr_err("falied to get vdd gpio!\n");
-		return gf_dev->vdd_gpio;
-	}
-	rc = devm_gpio_request(dev, gf_dev->vdd_gpio, "goodix_vdd");
-	if (rc) {
-		pr_err("failed to request vdd gpio, rc = %d\n", rc);
-		goto err_vdd;
-	}
-	gpio_direction_output(gf_dev->vdd_gpio, 1);
-
-	gf_dev->reset_gpio = of_get_named_gpio(np, "goodix,reset_gpio", 0);
+	gf_dev->reset_gpio = of_get_named_gpio(np, "fp-gpio-reset", 0);
 	if (gf_dev->reset_gpio < 0) {
 		pr_err("falied to get reset gpio!\n");
 		return gf_dev->reset_gpio;
@@ -51,7 +39,7 @@ int gf_parse_dts(struct gf_dev *gf_dev)
 	}
 	gpio_direction_output(gf_dev->reset_gpio, 1);
 
-	gf_dev->irq_gpio = of_get_named_gpio(np, "goodix,irq_gpio", 0);
+	gf_dev->irq_gpio = of_get_named_gpio(np, "fp-gpio-irq", 0);
 	if (gf_dev->irq_gpio < 0) {
 		pr_err("falied to get irq gpio!\n");
 		return gf_dev->irq_gpio;
@@ -67,8 +55,6 @@ int gf_parse_dts(struct gf_dev *gf_dev)
 err_irq:
 	devm_gpio_free(dev, gf_dev->reset_gpio);
 err_reset:
-	devm_gpio_free(dev, gf_dev->vdd_gpio);
-err_vdd:
 	return rc;
 }
 
@@ -105,11 +91,9 @@ int gf_power_off(struct gf_dev *gf_dev)
 
 int gf_hw_reset(struct gf_dev *gf_dev, unsigned int delay_ms)
 {
-	int ret = -1;
-
 	if (gf_dev == NULL) {
 		pr_info("Input buff is NULL.\n");
-		return ret;
+		return -1;
 	}
 	gpio_direction_output(gf_dev->reset_gpio, 1);
 	gpio_set_value(gf_dev->reset_gpio, 0);
@@ -121,10 +105,9 @@ int gf_hw_reset(struct gf_dev *gf_dev, unsigned int delay_ms)
 
 int gf_irq_num(struct gf_dev *gf_dev)
 {
-	int ret = -1;
 	if (gf_dev == NULL) {
 		pr_info("Input buff is NULL.\n");
-		return ret;
+		return -1;
 	} else {
 		return gpio_to_irq(gf_dev->irq_gpio);
 	}

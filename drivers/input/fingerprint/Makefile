@@ -1,3 +1,4 @@
 obj-$(CONFIG_CDFINGER_FINGERPRINT)	+= cdfingerfp/
 obj-$(CONFIG_FOCALTECH_FINGERPRINT)	+= focaltech/
 obj-$(CONFIG_GOODIX_FINGERPRINT)   += goodix/
+obj-$(CONFIG_FPC_FINGERPRINT)		+= fpc/

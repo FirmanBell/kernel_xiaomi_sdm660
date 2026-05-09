@@ -2,8 +2,6 @@
 # Fingerprint driver configuration
 #
 
-if MACH_ASUS_SDM660
-
 menuconfig INPUT_FINGERPRINT
 	bool "Fingerprint"
 	help
@@ -20,6 +18,6 @@ source "drivers/input/fingerprint/focaltech/Kconfig"
 
 source "drivers/input/fingerprint/goodix/Kconfig"
 
-endif
+source "drivers/input/fingerprint/fpc/Kconfig"
 
 endif
