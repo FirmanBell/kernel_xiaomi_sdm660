@@ -291,47 +291,9 @@ static inline void nav_event_input(struct gf_dev *gf_dev, gf_nav_event_t nav_eve
 	}
 }
 
-static inline void gf_kernel_key_input(struct gf_dev *gf_dev, struct gf_key *gf_key)
-{
-	uint32_t key_input = 0;
-
-	switch (gf_key->key) {
-	case GF_KEY_HOME:
-#ifdef CONFIG_TOUCHSCREEN_COMMON
-		if (!capacitive_keys_enabled)
-			return;
-#endif
-		key_input = GF_KEY_INPUT_HOME;
-		break;
-	case GF_KEY_POWER:
-		key_input = GF_KEY_INPUT_POWER;
-		break;
-	case GF_KEY_CAMERA:
-		key_input = GF_KEY_INPUT_CAMERA;
-		break;
-	default:
-		/* add special key define */
-		key_input = gf_key->key;
-	}
-
-	if ((GF_KEY_POWER == gf_key->key || GF_KEY_CAMERA == gf_key->key) &&
-	    (gf_key->value == 1)) {
-		input_report_key(gf_dev->input, key_input, 1);
-		input_sync(gf_dev->input);
-		input_report_key(gf_dev->input, key_input, 0);
-		input_sync(gf_dev->input);
-	}
-
-	if (gf_key->key == GF_KEY_HOME) {
-		input_report_key(gf_dev->input, key_input, gf_key->value);
-		input_sync(gf_dev->input);
-	}
-}
-
 static long gf_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 {
 	struct gf_dev *gf_dev = &gf;
-	struct gf_key gf_key;
 #ifdef SUPPORT_NAV_EVENT
 	gf_nav_event_t nav_event = GF_NAV_NONE;
 #endif
@@ -366,13 +328,6 @@ static long gf_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		break;
 	case GF_IOC_RESET:
 		gf_hw_reset(gf_dev, 3);
-		break;
-	case GF_IOC_INPUT_KEY_EVENT:
-		if (copy_from_user(&gf_key, (void __user *)arg, sizeof(struct gf_key))) {
-			retval = -EFAULT;
-			break;
-		}
-		gf_kernel_key_input(gf_dev, &gf_key);
 		break;
 #ifdef SUPPORT_NAV_EVENT
 	case GF_IOC_NAV_EVENT:
