@@ -11,6 +11,7 @@
 #include <linux/compiler.h>
 #include <linux/dcache.h>
 #include <linux/magic.h>
+#include <linux/security.h>
 #include <linux/types.h>
 
 #define SECSID_NULL			0x00000000 /* unspecified SID */
